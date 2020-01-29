@@ -6,13 +6,12 @@
 
 // Package
 package shrugUML;
-// System includes
+// Includes
 import java.util.ArrayList;
-// Local includes
 
 public class shrugUMLDiagram
 {
-    // Ctor
+    // Default Ctor - new Diagram with nothing in it and size 0
     public shrugUMLDiagram ()
     {
 	m_classes = new ArrayList<shrugUMLClass> ();
@@ -29,21 +28,20 @@ public class shrugUMLDiagram
      */
     public boolean addClass (String className)
     {
-	if (invalidName (className))
+	if (nameInDiagram (className))
 	    {
 		// TODO: THROW EXCEPTION
 		return false;
 	    }
 	else
 	    {
-		newClass = new shrugUMLClass (className);
+		shrugUMLClass newClass = new shrugUMLClass (className);
 		m_classes.add (newClass);
 		++m_size;
 		return true;
 	    }
     }
 
- 
     /*
       Function: removeClass (String className)
       Precondition: className is the name of the class to be removed from the diagram
@@ -51,7 +49,7 @@ public class shrugUMLDiagram
      */
     public boolean removeClass (String className)
     {
-	remove = findClass (className);
+	shrugUMLClass remove = findClass (className);
 	if (remove.getName () != null)
 	    {
 		m_classes.remove (remove);
@@ -72,10 +70,10 @@ public class shrugUMLDiagram
       Precondition: newName is the string to be checked for
       Postcondition: returns true if the name is in m_classes, false if it isn't
      */
-    public boolean nameInDiagram (String newName)
+    public boolean nameInDiagram (String className)
     {
 	for (shrugUMLClass classElement : m_classes)
-	    if (newName == classElement.getName ())
+	    if (className == classElement.getName ())
 		return true;
 	return false;
     }
@@ -89,7 +87,7 @@ public class shrugUMLDiagram
     public shrugUMLClass findClass (String className)
     {
 	for (shrugUMLClass classElement : m_classes)
-	    if (newName == classElement.getName ())
+	    if (className == classElement.getName ())
 		return classElement;
 	return new shrugUMLClass();
     }
