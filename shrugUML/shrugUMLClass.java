@@ -19,11 +19,21 @@ public class shrugUMLClass
 	this.className = newName;
     }
     // Public Methods
+
+    /*
+      Function: getName ()
+      Precondition: this has an initialized className
+      Postcondition: this.className is returned
+     */
     public String getName ()
     {
 	return this.className;
     }
-
+    /*
+      Function: setName ()
+      Precondition: newName is a valid string
+      Postcondition: this.className is set to newName
+     */
     public void setName (String newName)
     {
 	this.className = newName;
