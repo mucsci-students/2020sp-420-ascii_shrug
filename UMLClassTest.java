@@ -4,6 +4,8 @@ public class UMLClassTest
 {
     public static void main (String[] args)
     {
+
+	
 	// Default ctor test
 	shrugUMLClass myClass = new shrugUMLClass ();
 	if (myClass.getName () == null)

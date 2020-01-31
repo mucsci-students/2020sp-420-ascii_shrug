@@ -14,7 +14,7 @@ public class shrugUMLClass
 	this.className = null;
     }
     // Name Ctor - sets className to newName
-    public shrugUMLClass (String newName)
+x    public shrugUMLClass (String newName)
     {
 	this.className = newName;
     }
