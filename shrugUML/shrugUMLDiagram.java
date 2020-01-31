@@ -53,6 +53,7 @@ public class shrugUMLDiagram
 	if (remove.getName () != null)
 	    {
 		m_classes.remove (remove);
+		--m_size;
 		return true;
 	    }
 	else
