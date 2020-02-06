@@ -1,16 +1,16 @@
 import shrugUML.*;
 
-public class command
+public class Controller
 {
 
-  private shrugUMLDiagram m_diagram;
+  private ShrugUMLDiagram m_diagram;
 
-  public command ()
+  public Controller ()
   {
     this.m_diagram = null;
   }
 
-  public command (shrugUMLDiagram obj)
+  public Controller (ShrugUMLDiagram obj)
   {
     this.m_diagram = obj;
   }

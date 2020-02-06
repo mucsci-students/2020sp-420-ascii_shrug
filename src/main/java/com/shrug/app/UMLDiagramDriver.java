@@ -1,6 +1,6 @@
 import shrugUML.ShrugUMLDiagram;
 
-public class UMLDiagramTest
+public class UMLDiagramDriver
 {
     public static void main (String[] args)
     {
