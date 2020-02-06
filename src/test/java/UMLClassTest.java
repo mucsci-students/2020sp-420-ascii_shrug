@@ -1,4 +1,4 @@
-import shrugUML.shrugUMLClass;
+import shrugUML.ShrugUMLClass;
 
 public class UMLClassTest
 {
@@ -7,12 +7,12 @@ public class UMLClassTest
 
 	
 	// Default ctor test
-	shrugUMLClass myClass = new shrugUMLClass ();
+	ShrugUMLClass myClass = new ShrugUMLClass ();
 	if (myClass.getName () == null)
 	    System.out.println ("Default ctor: Pass");
 
 	// Name ctor test
-	myClass = new shrugUMLClass ("myClass");
+	myClass = new ShrugUMLClass ("myClass");
 	if (myClass.getName () == "myClass")
 	    System.out.println ("Name ctor: Pass");
 

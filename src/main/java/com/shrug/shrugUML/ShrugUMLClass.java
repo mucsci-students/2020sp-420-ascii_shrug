@@ -6,15 +6,15 @@
 // Package
 package shrugUML;
 
-public class shrugUMLClass
+public class ShrugUMLClass
 {
     // Default Ctor - sets the className to null
-    public shrugUMLClass ()
+    public ShrugUMLClass ()
     {
 	this.className = null;
     }
     // Name Ctor - sets className to newName
-    public shrugUMLClass (String newName)
+    public ShrugUMLClass (String newName)
     {
 	this.className = newName;
     }

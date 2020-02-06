@@ -9,12 +9,12 @@ package shrugUML;
 // Includes
 import java.util.ArrayList;
 
-public class shrugUMLDiagram
+public class ShrugUMLDiagram
 {
     // Default Ctor - new Diagram with nothing in it and size 0
-    public shrugUMLDiagram ()
+    public ShrugUMLDiagram ()
     {
-	m_classes = new ArrayList<shrugUMLClass> ();
+	m_classes = new ArrayList<ShrugUMLClass> ();
 	m_size = 0;
     }
 
@@ -35,7 +35,7 @@ public class shrugUMLDiagram
 	    }
 	else
 	    {
-		shrugUMLClass newClass = new shrugUMLClass (className);
+		ShrugUMLClass newClass = new ShrugUMLClass (className);
 		m_classes.add (newClass);
 		++m_size;
 		return true;
@@ -49,7 +49,7 @@ public class shrugUMLDiagram
      */
     public boolean removeClass (String className)
     {
-	shrugUMLClass remove = findClass (className);
+	ShrugUMLClass remove = findClass (className);
 	if (remove.getName () != null)
 	    {
 		m_classes.remove (remove);
@@ -73,7 +73,7 @@ public class shrugUMLDiagram
      */
     public boolean nameInDiagram (String className)
     {
-	for (shrugUMLClass classElement : m_classes)
+	for (ShrugUMLClass classElement : m_classes)
 	    if (className == classElement.getName ())
 		return true;
 	return false;
@@ -85,17 +85,17 @@ public class shrugUMLDiagram
       Precondition: className is the name of the class to be searched for
       Postcondition: returns class object with name className if it's in m_classes, returns a default class.
      */
-    public shrugUMLClass findClass (String className)
+    public ShrugUMLClass findClass (String className)
     {
-	for (shrugUMLClass classElement : m_classes)
+	for (ShrugUMLClass classElement : m_classes)
 	    if (className == classElement.getName ())
 		return classElement;
-	return new shrugUMLClass();
+	return new ShrugUMLClass(className);
     }
 
     /**************************************************************************/    
     // Private Data Members
     private int m_size;
-    private ArrayList<shrugUMLClass> m_classes;
+    private ArrayList<ShrugUMLClass> m_classes;
     
 }
