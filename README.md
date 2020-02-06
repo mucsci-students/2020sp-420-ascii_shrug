@@ -1,4 +1,4 @@
-### ¯\_(ツ)_/¯ UML Editor ¯\_(ツ)_/¯ 
+### ¯\\_(ツ)_/¯ UML Editor ¯\\_(ツ)_/¯ 
 #### Building:
 
 1. Install maven
