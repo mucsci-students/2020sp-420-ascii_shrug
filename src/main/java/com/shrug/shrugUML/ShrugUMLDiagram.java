@@ -50,20 +50,29 @@ public class ShrugUMLDiagram
      */
     public boolean removeClass (String className)
     {
-	ShrugUMLClass remove = findClass (className);
-	if (remove.getName () != null)
+	if (m_classes.remove (findClass (className)))
 	    {
-		m_classes.remove (remove);
 		--m_size;
 		return true;
 	    }
 	else
 	    {
-		// TODO: THROW EXCEPTION
+		//TODO: THROW EXCEPTION
 		return false;
 	    }
     }
 
+    /*
+      Function: getSize ()
+      Precondition: this is instantiated
+      Postcondition: m_size, the size of the diagram, is returned
+     */
+    public int getSize ()
+    {
+	return m_size;
+    }
+
+    
     /**************************************************************************/    
     // Private Methods
 
