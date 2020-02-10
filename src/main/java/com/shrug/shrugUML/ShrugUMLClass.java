@@ -8,36 +8,36 @@ package shrugUML;
 
 public class ShrugUMLClass
 {
-    // Default Ctor - sets the className to null
+    // Default Ctor - sets the m_className to null
     public ShrugUMLClass ()
     {
-	this.className = null;
+	m_className = null;
     }
-    // Name Ctor - sets className to newName
+    // Name Ctor - sets m_className to newName
     public ShrugUMLClass (String newName)
     {
-	this.className = newName;
+	m_className = newName;
     }
     // Public Methods
 
     /*
       Function: getName ()
-      Precondition: this has an initialized className
-      Postcondition: this.className is returned
+      Precondition: this has an initialized m_className
+      Postcondition: this.m_className is returned
      */
     public String getName ()
     {
-	return this.className;
+	return m_className;
     }
     /*
       Function: setName ()
       Precondition: newName is a valid string
-      Postcondition: this.className is set to newName
+      Postcondition: this.m_className is set to newName
      */
     public void setName (String newName)
     {
-	this.className = newName;
+	m_className = newName;
     }
     // Private Data Members
-    private String className;
+    private String m_className;
 }
