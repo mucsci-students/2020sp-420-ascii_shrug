@@ -94,7 +94,7 @@ public class ShrugUMLDiagram
     public boolean nameInDiagram (String className)
     {
 	for (ShrugUMLClass classElement : m_classes)
-	    if (className == classElement.getName ())
+	    if (className.contentEquals (classElement.getName ()))
 		return true;
 	return false;
     }
@@ -108,8 +108,12 @@ public class ShrugUMLDiagram
     public ShrugUMLClass findClass (String className)
     {
 	for (ShrugUMLClass classElement : m_classes)
-	    if (className == classElement.getName ())
-		return classElement;
+	    {
+		if (className.contentEquals (classElement.getName ()))
+		    {
+			return classElement;
+		    }
+	    }
 	return new ShrugUMLClass(className);
     }
 
