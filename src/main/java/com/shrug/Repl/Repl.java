@@ -1,8 +1,10 @@
 // repl.java
 // Author: 
 import java.util.Scanner;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.regex.*;
 import Controller.*;
+import shrugUML.*;
 
 public class Repl
 {
@@ -41,12 +43,18 @@ public class Repl
          return control.save (cmds[1]);
        case "load":
          return control.load (cmds[1]);
+       case "print":
+       {
+         for (ShrugUMLClass c : control.getClasses ())
+            System.out.println (c.getName ());
+       }
        case "exit":
          return exit ();
        default:
          return false;
      }
    }
+
 
    // TODO
    private static boolean exit () 

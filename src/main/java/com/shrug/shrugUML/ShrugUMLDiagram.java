@@ -63,6 +63,16 @@ public class ShrugUMLDiagram
     }
 
     /*
+      Function: getClasses ()
+      Precondition: this is instantiated
+      Postcondition: the underlying model is returned
+     */
+    public ArrayList<ShrugUMLClass> getClasses ()
+    {
+      return m_classes; 
+    }   
+
+    /*
       Function: getSize ()
       Precondition: this is instantiated
       Postcondition: m_size, the size of the diagram, is returned

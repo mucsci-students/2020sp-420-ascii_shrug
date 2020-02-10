@@ -1,6 +1,7 @@
 package Controller;
 
-import shrugUML.ShrugUMLDiagram;
+import shrugUML.*;
+import java.util.ArrayList;
 
 public class Controller
 {
@@ -39,6 +40,11 @@ public class Controller
   public boolean load (String path) 
   {
     return true;
+  }
+
+  public ArrayList<ShrugUMLClass> getClasses ()
+  {
+    return m_diagram.getClasses ();
   }
 }
 
