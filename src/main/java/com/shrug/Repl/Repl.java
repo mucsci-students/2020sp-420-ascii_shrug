@@ -13,8 +13,7 @@ public class Repl
    {
      while (true)
      {
-       String[] cmds = parseLine ();
-       execute (cmds);
+       execute (parseLine ());
        continue; 
      }
    } 
@@ -25,11 +24,6 @@ public class Repl
    {
     String command = scan.nextLine ();
     String[] cmds = command.split(" ", 0);
-    if (cmds[0].equals("add") || cmds[0].equals("remove") ||
-        cmds[0].equals("load") || cmds[0].equals("exit"))
-    {
-      return cmds;
-    }
     return cmds;
    }
 
@@ -47,7 +41,17 @@ public class Repl
          return control.save (cmds[1]);
        case "load":
          return control.load (cmds[1]);
+       case "exit":
+         return exit ();
+       default:
+         return false;
      }
+   }
+
+   // TODO
+   private boolean exit () 
+   {
+
      return false;
    }
     
