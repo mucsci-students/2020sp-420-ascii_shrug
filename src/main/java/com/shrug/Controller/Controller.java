@@ -1,5 +1,3 @@
-
-
 package Controller;
 
 import shrugUML.ShrugUMLDiagram;
@@ -11,7 +9,7 @@ public class Controller
 
   public Controller ()
   {
-    this.m_diagram = null;
+    this.m_diagram = new ShrugUMLDiagram ();
   }
 
   public Controller (ShrugUMLDiagram obj)
