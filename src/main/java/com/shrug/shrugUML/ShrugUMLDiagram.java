@@ -6,6 +6,7 @@
 
 // Package
 package shrugUML;
+
 // Includes
 import java.util.ArrayList;
 

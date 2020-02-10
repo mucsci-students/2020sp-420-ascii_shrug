@@ -1,4 +1,8 @@
-import shrugUML.*;
+
+
+package Controller;
+
+import shrugUML.ShrugUMLDiagram;
 
 public class Controller
 {
@@ -28,7 +32,7 @@ public class Controller
   }
 
   //TODO
-  public boolean save (String fileName, String path) 
+  public boolean save (String path) 
   {
     return true;
   }
