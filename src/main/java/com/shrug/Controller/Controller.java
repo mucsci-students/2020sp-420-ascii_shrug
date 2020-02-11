@@ -1,6 +1,8 @@
 package Controller;
 
 import shrugUML.ShrugUMLDiagram;
+import java.io.File;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Controller
 {
@@ -38,6 +40,9 @@ public class Controller
   //TODO
   public boolean load (String path) 
   {
+    ObjectMapper mapper = new ObjectMapper();
+    File f = new File (path);
+
     return true;
   }
 }
