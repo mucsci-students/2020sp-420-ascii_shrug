@@ -46,11 +46,14 @@ public class Controller {
         not catching objectMapper exceptions
         parameter path only works with file names and with file paths
   */
-  public boolean save(String path) {
+  public boolean save(String path) 
+  {
     ObjectMapper objectMapper = new ObjectMapper();
-    try {
-      objectMapper.writeValue(new File(path + ".json"), m_diagram);
-    } catch (IOException e) {
+    try 
+    {
+      objectMapper.writeValue(new File(path), m_diagram);
+    } 
+    catch (IOException e) {
       e.printStackTrace();
       return false;
     }
@@ -59,6 +62,16 @@ public class Controller {
 
   // TODO
   public boolean load(String path) {
+    try
+    {
+      ObjectMapper objectMapper = new ObjectMapper();
+      m_diagram = objectMapper.readValue(new File(path), ShrugUMLDiagram.class);
+    }
+    catch (IOException e) 
+    {
+      e.printStackTrace();
+      return false;
+    }
     return true;
   }
 
