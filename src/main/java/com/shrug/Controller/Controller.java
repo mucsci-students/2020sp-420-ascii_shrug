@@ -1,8 +1,13 @@
 package Controller;
 
+<<<<<<< HEAD
 import shrugUML.ShrugUMLDiagram;
 import java.io.File;
 import com.fasterxml.jackson.databind.ObjectMapper;
+=======
+import shrugUML.*;
+import java.util.ArrayList;
+>>>>>>> 7e038a416e5d32016b4c4b934b20b8e577fe8803
 
 public class Controller
 {
@@ -44,6 +49,11 @@ public class Controller
     File f = new File (path);
 
     return true;
+  }
+
+  public ArrayList<ShrugUMLClass> getClasses ()
+  {
+    return m_diagram.getClasses ();
   }
 }
 

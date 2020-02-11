@@ -1,9 +1,14 @@
 // repl.java
 // Author: 
 import java.util.Scanner;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.regex.*;
 import Controller.*;
+<<<<<<< HEAD
 import com.fasterxml.jackson.databind.ObjectMapper;
+=======
+import shrugUML.*;
+>>>>>>> 7e038a416e5d32016b4c4b934b20b8e577fe8803
 
 public class Repl
 {
@@ -24,8 +29,7 @@ public class Repl
    private static String[] parseLine ()
    {
     String command = scan.nextLine ();
-    String[] cmds = command.split(" ", 0);
-    return cmds;
+    return command.split(" ", 0);
    }
 
    // encapsulate logic for choosing what action must be taken. 
@@ -42,18 +46,32 @@ public class Repl
          return control.save (cmds[1]);
        case "load":
          return control.load (cmds[1]);
+       case "print":
+       {
+         for (ShrugUMLClass c : control.getClasses ())
+            System.out.println (c.getName ());
+         return true;
+       }
        case "exit":
          return exit ();
+       case "":
+         return true;
        default:
+       {
+         System.out.println ("Invalid Command.");
          return false;
+       }
      }
    }
 
-   // TODO
+   /* Function: exit () 
+    * precondition: program is running and exit is entered into Repl.
+    * postcondition: program is terminated.
+   */
    private static boolean exit () 
    {
-
-     return false;
+     System.exit (0);
+     return true;
    }
     
 }
