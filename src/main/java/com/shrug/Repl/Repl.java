@@ -35,9 +35,26 @@ public class Repl
      switch (cmds[0])
      {
        case "add":
-         return control.add (cmds[1]);
+       {
+	 // Store result in case of error
+	 boolean result = control.add (cmds[1]);
+	 if (!result)
+         {
+	   System.out.println ("Error: " + cmds[1] + " is an invalid name");
+	 }
+	 return result;
+       }
        case "remove":
-         return control.remove (cmds[1]);
+       {
+	 // Store result in case of error
+	 boolean result = control.remove (cmds[1]);
+	 if (!result)
+         {	   
+	   System.out.println ("Error: " + cmds[1] + " is an invalid name");
+	 }
+	 return result;
+       }
+        
        case "save":
          return control.save (cmds[1]);
        case "load":
