@@ -9,7 +9,7 @@ public class TestJunit
     {
 	ShrugUMLDiagram testDiagram = new ShrugUMLDiagram ();
 	assertEquals (testDiagram.nameInDiagram ("notAClass"), false);
-	assertEquals (testDiagram.getSize (), 0);
+
     }
 
     @Test
@@ -19,7 +19,6 @@ public class TestJunit
 	classes = new ShrugUMLClass[]{new ShrugUMLClass ("Class1"),
 				      new ShrugUMLClass ("Class2")};
 	ShrugUMLDiagram testDiagram = new ShrugUMLDiagram (classes);
-	assertEquals (testDiagram.getSize (), 2);
 	assertEquals (testDiagram.nameInDiagram ("Class1"), true);
 	assertEquals (testDiagram.nameInDiagram ("Class2"), true);
 	
@@ -53,23 +52,6 @@ public class TestJunit
     {
 	ShrugUMLDiagram testDiagram = new ShrugUMLDiagram ();
 	assertEquals (testDiagram.removeClass ("newClass"), false);
-    }
-    
-    @Test
-    public void testZeroSize ()
-    {
-	ShrugUMLDiagram testDiagram = new ShrugUMLDiagram ();
-	assertEquals (testDiagram.getSize (), 0);	
-    }
-
-    @Test
-    public void testNonZeroSize ()
-    {
-	ShrugUMLDiagram testDiagram = new ShrugUMLDiagram ();
-	assertEquals (testDiagram.addClass ("newClass"), true);
-	assertEquals (testDiagram.addClass ("newClass2"), true);
-	assertEquals (testDiagram.getSize (), 2);	
-	
     }
 	
 }
