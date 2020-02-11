@@ -4,11 +4,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.regex.*;
 import Controller.*;
-<<<<<<< HEAD
 import com.fasterxml.jackson.databind.ObjectMapper;
-=======
 import shrugUML.*;
->>>>>>> 7e038a416e5d32016b4c4b934b20b8e577fe8803
 
 public class Repl
 {

@@ -1,13 +1,11 @@
 package Controller;
 
-<<<<<<< HEAD
-import shrugUML.ShrugUMLDiagram;
+import shrugUML.*;
+
 import java.io.File;
 import com.fasterxml.jackson.databind.ObjectMapper;
-=======
-import shrugUML.*;
 import java.util.ArrayList;
->>>>>>> 7e038a416e5d32016b4c4b934b20b8e577fe8803
+import java.util.Arrays;
 
 public class Controller
 {
@@ -46,7 +44,13 @@ public class Controller
   public boolean load (String path) 
   {
     ObjectMapper mapper = new ObjectMapper();
-    File f = new File (path);
+    try
+    {
+      File jsonFile = new File (path);
+      ShrugUMLClass[] diagram = mapper.readValue (jsonFile, ShrugUMLClass[].class);
+    }
+    catch (Exception e) { System.out.println ("Error loading file"); }
+
 
     return true;
   }
