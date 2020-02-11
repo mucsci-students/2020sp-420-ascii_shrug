@@ -13,6 +13,19 @@ public class TestJunit
     }
 
     @Test
+    public void testUMLDiagramClassArrayCtor ()
+    {
+	ShrugUMLClass[] classes;
+	classes = new ShrugUMLClass[]{new ShrugUMLClass ("Class1"),
+				      new ShrugUMLClass ("Class2")};
+	ShrugUMLDiagram testDiagram = new ShrugUMLDiagram (classes);
+	assertEquals (testDiagram.getSize (), 2);
+	assertEquals (testDiagram.nameInDiagram ("Class1"), true);
+	assertEquals (testDiagram.nameInDiagram ("Class2"), true);
+	
+    }
+
+    @Test
     public void testAddClass ()
     {
 	ShrugUMLDiagram testDiagram = new ShrugUMLDiagram ();

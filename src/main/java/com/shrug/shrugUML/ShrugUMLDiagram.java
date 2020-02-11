@@ -1,14 +1,7 @@
-/*
-  Filename: shrugUMLDiagram.java
-  Author:   Cole Vohs
-  Description: A class representing a UML diagram
-*/
-
-// Package
 package shrugUML;
-
 // Includes
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ShrugUMLDiagram
 {
@@ -17,6 +10,16 @@ public class ShrugUMLDiagram
     {
 	m_classes = new ArrayList<ShrugUMLClass> ();
 	m_size = 0;
+    }
+
+    public ShrugUMLDiagram (ShrugUMLClass[] classes)
+    {
+	m_classes = new ArrayList<ShrugUMLClass> ();
+	for (ShrugUMLClass c : classes)
+	    {
+		m_classes.add (c);
+		++m_size;
+	    }
     }
 
     /**************************************************************************/    
