@@ -5,11 +5,10 @@ import java.util.Arrays;
 
 public class ShrugUMLDiagram
 {
-    // Default Ctor - new Diagram with nothing in it and size 0
+    // Default Ctor - new Diagram with nothing in it
     public ShrugUMLDiagram ()
     {
 	m_classes = new ArrayList<ShrugUMLClass> ();
-	m_size = 0;
     }
 
     public ShrugUMLDiagram (ShrugUMLClass[] classes)
@@ -18,7 +17,6 @@ public class ShrugUMLDiagram
 	for (ShrugUMLClass c : classes)
 	    {
 		m_classes.add (c);
-		++m_size;
 	    }
     }
 
@@ -40,7 +38,6 @@ public class ShrugUMLDiagram
 	    {
 		ShrugUMLClass newClass = new ShrugUMLClass (className);
 		m_classes.add (newClass);
-		++m_size;
 		return true;
 	    }
     }
@@ -54,7 +51,6 @@ public class ShrugUMLDiagram
     {
 	if (m_classes.remove (findClass (className)))
 	    {
-		--m_size;
 		return true;
 	    }
 	else
@@ -72,17 +68,6 @@ public class ShrugUMLDiagram
     {
       return m_classes; 
     }   
-
-    /*
-      Function: getSize ()
-      Precondition: this is instantiated
-      Postcondition: m_size, the size of the diagram, is returned
-     */
-    public int getSize ()
-    {
-	return m_size;
-    }
-
     
     /**************************************************************************/    
     // Private Methods
@@ -120,7 +105,6 @@ public class ShrugUMLDiagram
 
     /**************************************************************************/    
     // Private Data Members
-    private int m_size;
     private ArrayList<ShrugUMLClass> m_classes;
     
 }
