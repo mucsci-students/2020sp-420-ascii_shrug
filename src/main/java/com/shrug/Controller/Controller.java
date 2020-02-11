@@ -5,13 +5,8 @@ import shrugUML.*;
 import java.io.File;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.Arrays;
-=======
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
 import java.io.IOException;
->>>>>>> 4d268824b0637ef381a4f354d5d81dbcbaf2e1f6
 
 public class Controller {
 
@@ -63,28 +58,40 @@ public class Controller {
     }
     return true;
   }
-<<<<<<< HEAD
-  
-  //TODO
+ 
+
+  /*
+    Method: load (String path)
+    Path: an absolute file path
+    
+    Precondition: Repl is running and path leads to a valid json file.
+
+    Postcondition: A diagram has been constructed with equivalent state 
+                   to the json file.
+  */
   public boolean load (String path) 
   {
     ObjectMapper mapper = new ObjectMapper();
     try
     {
-      File jsonFile = new File (path);
-      ShrugUMLClass[] diagram = mapper.readValue (jsonFile, ShrugUMLClass[].class);
+      ShrugUMLClass[] diagram = mapper.readValue (new File (path), ShrugUMLClass[].class);
     }
-    catch (Exception e) { System.out.println ("Error loading file"); }
+    catch (IOException e) 
+    {
+      e.printStackTrace();
+      return false;
+    }
 
-
-=======
-
-  // TODO
-  public boolean load(String path) {
->>>>>>> 4d268824b0637ef381a4f354d5d81dbcbaf2e1f6
     return true;
   }
 
+  /*
+    Method: getClasses
+
+    Precondition: A diagram is initialized.
+
+    Postcondition: The underlying DS is returned.
+  */
   public ArrayList<ShrugUMLClass> getClasses() {
     return m_diagram.getClasses();
   }
