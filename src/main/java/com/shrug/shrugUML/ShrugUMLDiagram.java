@@ -28,13 +28,12 @@ public class ShrugUMLDiagram
     /*
       Function: addClass (String className)
       Precondition: className is the name of the class to be added to the diagram
-      Postcondition: className is added to the diagram if the name is valid, throws exception if name is invalid
+      Postcondition: className is added to the diagram if the name is valid. Returns true if it's added, false if it's not
      */
     public boolean addClass (String className)
     {
 	if (nameInDiagram (className))
 	    {
-		// TODO: THROW EXCEPTION
 		return false;
 	    }
 	else
@@ -49,7 +48,7 @@ public class ShrugUMLDiagram
     /*
       Function: removeClass (String className)
       Precondition: className is the name of the class to be removed from the diagram
-      Postcondition: className is removed from the diagram if className is in the diagram, throws exception if name is invalid
+      Postcondition: className is removed from the diagram if className is in the diagram. Returns true if remove, false if not removed.
      */
     public boolean removeClass (String className)
     {
@@ -60,7 +59,6 @@ public class ShrugUMLDiagram
 	    }
 	else
 	    {
-		//TODO: THROW EXCEPTION
 		return false;
 	    }
     }
