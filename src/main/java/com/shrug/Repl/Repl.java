@@ -25,8 +25,7 @@ public class Repl
    private static String[] parseLine ()
    {
     String command = scan.nextLine ();
-    String[] cmds = command.split(" ", 0);
-    return cmds;
+    return command.split(" ", 0);
    }
 
    // encapsulate logic for choosing what action must be taken. 
@@ -47,16 +46,24 @@ public class Repl
        {
          for (ShrugUMLClass c : control.getClasses ())
             System.out.println (c.getName ());
+         return true;
        }
        case "exit":
          return exit ();
+       case "":
+         return true;
        default:
+       {
+         System.out.println ("Invalid Command.");
          return false;
+       }
      }
    }
 
-
-   // TODO
+   /* Function: exit () 
+    * precondition: program is running and exit is entered into Repl.
+    * postcondition: program is terminated.
+   */
    private static boolean exit () 
    {
      System.exit (0);
