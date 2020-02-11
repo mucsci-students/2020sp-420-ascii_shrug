@@ -6,4 +6,4 @@
 2. run `mvn package` to compile
 
 #### Running:
-1. run `java -cp target/uml-VERSION.jar Repl`
+1. run `java -cp target/uml-VERSION-jar-with-dependencies.jar Repl`
