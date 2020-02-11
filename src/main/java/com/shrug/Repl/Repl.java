@@ -20,15 +20,29 @@ public class Repl
      }
    } 
    
-   // parses the current line and returns it to the main loop space 
-   // delimited into an array for execution
+   /*
+      Method: parseLine ()
+
+      Precondition: Repl exists and stdin is valid
+
+      Postcondition: returns an array with commands parsed into 
+                     an array by space. 
+   */
    private static String[] parseLine ()
    {
+    System.out.print ("->");
     String command = scan.nextLine ();
     return command.split(" ", 0);
    }
 
-   // encapsulate logic for choosing what action must be taken. 
+   /*
+      Method: execute (String[] cmds)
+      cmds is a list of the arguments on the command line, space delimited.
+
+      Precondition: Repl is initialized.
+
+      Postcondition: An action occurs to load, save, or modify the state of a UML diagram. 
+   */
    private static boolean execute (String[] cmds)
    {
      // in each case 
