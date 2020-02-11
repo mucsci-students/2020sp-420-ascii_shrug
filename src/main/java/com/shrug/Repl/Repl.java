@@ -59,8 +59,8 @@ public class Repl
    // TODO
    private static boolean exit () 
    {
-
-     return false;
+     System.exit (0);
+     return true;
    }
     
 }
