@@ -60,7 +60,14 @@ public class Controller {
     return true;
   }
 
-  // TODO
+  /*
+    Method: load (String path)
+    Path: an absolute file path
+    
+    Precondition: Repl is running and path leads to a valid json file.
+    Postcondition: A diagram has been constructed with equivalent state 
+                   to the json file.
+  */
   public boolean load(String path) {
     try
     {
