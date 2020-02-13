@@ -1,10 +1,10 @@
 package Controller;
 
-import shrugUML.*;
-import java.util.ArrayList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import shrugUML.*;
 
 public class Controller {
 
@@ -29,31 +29,21 @@ public class Controller {
   }
 
   /*
-      Method: save ()
-      Precondition: 
-        this has an initialized m_diagram
-
-      Postcondition:
-        this.m_className is returned
-
-      Parameters:
-        path -- the path/name of the file to be saved without .json extension
-
-      Returns:
-        true if able to save file else return false    
-      
-        BUGS:
-        not catching objectMapper exceptions
-        parameter path only works with file names and with file paths
-  */
-  public boolean save(String path) 
-  {
+   * Method: save () Precondition: this has an initialized m_diagram
+   *
+   * Postcondition: this.m_className is returned
+   *
+   * Parameters: path -- the path/name of the file to be saved without .json extension
+   *
+   * Returns: true if able to save file else return false
+   *
+   * BUGS: not catching objectMapper exceptions parameter path only works with file names and with file paths
+   */
+  public boolean save(String path) {
     ObjectMapper objectMapper = new ObjectMapper();
-    try 
-    {
+    try {
       objectMapper.writeValue(new File(path), m_diagram);
-    } 
-    catch (IOException e) {
+    } catch (IOException e) {
       e.printStackTrace();
       return false;
     }
@@ -61,21 +51,16 @@ public class Controller {
   }
 
   /*
-    Method: load (String path)
-    Path: an absolute file path
-    
-    Precondition: Repl is running and path leads to a valid json file.
-    Postcondition: A diagram has been constructed with equivalent state 
-                   to the json file.
-  */
+   * Method: load (String path) Path: an absolute file path
+   *
+   * Precondition: Repl is running and path leads to a valid json file. Postcondition: A diagram has been constructed
+   * with equivalent state to the json file.
+   */
   public boolean load(String path) {
-    try
-    {
+    try {
       ObjectMapper objectMapper = new ObjectMapper();
       m_diagram = objectMapper.readValue(new File(path), ShrugUMLDiagram.class);
-    }
-    catch (IOException e) 
-    {
+    } catch (IOException e) {
       e.printStackTrace();
       return false;
     }
