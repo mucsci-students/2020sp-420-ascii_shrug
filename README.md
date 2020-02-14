@@ -12,10 +12,10 @@
 #### Usage:
 ```
 Commands:
-add <classname>      : adds classname to the diagram\n" +
-remove <classname>   : removes classname from the diagram\n" +
-save <filename>.json : save the diagram in a specified json file\n" +
-load <filename>.json : load the diagram stored in specified json file\n" +
-print                : prints the current diagram\n" +
+add <classname>      : adds classname to the diagram
+remove <classname>   : removes classname from the diagram
+save <filename>.json : save the diagram in a specified json file
+load <filename>.json : load the diagram stored in specified json file
+print                : prints the current diagram
 exit                 : exit the editor (no warning for unsaved diagram)
 ```
