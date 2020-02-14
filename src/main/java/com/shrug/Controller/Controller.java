@@ -29,30 +29,30 @@ public class Controller {
   }
 
   /*
-      Method: save ()
-      Precondition: 
-        this has an initialized m_diagram
+    Method: save ()
+    Precondition: 
+    this has an initialized m_diagram
 
-      Postcondition:
-        this.m_className is returned
+    Postcondition:
+    this.m_className is returned
 
-      Parameters:
-        path -- the path/name of the file to be saved without .json extension
+    Parameters:
+    path -- the path/name of the file to be saved without .json extension
 
-      Returns:
-        true if able to save file else return false    
+    Returns:
+    true if able to save file else return false    
       
-        BUGS:
-        not catching objectMapper exceptions
-        parameter path only works with file names and with file paths
+    BUGS:
+    not catching objectMapper exceptions
+    parameter path only works with file names and with file paths
   */
   public boolean save(String path) 
   {
     ObjectMapper objectMapper = new ObjectMapper();
     try 
-    {
-      objectMapper.writeValue(new File(path), m_diagram);
-    } 
+      {
+	objectMapper.writeValue(new File(path), m_diagram);
+      } 
     catch (IOException e) {
       e.printStackTrace();
       return false;
@@ -66,19 +66,19 @@ public class Controller {
     
     Precondition: Repl is running and path leads to a valid json file.
     Postcondition: A diagram has been constructed with equivalent state 
-                   to the json file.
+    to the json file.
   */
   public boolean load(String path) {
     try
-    {
-      ObjectMapper objectMapper = new ObjectMapper();
-      m_diagram = objectMapper.readValue(new File(path), ShrugUMLDiagram.class);
-    }
+      {
+	ObjectMapper objectMapper = new ObjectMapper();
+	m_diagram = objectMapper.readValue(new File(path), ShrugUMLDiagram.class);
+      }
     catch (IOException e) 
-    {
-      e.printStackTrace();
-      return false;
-    }
+      {
+	e.printStackTrace();
+	return false;
+      }
     return true;
   }
 
