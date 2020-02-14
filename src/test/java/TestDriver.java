@@ -6,9 +6,17 @@ public class TestDriver
 {
     public static void main (String[] args)
     {
-	Result result = JUnitCore.runClasses(TestJunit.class);
+	// Run UMLDiagram tests
+	Result diagramResult = JUnitCore.runClasses(TestUMLDiagram.class);
 	
-	for (Failure failure : result.getFailures()) {
+	for (Failure failure : diagramResult.getFailures()) {
+	    System.out.println(failure.toString());
+	}
+
+	// Run UMLClass tests
+	Result classResult = JUnitCore.runClasses(TestUMLClass.class);
+	
+	for (Failure failure : classResult.getFailures()) {
 	    System.out.println(failure.toString());
 	}
 	
