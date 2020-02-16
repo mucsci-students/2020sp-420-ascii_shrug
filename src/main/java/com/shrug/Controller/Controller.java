@@ -18,15 +18,27 @@ public class Controller {
     this.m_diagram = obj;
   }
 
-  // TODO
+  /*
+   * Function: add (String className)
+   * Precondition: className is the name of the class to be added to the diagram
+   * Postcondition: className is added to the diagram if the name is valid. Returns true if it's added, false if it's
+   * not
+   */
   public boolean add(String className) {
     return m_diagram.addClass(className);
   }
 
-  // TODO
+  /*
+   * Method: remove (String className)
+   * Precondition: className is the name of the class to be removed from the
+   * diagram
+   * Postcondition: className is removed from the diagram if className is in the diagram. Returns true if
+   * remove, false if not removed.
+   */
   public boolean remove(String className) {
     return m_diagram.removeClass(className);
   }
+
   /*
     Method: save ()
     Precondition:
@@ -75,6 +87,11 @@ public class Controller {
     return true;
   }
 
+  /*
+   * Function: getClasses ()
+   * Precondition: this is instantiated
+   * Postcondition: the underlying model is returned
+   */
   public ArrayList<ShrugUMLClass> getClasses() {
     return m_diagram.getClasses();
   }
