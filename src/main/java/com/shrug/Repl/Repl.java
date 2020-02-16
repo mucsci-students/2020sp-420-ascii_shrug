@@ -1,5 +1,7 @@
-// repl.java
-// Author:
+/* Filename: Repl.java
+ * Primary Author: Jack Fazio
+ * Description: Represents basic program loop
+ */
 import Controller.*;
 import java.util.Scanner;
 import java.util.regex.*;
@@ -10,6 +12,7 @@ public class Repl {
   private static Controller control = new Controller();
 
   public static void main(String[] args) {
+    printHelp();
     while (true) {
       execute(parseLine());
       continue;
@@ -17,13 +20,11 @@ public class Repl {
   }
 
   /*
-    Method: parseLine ()
-
-    Precondition: Repl exists and stdin is valid
-
-    Postcondition: returns an array with commands parsed into
-    an array by space.
-  */
+   *Method: parseLine ()
+   * Precondition: Repl exists and stdin is valid
+   * Postcondition: returns an array with commands parsed into
+   * an array by space.
+   */
   private static String[] parseLine() {
     System.out.print("-> ");
     String command = scan.nextLine();
@@ -31,13 +32,11 @@ public class Repl {
   }
 
   /*
-    Method: execute (String[] cmds)
-    cmds is a list of the arguments on the command line, space delimited.
-
-    Precondition: Repl is initialized.
-
-    Postcondition: An action occurs to load, save, or modify the state of a UML diagram.
-  */
+   * Method: execute (String[] cmds)
+   * cmds is a list of the arguments on the command line, space delimited.
+   * Precondition: Repl is initialized.
+   * Postcondition: An action occurs to load, save, or modify the state of a UML diagram.
+   */
   private static boolean execute(String[] cmds) {
     // in each case
     switch (cmds[0].toLowerCase()) {
@@ -77,7 +76,7 @@ public class Repl {
         return true;
       default:
         {
-          System.out.println("Error: Invalid Command");
+          System.out.println("Error: Invalid Command (type 'help' for valid commands)");
           return false;
         }
     }
