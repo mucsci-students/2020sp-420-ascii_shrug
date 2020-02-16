@@ -27,8 +27,7 @@ public class Repl {
    */
   private static String[] parseLine() {
     System.out.print("-> ");
-    String command = scan.nextLine();
-    return command.split(" ", 0);
+    return scan.nextLine().trim().split("\\s+", 0);
   }
 
   /*
@@ -38,26 +37,12 @@ public class Repl {
    * Postcondition: An action occurs to load, save, or modify the state of a UML diagram.
    */
   private static boolean execute(String[] cmds) {
-    // in each case
+
     switch (cmds[0].toLowerCase()) {
       case "add":
-        {
-          // Store result in case of error
-          boolean result = control.add(cmds[1]);
-          if (!result) {
-            System.out.println("Error: " + cmds[1] + " is an invalid name");
-          }
-          return result;
-        }
+        return add(cmds);
       case "remove":
-        {
-          // Store result in case of error
-          boolean result = control.remove(cmds[1]);
-          if (!result) {
-            System.out.println("Error: " + cmds[1] + " is an invalid name");
-          }
-          return result;
-        }
+        return remove(cmds);
       case "save":
         return control.save(cmds[1]);
       case "load":
@@ -70,8 +55,10 @@ public class Repl {
       case "exit":
         return exit();
       case "help":
-        printHelp();
-        return true;
+        {
+          printHelp();
+          return true;
+        }
       case "":
         return true;
       default:
@@ -104,6 +91,30 @@ public class Repl {
             + "load <filename>.json : load the diagram stored in specified json file\n"
             + "print                : prints the current diagram\n"
             + "exit                 : exit the editor (no warning for unsaved diagram)\n");
+  }
+
+  /* Function: add ()
+   * precondition: repl is instantiated with an associated controller.
+   * postcondition: the UML object is added to the diagram.
+   */
+  private static boolean add(String[] cmds) {
+    if (!control.add(cmds[1])) {
+      System.out.println("Error: " + cmds[1] + " is an invalid name");
+      return true;
+    }
+    return false;
+  }
+
+  /* Function: remove ()
+   * precondition: repl is instantiated with an associated controller.
+   * postcondition: the UML object is removed from the diagram.
+   */
+  private static boolean remove(String[] cmds) {
+    if (!control.remove(cmds[1])) {
+      System.out.println("Error: " + cmds[1] + " is an invalid name");
+      return true;
+    }
+    return false;
   }
 
   /* Function: exit ()
