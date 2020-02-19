@@ -1,7 +1,10 @@
 /* Filename: Repl.java
  * Primary Author: Jack Fazio
- * Description: Represents basic program loop
+ * Description: Text view of UML editor
  */
+
+package Repl;
+
 import Controller.*;
 import java.util.Scanner;
 import java.util.regex.*;
@@ -11,7 +14,11 @@ public class Repl {
   private static Scanner scan = new Scanner(System.in);
   private static Controller control = new Controller();
 
-  public static void main(String[] args) {
+  public Repl() {
+    run();
+  }
+
+  private static void run() {
     printHelp();
     while (true) {
       execute(parseLine());

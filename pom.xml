@@ -39,7 +39,7 @@
         <configuration>
 	  <archive>
 	    <manifest>
-	      <mainClass>Repl</mainClass>
+	      <mainClass>Main</mainClass>
 	    </manifest>
 	  </archive>
           <descriptorRefs>
