@@ -13,5 +13,5 @@ public class Main {
     GUI g;
     if (args.length > 0 && args[0].equals("-t")) r = new Repl();
     else Application.launch(GUI.class, args);
-	}
+  }
 }
