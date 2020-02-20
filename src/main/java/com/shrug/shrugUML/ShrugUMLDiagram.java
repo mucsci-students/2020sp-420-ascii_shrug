@@ -8,11 +8,14 @@ package shrugUML;
 
 // Includes
 import java.util.ArrayList;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
 public class ShrugUMLDiagram {
   // Default Ctor - new Diagram with nothing in it
   public ShrugUMLDiagram() {
     m_classes = new ArrayList<ShrugUMLClass>();
+    m_diagram = new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
   }
 
   public ShrugUMLDiagram(ShrugUMLClass[] classes) {
@@ -37,6 +40,7 @@ public class ShrugUMLDiagram {
     } else {
       ShrugUMLClass newClass = new ShrugUMLClass(className);
       m_classes.add(newClass);
+      m_diagram.addVertex(newClass);
       return true;
     }
   }
@@ -97,4 +101,6 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Private Data Members
   private ArrayList<ShrugUMLClass> m_classes;
+
+  private SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> m_diagram;
 }
