@@ -12,6 +12,13 @@
   </properties>
 
   <dependencies>
+	
+  <dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-controls</artifactId>
+    <version>13</version>
+	<scope>compile</scope>
+  </dependency>
 
     <dependency>
       <groupId>junit</groupId>
