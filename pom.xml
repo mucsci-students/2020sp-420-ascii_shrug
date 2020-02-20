@@ -9,6 +9,7 @@
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -67,7 +68,7 @@
       <plugin>
 	<groupId>com.cosium.code</groupId>
 	<artifactId>maven-git-code-format</artifactId>
-	<version>1.37</version>
+	<version>1.39</version>
 	<executions>
 	  <!-- On commit, format the modified java files -->
 	  <execution>
