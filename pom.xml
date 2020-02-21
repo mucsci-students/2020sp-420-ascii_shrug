@@ -9,9 +9,17 @@
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
+	
+  <dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-controls</artifactId>
+    <version>13</version>
+	<scope>compile</scope>
+  </dependency>
 
     <dependency>
       <groupId>junit</groupId>
@@ -65,15 +73,9 @@
       <plugin>
 	<groupId>com.cosium.code</groupId>
 	<artifactId>maven-git-code-format</artifactId>
-	<version>1.37</version>
+	<version>1.39</version>
 	<executions>
 	  <!-- On commit, format the modified java files -->
-	  <execution>
-	    <id>install-formatter-hook</id>
-	    <goals>
-	      <goal>install-hooks</goal>
-	    </goals>
-	  </execution>
 	  <!-- On Maven verify phase, fail if any file 
 	       (including unmodified) is badly formatted -->
 	  <execution>
