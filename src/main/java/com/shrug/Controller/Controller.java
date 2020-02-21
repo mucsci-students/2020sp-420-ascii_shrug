@@ -3,7 +3,7 @@ package Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Set;
 import shrugUML.*;
 
 public class Controller {
@@ -92,7 +92,7 @@ public class Controller {
    * Precondition: this is instantiated
    * Postcondition: the underlying model is returned
    */
-  public ArrayList<ShrugUMLClass> getClasses() {
+  public Set<ShrugUMLClass> getClasses() {
     return m_diagram.getClasses();
   }
 }
