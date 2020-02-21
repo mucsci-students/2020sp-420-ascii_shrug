@@ -7,19 +7,14 @@
 package shrugUML;
 
 // Includes
-import java.util.ArrayList;
+import java.util.Set;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
 public class ShrugUMLDiagram {
   // Default Ctor - new Diagram with nothing in it
   public ShrugUMLDiagram() {
-    m_classes = new ArrayList<ShrugUMLClass>();
-  }
-
-  public ShrugUMLDiagram(ShrugUMLClass[] classes) {
-    m_classes = new ArrayList<ShrugUMLClass>();
-    for (ShrugUMLClass c : classes) {
-      m_classes.add(c);
-    }
+    m_diagram = new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
   }
 
   /** *********************************************************************** */
@@ -36,7 +31,7 @@ public class ShrugUMLDiagram {
       return false;
     } else {
       ShrugUMLClass newClass = new ShrugUMLClass(className);
-      m_classes.add(newClass);
+      m_diagram.addVertex(newClass);
       return true;
     }
   }
@@ -49,29 +44,28 @@ public class ShrugUMLDiagram {
    * remove, false if not removed.
    */
   public boolean removeClass(String className) {
-    if (m_classes.remove(findClass(className))) {
+    if (m_diagram.removeVertex(findClass(className))) {
       return true;
     } else {
       return false;
     }
   }
 
-  /*
-   * Function: getClasses ()
+  /* Function: getClassesAsSet ()
    * Precondition: this is instantiated
-   * Postcondition: the underlying model is returned
+   * Postcondition: the classes in the diagram are returned as a set
    */
-  public ArrayList<ShrugUMLClass> getClasses() {
-    return m_classes;
+  public Set<ShrugUMLClass> getClasses() {
+    return m_diagram.vertexSet();
   }
 
   /*
-   * Function: classInDiagram (String newName)
+   * Function: nameInDiagram (String newName)
    * Precondition: newName is the string to be checked for Postcondition:
    * returns true if the name is in m_classes, false if it isn't
    */
   public boolean nameInDiagram(String className) {
-    for (ShrugUMLClass classElement : m_classes)
+    for (ShrugUMLClass classElement : getClasses())
       if (className.contentEquals(classElement.getName())) return true;
     return false;
   }
@@ -83,18 +77,71 @@ public class ShrugUMLDiagram {
    * name.
    */
   public ShrugUMLClass findClass(String className) {
-    for (ShrugUMLClass classElement : m_classes) {
+    for (ShrugUMLClass classElement : getClasses()) {
       if (className.contentEquals(classElement.getName())) {
         return classElement;
       }
     }
-    return new ShrugUMLClass();
+    return null;
   }
 
+  /* Function: addRelationship (String c1, String c2)
+   * Precondition:
+   * Postcondition: Relationship c1 -> c2 is added to the diagram
+   */
+  public boolean addRelationship(String n1, String n2) {
+    if (!isRelationshipInDiagram(n1, n2) && findClass(n1) != null && findClass(n2) != null) {
+      m_diagram.addEdge(findClass(n1), findClass(n2));
+      return true;
+    }
+    return false;
+  }
+
+  /* Function: removeRelationship (String c1, String c2)
+   * Precondition:
+   * Postcondition: Relationship c1 -> c2 is added to the diagram
+   */
+  public boolean removeRelationship(String n1, String n2) {
+    DefaultEdge edge = getRelationship(n1, n2);
+    if (edge != null) {
+      return m_diagram.removeEdge(edge);
+    }
+    return false;
+  }
+
+  /* Function: getEdgesOfClass (String className)
+   * Precondition:
+   * Postcondition: A set containing the edges going out from the class is returned; returns null if className is not in the diagram
+   */
+  public Set<DefaultEdge> getRelationshipsOfClass(String className) {
+    ShrugUMLClass c = findClass(className);
+    if (c != null) return m_diagram.edgesOf(c);
+    return null;
+  }
+
+  /* Function: getRelationship (String n1, String n2)
+   * Precondition:
+   * Postcondition: Returns the edge n1 -> n2; null if edge doesn't exist or one of the classes doesn't exist
+   */
+  public DefaultEdge getRelationship(String n1, String n2) {
+    ShrugUMLClass c1 = findClass(n1);
+    ShrugUMLClass c2 = findClass(n2);
+    DefaultEdge edge = m_diagram.getEdge(c1, c2);
+    if ((edge != null) && (c1 != null) && (c2 != null)) return edge;
+    else return null;
+  }
+
+  public boolean isRelationshipInDiagram(String n1, String n2) {
+    ShrugUMLClass c1 = findClass(n1);
+    ShrugUMLClass c2 = findClass(n2);
+    DefaultEdge edge = m_diagram.getEdge(c1, c2);
+    if ((edge != null) && (c1 != null) && (c2 != null)) return true;
+    else return false;
+  }
   /** *********************************************************************** */
   // Private Methods
 
   /** *********************************************************************** */
   // Private Data Members
-  private ArrayList<ShrugUMLClass> m_classes;
+  private SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> m_diagram;
 }
