@@ -1,6 +1,6 @@
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
+import java.util.Set;
 import org.junit.*;
 import shrugUML.*;
 
@@ -9,15 +9,6 @@ public class TestUMLDiagram {
   public void testUMLNullCtor() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     assertEquals(testDiagram.nameInDiagram("notAClass"), false);
-  }
-
-  @Test
-  public void testUMLDiagramClassArrayCtor() {
-    ShrugUMLClass[] classes;
-    classes = new ShrugUMLClass[] {new ShrugUMLClass("Class1"), new ShrugUMLClass("Class2")};
-    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram(classes);
-    assertEquals(testDiagram.nameInDiagram("Class1"), true);
-    assertEquals(testDiagram.nameInDiagram("Class2"), true);
   }
 
   @Test
@@ -64,14 +55,14 @@ public class TestUMLDiagram {
   public void testValidFindClass() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     testDiagram.addClass("newClass");
-    assertEquals(testDiagram.findClass("newClass"), testDiagram.getClasses().get(0));
+    assertNotNull(testDiagram.findClass("newClass"));
   }
 
   @Test
   public void testInvalidFindClass() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     testDiagram.addClass("newClass");
-    assertTrue(testDiagram.findClass("newClass2") != testDiagram.getClasses().get(0));
+    assertNull(testDiagram.findClass("haha"));
   }
 
   @Test
@@ -80,9 +71,43 @@ public class TestUMLDiagram {
     testDiagram.addClass("a");
     testDiagram.addClass("b");
     testDiagram.addClass("c");
-    ArrayList<ShrugUMLClass> diagram = testDiagram.getClasses();
-    assertTrue(diagram.get(0).getName() == "a");
-    assertTrue(diagram.get(1).getName() == "b");
-    assertTrue(diagram.get(2).getName() == "c");
+    Set<ShrugUMLClass> diagram = testDiagram.getClasses();
+    assertNotNull(testDiagram.findClass("a"));
+    assertNotNull(testDiagram.findClass("b"));
+    assertNotNull(testDiagram.findClass("c"));
+  }
+
+  @Test
+  public void testValidAddRelationship() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    testDiagram.addClass("a");
+    testDiagram.addClass("b");
+    assertTrue(testDiagram.addRelationship("a", "b"));
+  }
+
+  @Test
+  public void testInvalidAddRelationship() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    testDiagram.addClass("a");
+    testDiagram.addClass("b");
+    assertFalse(testDiagram.addRelationship("a", "c"));
+  }
+
+  @Test
+  public void testValidRemoveRelationship() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    testDiagram.addClass("a");
+    testDiagram.addClass("b");
+    testDiagram.addRelationship("a", "b");
+    assertTrue(testDiagram.removeRelationship("a", "b"));
+  }
+
+  @Test
+  public void testInvalidRemoveRelationship() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    testDiagram.addClass("a");
+    testDiagram.addClass("b");
+    testDiagram.addRelationship("a", "b");
+    assertFalse(testDiagram.removeRelationship("a", "c"));
   }
 }

@@ -4,11 +4,6 @@ import org.junit.*;
 import shrugUML.*;
 
 public class TestUMLClass {
-  @Test
-  public void testClassDefaultCtor() {
-    ShrugUMLClass myClass = new ShrugUMLClass();
-    assertEquals(myClass.getName(), null);
-  }
 
   @Test
   public void testClassNameCtor() {
