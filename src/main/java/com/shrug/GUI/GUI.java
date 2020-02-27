@@ -19,13 +19,13 @@ import javafx.embed.swing.*;
 import org.jgrapht.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
+import org.jgrapht.event.*;
 import shrugUML.*;
 
 public class GUI extends Application {
   private Button add, remove, edit, save, load;
-  SimpleDirectedGraph test = new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
-  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge> (test);
-  mxIGraphLayout layout = new mxOrganicLayout(jgxAdapter);
+  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter;
+  //mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
   public GUI() {}
 
@@ -40,7 +40,8 @@ public class GUI extends Application {
 
     initDiagram(borderPane);
     initMenuBar(borderPane);
-    //initButtons(borderPane);
+
+    borderPane.setCenter(createSwingDiagram());
 
     borderPane.setMargin(borderPane.getCenter(), new Insets(30));
 
@@ -48,17 +49,15 @@ public class GUI extends Application {
     primaryStage.show();
   }
 
-  public void createSwingDiagram() {
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
+  //function to print class names and attributes
+
+  public SwingNode createSwingDiagram() {
         SwingNode diagramNode = new SwingNode();
-        JInternalFrame frame = new JInternalFrame();
-        layout.execute(jgxAdapter.getDefaultParent());
+        JPanel frame = new JPanel();
+        //layout.execute(jgxAdapter.getDefaultParent());
         frame.add(new mxGraphComponent(jgxAdapter));
         diagramNode.setContent(frame);
-      }
-    });
+        return diagramNode;
   }
 
   public void initDiagram (BorderPane borderPane) {
@@ -66,7 +65,6 @@ public class GUI extends Application {
     diagram.setStyle("-fx-background-color: antiquewhite;");
     diagram.setStyle("-fx-border-style: solid;");
     diagram.setStyle("-fx-border-color: black;");
-    borderPane.setCenter(diagram);
   }
 
   public void initMenuBar (BorderPane borderPane) {
@@ -118,7 +116,10 @@ public class GUI extends Application {
     borderPane.setTop(options);
   }
 
-  public void processButtonPressAdd(ActionEvent event) {}
+  public void processButtonPressAdd(ActionEvent event) {
+    //call controller to add vertex, controller returns class, and we need controller to return diagram from model
+    //call adapter.vertexAdded()
+  }
 
   public void processButtonPressRemove(ActionEvent event) {}
 
