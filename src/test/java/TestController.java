@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.io.File;
 import Controller.*;
 import org.junit.*;
 import shrugUML.*;
@@ -23,6 +24,9 @@ public class TestController {
   public void testSave() {
     Controller controller = new Controller();
     assertTrue(controller.save("test.json"));
+    File testFile = new File("./test.json");
+    testFile.delete();
+
   }
 
   @Test
