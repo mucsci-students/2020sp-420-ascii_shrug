@@ -9,6 +9,7 @@ import javafx.scene.paint.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
+import javafx.embed.swing.SwingNode;
 import Controller.*;
 
 import com.mxgraph.layout.*;
