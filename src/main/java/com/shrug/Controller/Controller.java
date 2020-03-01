@@ -1,10 +1,18 @@
 package Controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
+/** *********************************************************************** */
+// Imports (java/external/local)
 import java.io.IOException;
+import java.io.File;
 import java.util.Set;
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+
 import shrugUML.*;
+
 
 public class Controller {
 
@@ -18,13 +26,17 @@ public class Controller {
     this.m_diagram = obj;
   }
 
+
+  /** *********************************************************************** */
+  // Class methods
+
   /*
    * Function: add (String className)
    * Precondition: className is the name of the class to be added to the diagram
    * Postcondition: className is added to the diagram if the name is valid. Returns true if it's added, false if it's
    * not
    */
-  public boolean add(String className) {
+  public boolean addClass(String className) {
     return m_diagram.addClass(className);
   }
 
@@ -35,10 +47,81 @@ public class Controller {
    * Postcondition: className is removed from the diagram if className is in the diagram. Returns true if
    * remove, false if not removed.
    */
-  public boolean remove(String className) {
+  public boolean removeClass(String className) {
     return m_diagram.removeClass(className);
   }
 
+  /** *********************************************************************** */
+  // Attribute methods
+
+  /*
+   * Function: addAttribute (String className, ArrayList<String> attributeList)
+   * Precondition: className and n in attributeList are valid identifiers
+   * Postcondition: className is added to the diagram if the name is valid with attributeList as its attributes.
+   *                valid attributes are given to className if className exists.
+   */
+  public boolean addAttributes(String className, ArrayList<String> attributeList) {
+
+    if (m_diagram.nameInDiagram (className))
+      return m_diagram.findClass (className).addAttributes (attributeList);
+    else
+    {
+      addClass (className);
+      return addAttributes (className, attributeList);
+    }
+  }
+  
+  /*
+   * Function: removeAttribute (String className, String[] attributeList)
+   * Precondition: className exists and n in attributeList are valid identifiers
+   * Postcondition: Removes all attributes of classname. returns false if 
+   *                className is not in diagram 
+   */
+  public boolean removeAttributes(String className, ArrayList<String> attributeList) {
+    if (m_diagram.nameInDiagram (className))
+      return m_diagram.findClass(className).removeAttributes(attributeList);
+    else 
+      return false;
+  }
+  
+
+  /** *********************************************************************** */
+  // Relationship methods
+
+  /*
+   * Function: addRelationship (String className, String[] vectorList)
+   * Precondition: className and v in vectorList exist
+   * Postcondition: className has relationships to v[i] st i != 0
+   */
+  public boolean addRelationships(String className, ArrayList<String> vectorList) {
+    boolean success = false;
+
+    for (String v : vectorList) 
+      success |= m_diagram.addRelationship(className, v);
+        
+    return success;
+  }
+
+  /*
+   * Function: remove (String className, String[] vectorList)
+   * Precondition: className and v in vectorList exist
+   * Postcondition: className has relationships to v[i] st i != 0
+   */
+  public boolean removeRelationships(String className, ArrayList<String> vectorList) {
+    boolean success = false;
+
+    for (String v : vectorList) 
+      success |= m_diagram.removeRelationship(className, v);
+        
+    return success;
+  }
+
+  /** *********************************************************************** */
+  // Meta methods
+
+  public boolean contains (String className) {
+    return m_diagram.nameInDiagram(className);
+  }
   /*
     Method: save ()
     Precondition:
@@ -85,6 +168,16 @@ public class Controller {
       return false;
     }
     return true;
+  }
+
+  /*
+   * Function: getGraph ()
+   * Precondition: this is instantiated
+   * Postcondition: the underlying graph is returned
+   */
+  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph ()
+  { 
+    return m_diagram.getGraph();
   }
 
   /*

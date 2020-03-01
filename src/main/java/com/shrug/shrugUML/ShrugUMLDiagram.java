@@ -20,6 +20,9 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Public Methods
 
+  /** *********************************************************************** */
+  // Class Methods
+
   /*
    * Function: addClass (String className)
    * Precondition: className is the name of the class to be added to the diagram
@@ -85,6 +88,9 @@ public class ShrugUMLDiagram {
     return null;
   }
 
+  /** *********************************************************************** */
+  // Relationship Methods
+
   /* Function: addRelationship (String c1, String c2)
    * Precondition:
    * Postcondition: Relationship c1 -> c2 is added to the diagram
@@ -120,7 +126,7 @@ public class ShrugUMLDiagram {
   }
 
   /* Function: getRelationship (String n1, String n2)
-   * Precondition:
+   * Precondition: graph exists
    * Postcondition: Returns the edge n1 -> n2; null if edge doesn't exist or one of the classes doesn't exist
    */
   public DefaultEdge getRelationship(String n1, String n2) {
@@ -131,6 +137,10 @@ public class ShrugUMLDiagram {
     else return null;
   }
 
+  /* Function: isRelationshipInDiagram (String n1, String n2)
+   * Precondition: graph exists
+   * Postcondition: Returns true if the edge n1 -> n2 exists. false otherwise
+   */
   public boolean isRelationshipInDiagram(String n1, String n2) {
     ShrugUMLClass c1 = findClass(n1);
     ShrugUMLClass c2 = findClass(n2);
@@ -138,6 +148,14 @@ public class ShrugUMLDiagram {
     if ((edge != null) && (c1 != null) && (c2 != null)) return true;
     else return false;
   }
+
+
+  /** *********************************************************************** */
+  // Utility Methods
+  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
+    return m_diagram;
+  }
+
   /** *********************************************************************** */
   // Private Methods
 
