@@ -2,17 +2,14 @@ package Controller;
 
 /** *********************************************************************** */
 // Imports (java/external/local)
-import java.io.IOException;
-import java.io.File;
-import java.util.Set;
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Set;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
-
 import shrugUML.*;
-
 
 public class Controller {
 
@@ -25,7 +22,6 @@ public class Controller {
   public Controller(ShrugUMLDiagram obj) {
     this.m_diagram = obj;
   }
-
 
   /** *********************************************************************** */
   // Class methods
@@ -62,28 +58,25 @@ public class Controller {
    */
   public boolean addAttributes(String className, ArrayList<String> attributeList) {
 
-    if (m_diagram.nameInDiagram (className))
-      return m_diagram.findClass (className).addAttributes (attributeList);
-    else
-    {
-      addClass (className);
-      return addAttributes (className, attributeList);
+    if (m_diagram.nameInDiagram(className))
+      return m_diagram.findClass(className).addAttributes(attributeList);
+    else {
+      addClass(className);
+      return addAttributes(className, attributeList);
     }
   }
-  
+
   /*
    * Function: removeAttribute (String className, String[] attributeList)
    * Precondition: className exists and n in attributeList are valid identifiers
-   * Postcondition: Removes all attributes of classname. returns false if 
-   *                className is not in diagram 
+   * Postcondition: Removes all attributes of classname. returns false if
+   *                className is not in diagram
    */
   public boolean removeAttributes(String className, ArrayList<String> attributeList) {
-    if (m_diagram.nameInDiagram (className))
+    if (m_diagram.nameInDiagram(className))
       return m_diagram.findClass(className).removeAttributes(attributeList);
-    else 
-      return false;
+    else return false;
   }
-  
 
   /** *********************************************************************** */
   // Relationship methods
@@ -96,9 +89,8 @@ public class Controller {
   public boolean addRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList) 
-      success |= m_diagram.addRelationship(className, v);
-        
+    for (String v : vectorList) success |= m_diagram.addRelationship(className, v);
+
     return success;
   }
 
@@ -110,18 +102,14 @@ public class Controller {
   public boolean removeRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList) 
-      success |= m_diagram.removeRelationship(className, v);
-        
+    for (String v : vectorList) success |= m_diagram.removeRelationship(className, v);
+
     return success;
   }
 
   /** *********************************************************************** */
   // Meta methods
 
-  public boolean contains (String className) {
-    return m_diagram.nameInDiagram(className);
-  }
   /*
     Method: save ()
     Precondition:
@@ -150,7 +138,6 @@ public class Controller {
     }
     return true;
   }
-
   /*
     Method: load (String path)
     Path: an absolute file path
@@ -175,8 +162,7 @@ public class Controller {
    * Precondition: this is instantiated
    * Postcondition: the underlying graph is returned
    */
-  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph ()
-  { 
+  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
     return m_diagram.getGraph();
   }
 
@@ -186,6 +172,6 @@ public class Controller {
    * Postcondition: the underlying model is returned
    */
   public Set<ShrugUMLClass> getClasses() {
-    return m_diagram.getClasses();
+    return m_diagram.retClasses();
   }
 }

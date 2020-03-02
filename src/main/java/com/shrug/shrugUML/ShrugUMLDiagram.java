@@ -7,9 +7,20 @@
 package shrugUML;
 
 // Includes
+import com.fasterxml.jackson.annotation.*;
+import java.util.ArrayList;
 import java.util.Set;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
+
+/*
+ // Deconstruct
+ v = m_diagram.vertexSet ().toArray ();
+ e = m_diagram.edgeSet ().toArray ();
+ // Construct
+ foreach (v) add v;
+ foreach (e) add e;
+*/
 
 public class ShrugUMLDiagram {
   // Default Ctor - new Diagram with nothing in it
@@ -33,9 +44,15 @@ public class ShrugUMLDiagram {
     if (nameInDiagram(className)) {
       return false;
     } else {
-      ShrugUMLClass newClass = new ShrugUMLClass(className);
-      m_diagram.addVertex(newClass);
-      return true;
+      return m_diagram.addVertex(new ShrugUMLClass(className));
+    }
+  }
+
+  public boolean addClass(ShrugUMLClass c) {
+    if (nameInDiagram(c.getName())) {
+      return false;
+    } else {
+      return m_diagram.addVertex(c);
     }
   }
 
@@ -54,11 +71,11 @@ public class ShrugUMLDiagram {
     }
   }
 
-  /* Function: getClassesAsSet ()
+  /* Function: retClassesAsSet ()
    * Precondition: this is instantiated
    * Postcondition: the classes in the diagram are returned as a set
    */
-  public Set<ShrugUMLClass> getClasses() {
+  public Set<ShrugUMLClass> retClasses() {
     return m_diagram.vertexSet();
   }
 
@@ -68,8 +85,8 @@ public class ShrugUMLDiagram {
    * returns true if the name is in m_classes, false if it isn't
    */
   public boolean nameInDiagram(String className) {
-    for (ShrugUMLClass classElement : getClasses())
-      if (className.contentEquals(classElement.getName())) return true;
+    for (ShrugUMLClass classElement : retClasses())
+      if (className == classElement.getName()) return true;
     return false;
   }
 
@@ -80,7 +97,7 @@ public class ShrugUMLDiagram {
    * name.
    */
   public ShrugUMLClass findClass(String className) {
-    for (ShrugUMLClass classElement : getClasses()) {
+    for (ShrugUMLClass classElement : retClasses()) {
       if (className.contentEquals(classElement.getName())) {
         return classElement;
       }
@@ -149,11 +166,38 @@ public class ShrugUMLDiagram {
     else return false;
   }
 
+  @JsonProperty("Vertices")
+  public ArrayList<ShrugUMLClass> deconstructVertices() {
+    return new ArrayList<ShrugUMLClass>(retClasses());
+  }
+
+  @JsonProperty("Vertices")
+  public ArrayList<ShrugUMLClassTuple> deconstructEdges() {
+    ArrayList<ShrugUMLClassTuple> tuples = new ArrayList<ShrugUMLClassTuple>();
+    for (DefaultEdge e : m_diagram.edgeSet()) {
+      tuples.add(new ShrugUMLClassTuple(e.getSource(), e.getTarget()));
+    }
+    return tuples;
+  }
+
+  public void constructVertices(ArrayList<ShrugUMLClass> classes) {
+    for (ShrugUMLClass c : classes) addClass(c);
+  }
+
+  public void constructEdges(ArrayList<DefaultEdge> edges) {
+    for (DefaultEdge e : edges) {
+      m_diagram.addEdge(e.getSource(), e.getTarget(), e);
+    }
+  }
 
   /** *********************************************************************** */
   // Utility Methods
   public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
     return m_diagram;
+  }
+
+  public void setGraph(SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> graph) {
+    m_diagram = graph;
   }
 
   /** *********************************************************************** */

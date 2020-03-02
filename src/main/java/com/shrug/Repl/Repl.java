@@ -6,11 +6,10 @@
 package Repl;
 
 import Controller.*;
-import shrugUML.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import shrugUML.*;
 
 public class Repl {
   private static Scanner scan = new Scanner(System.in);
@@ -36,7 +35,7 @@ public class Repl {
    * an array by space.
    */
   private static ArrayList<String> parseLine() {
-    return new ArrayList<String> (Arrays.asList(scan.nextLine().trim().split("\\s+")));
+    return new ArrayList<String>(Arrays.asList(scan.nextLine().trim().split("\\s+")));
   }
 
   /*
@@ -46,16 +45,15 @@ public class Repl {
    * Postcondition: An action occurs to load, save, or modify the state of a UML diagram.
    */
   private static boolean execute(ArrayList<String> cmds) {
-
     switch (cmds.get(0).toLowerCase()) {
       case "add":
         return add(cmds);
       case "remove":
         return remove(cmds);
       case "save":
-        return control.save(cmds.get(0));
+        return control.save(cmds.get(1));
       case "load":
-        return control.load(cmds.get(0));
+        return control.load(cmds.get(1));
       case "print":
         {
           printDiagram();
@@ -83,7 +81,7 @@ public class Repl {
    * Postcondition: The diagram is printed
    */
   private static void printDiagram() {
-    for (ShrugUMLClass c : control.getClasses()) System.out.println(c.getName());
+    System.out.println(control.getGraph().toString());
   }
 
   /* Function: printHelp ()
@@ -106,38 +104,31 @@ public class Repl {
    * precondition: repl is instantiated with an associated controller.
    * postcondition: the UML object is added to the diagram.
    */
-  private static boolean add(ArrayList<String> cmds) { 
-      
-      // add name to diagram if needed
-      if (control.contains(cmds.get(1)))
-      {
-        if (!control.addClass(cmds.get(1))) {
-          System.out.println("Error: " + cmds.get(1) + " is an invalid name");
-          return false;
-        }
-      }
+  private static boolean add(ArrayList<String> cmds) {
 
-      // add relationships
-      if (cmds.contains ("-r")){
-        ArrayList<String> relationships = new ArrayList<String>();
-        for (int i = cmds.indexOf("-r"); i != cmds.indexOf("-a") && i != cmds.size(); ++i)
-        {
-          relationships.add(cmds.get(i));
-        }
-        control.addRelationships(cmds.get(1), relationships);
-      }
+    if (!control.addClass(cmds.get(1))) {
+      System.out.println("Error: " + cmds.get(1) + " is an invalid name");
+      return false;
+    }
 
-      // add attributes
-      if (cmds.contains ("-a")){
-        ArrayList<String> attributes = new ArrayList<String>();
-        for (int i = cmds.indexOf("-a"); i != cmds.indexOf("-r") && i != cmds.size(); ++i)
-        {
-          attributes.add(cmds.get(i));
-        }
-        control.addAttributes(cmds.get(1), attributes);
-        
+    // add relationships
+    if (cmds.contains("-r")) {
+      ArrayList<String> relationships = new ArrayList<String>();
+      for (int i = cmds.indexOf("-r"); i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
+        relationships.add(cmds.get(i));
       }
-      return true;
+      control.addRelationships(cmds.get(1), relationships);
+    }
+
+    // add attributes
+    if (cmds.contains("-a")) {
+      ArrayList<String> attributes = new ArrayList<String>();
+      for (int i = cmds.indexOf("-a"); i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
+        attributes.add(cmds.get(i));
+      }
+      control.addAttributes(cmds.get(1), attributes);
+    }
+    return true;
   }
 
   /* Function: remove ()
@@ -146,27 +137,25 @@ public class Repl {
    */
   private static boolean remove(ArrayList<String> cmds) {
 
-      // remove relationships
-      if (cmds.contains ("-r")){
-        ArrayList<String> relationships = new ArrayList<String>();
-        for (int i = cmds.indexOf("-r"); i != cmds.indexOf("-a") && i != cmds.size(); ++i)
-        {
-          relationships.add(cmds.get(i));
-        }
-        control.removeRelationships(cmds.get(1), relationships);
+    // remove relationships
+    if (cmds.contains("-r")) {
+      ArrayList<String> relationships = new ArrayList<String>();
+      for (int i = cmds.indexOf("-r"); i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
+        relationships.add(cmds.get(i));
       }
+      control.removeRelationships(cmds.get(1), relationships);
+    }
 
-      // remove attributes
-      if (cmds.contains ("-a")){
-        ArrayList<String> attributes = new ArrayList<String>();
-        for (int i = cmds.indexOf("-a"); i != cmds.indexOf("-r") && i != cmds.size(); ++i)
-        {
-          attributes.add(cmds.get(i));
-        }
-        control.removeAttributes(cmds.get(1), attributes);
+    // remove attributes
+    if (cmds.contains("-a")) {
+      ArrayList<String> attributes = new ArrayList<String>();
+      for (int i = cmds.indexOf("-a"); i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
+        attributes.add(cmds.get(i));
       }
+      control.removeAttributes(cmds.get(1), attributes);
+    }
 
-      return true;
+    return true;
   }
 
   /* Function: exit ()
