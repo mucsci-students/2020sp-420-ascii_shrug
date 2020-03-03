@@ -6,10 +6,17 @@ package Controller;
 import java.io.*;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.nio.json.*;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.AttributeType;
 
 import shrugUML.*;
 
@@ -143,8 +150,16 @@ public class Controller {
 
   public boolean save(String path) {
     try {
-      JSONExporter<ShrugUMLClass, DefaultEdge> saver = new JSONExporter<ShrugUMLClass, DefaultEdge>();
       FileWriter w = new FileWriter (path);
+
+      JSONExporter<ShrugUMLClass, DefaultEdge> saver = new JSONExporter<ShrugUMLClass, DefaultEdge>();
+      saver.setVertexIdProvider ((ShrugUMLClass c) -> {return c.getName();});
+      saver.setVertexAttributeProvider ( (ShrugUMLClass c) -> { 
+                                                                Map<String, Attribute> map = new HashMap<String, Attribute> ();
+                                                                map.put("Attributes", new DefaultAttribute (c.getAttributes(), AttributeType.UNKNOWN));
+                                                                map.put("Methods", new DefaultAttribute (c.getMethods(), AttributeType.UNKNOWN));
+                                                                return map;
+                                                              });
       saver.exportGraph (getGraph (), w);
       return true;
     } catch (IOException e) {
@@ -164,8 +179,9 @@ public class Controller {
   */
   public boolean load (String path) {
     try{
-      JSONImporter<ShrugUMLClass, DefaultEdge> creator = new JSONImporter<ShrugUMLClass, DefaultEdge>();
       FileReader r = new FileReader(path);
+
+      JSONImporter<ShrugUMLClass, DefaultEdge> creator = new JSONImporter<ShrugUMLClass, DefaultEdge>();
       SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> g = new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
       creator.importGraph (g, r);
       m_diagram.setGraph (g);

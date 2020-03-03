@@ -114,7 +114,7 @@ public class Repl {
     // add relationships
     if (cmds.contains("-r")) {
       ArrayList<String> relationships = new ArrayList<String>();
-      for (int i = cmds.indexOf("-r"); i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
+      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
         relationships.add(cmds.get(i));
       }
       control.addRelationships(cmds.get(1), relationships);
@@ -123,7 +123,7 @@ public class Repl {
     // add attributes
     if (cmds.contains("-a")) {
       ArrayList<String> attributes = new ArrayList<String>();
-      for (int i = cmds.indexOf("-a"); i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
+      for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
         attributes.add(cmds.get(i));
       }
       control.addAttributes(cmds.get(1), attributes);
@@ -140,7 +140,7 @@ public class Repl {
     // remove relationships
     if (cmds.contains("-r")) {
       ArrayList<String> relationships = new ArrayList<String>();
-      for (int i = cmds.indexOf("-r"); i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
+      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
         relationships.add(cmds.get(i));
       }
       control.removeRelationships(cmds.get(1), relationships);
@@ -149,7 +149,7 @@ public class Repl {
     // remove attributes
     if (cmds.contains("-a")) {
       ArrayList<String> attributes = new ArrayList<String>();
-      for (int i = cmds.indexOf("-a"); i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
+      for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
         attributes.add(cmds.get(i));
       }
       control.removeAttributes(cmds.get(1), attributes);
