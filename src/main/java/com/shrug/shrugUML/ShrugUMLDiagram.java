@@ -7,7 +7,6 @@
 package shrugUML;
 
 // Includes
-import com.fasterxml.jackson.annotation.*;
 import java.util.ArrayList;
 import java.util.Set;
 import org.jgrapht.graph.DefaultEdge;
@@ -71,11 +70,11 @@ public class ShrugUMLDiagram {
     }
   }
 
-  /* Function: retClassesAsSet ()
+  /* Function: getClassesAsSet ()
    * Precondition: this is instantiated
    * Postcondition: the classes in the diagram are returned as a set
    */
-  public Set<ShrugUMLClass> retClasses() {
+  public Set<ShrugUMLClass> getClasses() {
     return m_diagram.vertexSet();
   }
 
@@ -85,7 +84,7 @@ public class ShrugUMLDiagram {
    * returns true if the name is in m_classes, false if it isn't
    */
   public boolean nameInDiagram(String className) {
-    for (ShrugUMLClass classElement : retClasses())
+    for (ShrugUMLClass classElement : getClasses())
       if (className == classElement.getName()) return true;
     return false;
   }
@@ -97,7 +96,7 @@ public class ShrugUMLDiagram {
    * name.
    */
   public ShrugUMLClass findClass(String className) {
-    for (ShrugUMLClass classElement : retClasses()) {
+    for (ShrugUMLClass classElement : getClasses()) {
       if (className.contentEquals(classElement.getName())) {
         return classElement;
       }

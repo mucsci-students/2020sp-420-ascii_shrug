@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.nio.json;
+import org.jgrapht.nio.json.*;
 
 import shrugUML.*;
 
@@ -142,10 +142,14 @@ public class Controller {
   */
 
   public boolean save(String path) {
-    JSONExporter saver = new JSONexporter();
-    FileWriter w = new FileWriter (path);
-    saver.exportGraph (getGraph (), w);
-    return true;
+    try {
+      JSONExporter<ShrugUMLClass, DefaultEdge> saver = new JSONExporter<ShrugUMLClass, DefaultEdge>();
+      FileWriter w = new FileWriter (path);
+      saver.exportGraph (getGraph (), w);
+      return true;
+    } catch (IOException e) {
+      return false;
+    }
   }
 
 
@@ -159,12 +163,16 @@ public class Controller {
     to the json file.
   */
   public boolean load (String path) {
-    JSONImporter creator = new JSONImporter();
-    FileReader r = new FileReader(path);
-    SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> g;
-    creator.importGraph (g, r);
-    m_diagram.setGraph (g);
-    return true;
+    try{
+      JSONImporter<ShrugUMLClass, DefaultEdge> creator = new JSONImporter<ShrugUMLClass, DefaultEdge>();
+      FileReader r = new FileReader(path);
+      SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> g = new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
+      creator.importGraph (g, r);
+      m_diagram.setGraph (g);
+      return true;
+    } catch (IOException e) {
+      return false;
+    }
   }
 
   /*
