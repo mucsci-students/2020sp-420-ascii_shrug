@@ -153,6 +153,7 @@ public class Controller {
       saver.setVertexAttributeProvider(
           (ShrugUMLClass c) -> {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
+            map.put("Name", new DefaultAttribute(c.getName(), AttributeType.STRING));
             map.put("Attributes", new DefaultAttribute(c.getAttributes(), AttributeType.UNKNOWN));
             map.put("Methods", new DefaultAttribute(c.getMethods(), AttributeType.UNKNOWN));
             return map;
@@ -183,9 +184,8 @@ public class Controller {
 
       BiConsumer<Pair<ShrugUMLClass, String>, Attribute> vertexConsumer =
           (pair, attr) -> {
-            System.out.println(pair.getSecond());
             switch (pair.getSecond()) {
-              case "id":
+              case "Name":
                 {
                   pair.getFirst().setName(attr.getValue());
                   break;
@@ -193,15 +193,21 @@ public class Controller {
               case "Attributes":
                 {
                   ArrayList<String> attributes =
-                      new ArrayList<String>(Arrays.asList(attr.getValue().trim().split(", ")));
+                      new ArrayList<String>(
+                          Arrays.asList(
+                              attr.getValue()
+                                  .trim()
+                                  .replace("[", "")
+                                  .replace("]", "")
+                                  .split(", ")));
                   pair.getFirst().addAttributes(attributes);
                   break;
                 }
               case "Methods":
                 {
-                  ArrayList<String> attributes =
+                  ArrayList<String> methods =
                       new ArrayList<String>(Arrays.asList(attr.getValue().trim().split(", ")));
-                  pair.getFirst().addMethods(attributes);
+                  pair.getFirst().addMethods(methods);
                   break;
                 }
             }
