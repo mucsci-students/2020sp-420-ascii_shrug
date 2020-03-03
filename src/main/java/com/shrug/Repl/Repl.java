@@ -6,8 +6,9 @@
 package Repl;
 
 import Controller.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-import java.util.regex.*;
 import shrugUML.*;
 
 public class Repl {
@@ -21,6 +22,7 @@ public class Repl {
   private static void run() {
     printHelp();
     while (true) {
+      System.out.print("-> ");
       execute(parseLine());
       continue;
     }
@@ -32,9 +34,8 @@ public class Repl {
    * Postcondition: returns an array with commands parsed into
    * an array by space.
    */
-  private static String[] parseLine() {
-    System.out.print("-> ");
-    return scan.nextLine().trim().split("\\s+", 0);
+  private static ArrayList<String> parseLine() {
+    return new ArrayList<String>(Arrays.asList(scan.nextLine().trim().split("\\s+")));
   }
 
   /*
@@ -43,17 +44,16 @@ public class Repl {
    * Precondition: Repl is initialized.
    * Postcondition: An action occurs to load, save, or modify the state of a UML diagram.
    */
-  private static boolean execute(String[] cmds) {
-
-    switch (cmds[0].toLowerCase()) {
+  private static boolean execute(ArrayList<String> cmds) {
+    switch (cmds.get(0).toLowerCase()) {
       case "add":
         return add(cmds);
       case "remove":
         return remove(cmds);
       case "save":
-        return control.save(cmds[1]);
+        return control.save(cmds.get(1));
       case "load":
-        return control.load(cmds[1]);
+        return control.load(cmds.get(1));
       case "print":
         {
           printDiagram();
@@ -81,7 +81,7 @@ public class Repl {
    * Postcondition: The diagram is printed
    */
   private static void printDiagram() {
-    for (ShrugUMLClass c : control.getClasses()) System.out.println(c.getName());
+    System.out.println(control.getGraph().toString());
   }
 
   /* Function: printHelp ()
@@ -104,24 +104,55 @@ public class Repl {
    * precondition: repl is instantiated with an associated controller.
    * postcondition: the UML object is added to the diagram.
    */
-  private static boolean add(String[] cmds) {
-    if (!control.add(cmds[1])) {
-      System.out.println("Error: " + cmds[1] + " is an invalid name");
-      return true;
+  private static boolean add(ArrayList<String> cmds) {
+
+    control.addClass(cmds.get(1));
+
+    // add relationships
+    if (cmds.contains("-r")) {
+      ArrayList<String> relationships = new ArrayList<String>();
+      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i < cmds.size(); ++i) {
+        relationships.add(cmds.get(i));
+      }
+      control.addRelationships(cmds.get(1), relationships);
     }
-    return false;
+
+    // add attributes
+    if (cmds.contains("-a")) {
+      ArrayList<String> attributes = new ArrayList<String>();
+      for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i < cmds.size(); ++i) {
+        attributes.add(cmds.get(i));
+      }
+      control.addAttributes(cmds.get(1), attributes);
+    }
+    return true;
   }
 
   /* Function: remove ()
    * precondition: repl is instantiated with an associated controller.
    * postcondition: the UML object is removed from the diagram.
    */
-  private static boolean remove(String[] cmds) {
-    if (!control.remove(cmds[1])) {
-      System.out.println("Error: " + cmds[1] + " is an invalid name");
-      return true;
+  private static boolean remove(ArrayList<String> cmds) {
+
+    // remove relationships
+    if (cmds.contains("-r")) {
+      ArrayList<String> relationships = new ArrayList<String>();
+      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
+        relationships.add(cmds.get(i));
+      }
+      control.removeRelationships(cmds.get(1), relationships);
     }
-    return false;
+
+    // remove attributes
+    if (cmds.contains("-a")) {
+      ArrayList<String> attributes = new ArrayList<String>();
+      for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
+        attributes.add(cmds.get(i));
+      }
+      control.removeAttributes(cmds.get(1), attributes);
+    }
+
+    return true;
   }
 
   /* Function: exit ()
