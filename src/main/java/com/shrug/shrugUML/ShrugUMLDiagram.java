@@ -166,29 +166,6 @@ public class ShrugUMLDiagram {
     else return false;
   }
 
-  @JsonProperty("Vertices")
-  public ArrayList<ShrugUMLClass> deconstructVertices() {
-    return new ArrayList<ShrugUMLClass>(retClasses());
-  }
-
-  @JsonProperty("Vertices")
-  public ArrayList<ShrugUMLClassTuple> deconstructEdges() {
-    ArrayList<ShrugUMLClassTuple> tuples = new ArrayList<ShrugUMLClassTuple>();
-    for (DefaultEdge e : m_diagram.edgeSet()) {
-      tuples.add(new ShrugUMLClassTuple(e.getSource(), e.getTarget()));
-    }
-    return tuples;
-  }
-
-  public void constructVertices(ArrayList<ShrugUMLClass> classes) {
-    for (ShrugUMLClass c : classes) addClass(c);
-  }
-
-  public void constructEdges(ArrayList<DefaultEdge> edges) {
-    for (DefaultEdge e : edges) {
-      m_diagram.addEdge(e.getSource(), e.getTarget(), e);
-    }
-  }
 
   /** *********************************************************************** */
   // Utility Methods
@@ -196,7 +173,7 @@ public class ShrugUMLDiagram {
     return m_diagram;
   }
 
-  public void setGraph(SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> graph) {
+  public void setGraph (SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> graph) {
     m_diagram = graph;
   }
 
