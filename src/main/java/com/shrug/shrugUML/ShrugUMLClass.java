@@ -106,11 +106,10 @@ public class ShrugUMLClass {
     return m_attributes.addAll(methodNames);
   }
 
-  /* Function:
-   * Precondition:
-   * Postcondition
-   */
-
+  @Override
+  public String toString() {
+    return getName();
+  }
   // Private Data Members
   private String m_className;
   private HashSet<String> m_attributes;
