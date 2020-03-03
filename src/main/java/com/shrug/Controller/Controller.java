@@ -5,15 +5,19 @@ package Controller;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.*;
+import java.util.HashSet;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.json.*;
+import org.jgrapht.alg.util.*;
 import shrugUML.*;
 
 public class Controller {
@@ -177,10 +181,29 @@ public class Controller {
           new JSONImporter<ShrugUMLClass, DefaultEdge>();
       SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> g =
           new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
-      g.setVertexSupplier(
-          () -> {
-            return new ShrugUMLClass();
-          });
+
+
+      BiConsumer<Pair<ShrugUMLClass, String>, Attribute> vertexConsumer = (pair, attr) -> {
+                                                                                           switch (pair.getSecond ()) {
+                                                                                              case "Attributes":
+                                                                                              {
+                                                                                                ArrayList<String> attributes = new ArrayList<String> (Arrays.asList(attr.getValue().trim().split(", ")));
+                                                                                                pair.getFirst().addAttributes(attributes);
+                                                                                                break;
+                                                                                              }
+                                                                                              case "Methods":
+                                                                                              {
+                                                                                                ArrayList<String> attributes = new ArrayList<String> (Arrays.asList(attr.getValue().trim().split(", ")));
+                                                                                                pair.getFirst().addMethods(attributes);
+                                                                                                break; 
+                                                                                              }
+                                                                                           }};
+
+
+      
+
+      creator.addVertexAttributeConsumer(vertexConsumer);
+      g.setVertexSupplier(() -> new ShrugUMLClass());
       creator.importGraph(g, r);
       m_diagram.setGraph(g);
       return true;
