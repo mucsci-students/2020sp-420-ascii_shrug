@@ -70,7 +70,7 @@ public class Controller {
       return m_diagram.findClass(className).addAttributes(attributeList);
     else {
       addClass(className);
-      return addAttributes(className, attributeList);
+      return m_diagram.findClass(className).addAttributes(attributeList);
     }
   }
 
@@ -197,9 +197,10 @@ public class Controller {
                           Arrays.asList(
                               attr.getValue()
                                   .trim()
+                                  .replace(",", "")
                                   .replace("[", "")
                                   .replace("]", "")
-                                  .split(", ")));
+                                  .split("\\s+")));
                   pair.getFirst().addAttributes(attributes);
                   break;
                 }
@@ -213,11 +214,6 @@ public class Controller {
             }
           };
 
-      /*
-      creator.addVertexConsumer ((ShrugUMLClass c) -> {
-          c.setName ()
-        });
-      */
       creator.addVertexAttributeConsumer(vertexConsumer);
       g.setVertexSupplier(() -> new ShrugUMLClass());
       creator.importGraph(g, r);

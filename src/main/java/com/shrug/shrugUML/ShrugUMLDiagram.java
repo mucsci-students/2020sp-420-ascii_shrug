@@ -85,7 +85,7 @@ public class ShrugUMLDiagram {
    */
   public boolean nameInDiagram(String className) {
     for (ShrugUMLClass classElement : getClasses())
-      if (className == classElement.getName()) return true;
+      if (className.equals(classElement.getName())) return true;
     return false;
   }
 

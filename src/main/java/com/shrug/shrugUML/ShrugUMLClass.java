@@ -103,7 +103,7 @@ public class ShrugUMLClass {
    * Postcondition
    */
   public boolean addMethods(ArrayList<String> methodNames) {
-    return m_attributes.addAll(methodNames);
+    return m_methods.addAll(methodNames);
   }
 
   @Override
