@@ -4,22 +4,17 @@ package Controller;
 // Imports (java/external/local)
 
 import java.io.*;
-import java.util.Set;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.HashSet;
-
+import java.util.Map;
+import java.util.Set;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.json.*;
 import org.jgrapht.nio.Attribute;
-import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.AttributeType;
-
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.json.*;
 import shrugUML.*;
-
 
 public class Controller {
 
@@ -32,7 +27,6 @@ public class Controller {
   public Controller(ShrugUMLDiagram obj) {
     this.m_diagram = obj;
   }
-
 
   /** *********************************************************************** */
   // Class methods
@@ -69,28 +63,25 @@ public class Controller {
    */
   public boolean addAttributes(String className, ArrayList<String> attributeList) {
 
-    if (m_diagram.nameInDiagram (className))
-      return m_diagram.findClass (className).addAttributes (attributeList);
-    else
-    {
-      addClass (className);
-      return addAttributes (className, attributeList);
+    if (m_diagram.nameInDiagram(className))
+      return m_diagram.findClass(className).addAttributes(attributeList);
+    else {
+      addClass(className);
+      return addAttributes(className, attributeList);
     }
   }
-  
+
   /*
    * Function: removeAttribute (String className, String[] attributeList)
    * Precondition: className exists and n in attributeList are valid identifiers
-   * Postcondition: Removes all attributes of classname. returns false if 
-   *                className is not in diagram 
+   * Postcondition: Removes all attributes of classname. returns false if
+   *                className is not in diagram
    */
   public boolean removeAttributes(String className, ArrayList<String> attributeList) {
-    if (m_diagram.nameInDiagram (className))
+    if (m_diagram.nameInDiagram(className))
       return m_diagram.findClass(className).removeAttributes(attributeList);
-    else 
-      return false;
+    else return false;
   }
-  
 
   /** *********************************************************************** */
   // Relationship methods
@@ -103,9 +94,8 @@ public class Controller {
   public boolean addRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList) 
-      success |= m_diagram.addRelationship(className, v);
-        
+    for (String v : vectorList) success |= m_diagram.addRelationship(className, v);
+
     return success;
   }
 
@@ -117,16 +107,15 @@ public class Controller {
   public boolean removeRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList) 
-      success |= m_diagram.removeRelationship(className, v);
-        
+    for (String v : vectorList) success |= m_diagram.removeRelationship(className, v);
+
     return success;
   }
 
   /** *********************************************************************** */
   // Utility methods
 
-  public boolean contains (String className) {
+  public boolean contains(String className) {
     return m_diagram.nameInDiagram(className);
   }
   /*
@@ -150,24 +139,27 @@ public class Controller {
 
   public boolean save(String path) {
     try {
-      FileWriter w = new FileWriter (path);
+      FileWriter w = new FileWriter(path);
 
-      JSONExporter<ShrugUMLClass, DefaultEdge> saver = new JSONExporter<ShrugUMLClass, DefaultEdge>();
-      saver.setVertexIdProvider ((ShrugUMLClass c) -> {return c.getName();});
-      saver.setVertexAttributeProvider ( (ShrugUMLClass c) -> { 
-                                                                Map<String, Attribute> map = new HashMap<String, Attribute> ();
-                                                                map.put("Attributes", new DefaultAttribute (c.getAttributes(), AttributeType.UNKNOWN));
-                                                                map.put("Methods", new DefaultAttribute (c.getMethods(), AttributeType.UNKNOWN));
-                                                                return map;
-                                                              });
-      saver.exportGraph (getGraph (), w);
+      JSONExporter<ShrugUMLClass, DefaultEdge> saver =
+          new JSONExporter<ShrugUMLClass, DefaultEdge>();
+      saver.setVertexIdProvider(
+          (ShrugUMLClass c) -> {
+            return c.getName();
+          });
+      saver.setVertexAttributeProvider(
+          (ShrugUMLClass c) -> {
+            Map<String, Attribute> map = new HashMap<String, Attribute>();
+            map.put("Attributes", new DefaultAttribute(c.getAttributes(), AttributeType.UNKNOWN));
+            map.put("Methods", new DefaultAttribute(c.getMethods(), AttributeType.UNKNOWN));
+            return map;
+          });
+      saver.exportGraph(getGraph(), w);
       return true;
     } catch (IOException e) {
       return false;
     }
   }
-
-
 
   /*
     Method: load (String path)
@@ -177,14 +169,20 @@ public class Controller {
     Postcondition: A diagram has been constructed with equivalent state
     to the json file.
   */
-  public boolean load (String path) {
-    try{
+  public boolean load(String path) {
+    try {
       FileReader r = new FileReader(path);
 
-      JSONImporter<ShrugUMLClass, DefaultEdge> creator = new JSONImporter<ShrugUMLClass, DefaultEdge>();
-      SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> g = new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
-      creator.importGraph (g, r);
-      m_diagram.setGraph (g);
+      JSONImporter<ShrugUMLClass, DefaultEdge> creator =
+          new JSONImporter<ShrugUMLClass, DefaultEdge>();
+      SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> g =
+          new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
+      g.setVertexSupplier(
+          () -> {
+            return new ShrugUMLClass();
+          });
+      creator.importGraph(g, r);
+      m_diagram.setGraph(g);
       return true;
     } catch (IOException e) {
       return false;
@@ -196,8 +194,7 @@ public class Controller {
    * Precondition: this is instantiated
    * Postcondition: the underlying graph is returned
    */
-  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph ()
-  { 
+  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
     return m_diagram.getGraph();
   }
 

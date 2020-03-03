@@ -18,11 +18,18 @@ public class ShrugUMLClass {
     m_methods = new HashSet<String>();
   }
 
-  // Name Ctor - sets m_className to newName
+  // ArrayList Ctor
   public ShrugUMLClass(String newName, ArrayList<String> attributes, ArrayList<String> methods) {
     setName(newName);
     addAttributes(attributes);
     addMethods(methods);
+  }
+
+  // HashSet ctor
+  public ShrugUMLClass(String newName, HashSet<String> attributes, HashSet<String> methods) {
+    this.m_className = newName;
+    this.m_attributes = attributes;
+    this.m_methods = methods;
   }
 
   // public ShrugUMLClass()
@@ -74,11 +81,11 @@ public class ShrugUMLClass {
 
   /** *********************************************************************** */
   // Attribute methods
- 
+
   /* Function: addAttribute (ArrayList<String> attributeList)
-   * Precondition: diagram exists 
+   * Precondition: diagram exists
    * Postcondition: all valid attributes have been added
-  */
+   */
   public boolean addAttributes(ArrayList<String> attributeList) {
     return m_attributes.addAll(attributeList);
   }
@@ -88,7 +95,7 @@ public class ShrugUMLClass {
    * Postcondition: all valid attributes have been removed
    */
   public boolean removeAttributes(ArrayList<String> attributeList) {
-    return m_attributes.removeAll (attributeList);
+    return m_attributes.removeAll(attributeList);
   }
 
   /* Function: addMethods ()
