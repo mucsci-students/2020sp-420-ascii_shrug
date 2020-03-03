@@ -18,11 +18,18 @@ public class ShrugUMLClass {
     m_methods = new HashSet<String>();
   }
 
-  // Name Ctor - sets m_className to newName
+  // ArrayList Ctor
   public ShrugUMLClass(String newName, ArrayList<String> attributes, ArrayList<String> methods) {
     setName(newName);
     addAttributes(attributes);
     addMethods(methods);
+  }
+
+  // HashSet ctor
+  public ShrugUMLClass(String newName, HashSet<String> attributes, HashSet<String> methods) {
+    this.m_className = newName;
+    this.m_attributes = attributes;
+    this.m_methods = methods;
   }
 
   // public ShrugUMLClass()
@@ -32,7 +39,10 @@ public class ShrugUMLClass {
     m_methods = new HashSet<String>();
   }
 
+  /** *********************************************************************** */
   // Public Methods
+  /** *********************************************************************** */
+  // Class Methods
 
   /*
    * Function: getName ()
@@ -69,12 +79,23 @@ public class ShrugUMLClass {
     return m_methods;
   }
 
-  /* Function: addAttribute ()
-   * Precondition:
-   * Postcondition
+  /** *********************************************************************** */
+  // Attribute methods
+
+  /* Function: addAttribute (ArrayList<String> attributeList)
+   * Precondition: diagram exists
+   * Postcondition: all valid attributes have been added
    */
-  public boolean addAttributes(ArrayList<String> attributeNames) {
-    return m_attributes.addAll(attributeNames);
+  public boolean addAttributes(ArrayList<String> attributeList) {
+    return m_attributes.addAll(attributeList);
+  }
+
+  /* Function: removeAttributes (ArrayList<String> attributeList)
+   * Precondition: diagram exists
+   * Postcondition: all valid attributes have been removed
+   */
+  public boolean removeAttributes(ArrayList<String> attributeList) {
+    return m_attributes.removeAll(attributeList);
   }
 
   /* Function: addMethods ()
@@ -82,14 +103,13 @@ public class ShrugUMLClass {
    * Postcondition
    */
   public boolean addMethods(ArrayList<String> methodNames) {
-    return m_attributes.addAll(methodNames);
+    return m_methods.addAll(methodNames);
   }
 
-  /* Function:
-   * Precondition:
-   * Postcondition
-   */
-
+  @Override
+  public String toString() {
+    return getName() + ": " + getAttributes();
+  }
   // Private Data Members
   private String m_className;
   private HashSet<String> m_attributes;

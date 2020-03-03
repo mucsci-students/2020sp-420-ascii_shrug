@@ -1,32 +1,30 @@
 package GUI;
 
+import Controller.*;
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
 import javafx.application.Application;
+import javafx.embed.swing.*;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.geometry.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.paint.*;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
-import javafx.embed.swing.SwingNode;
-import Controller.*;
-
-import com.mxgraph.layout.*;
-import com.mxgraph.swing.*;
+import javafx.scene.control.Button;
+import javafx.scene.layout.*;
+import javafx.scene.paint.*;
+import javafx.stage.Stage;
 import javax.swing.*;
-import javafx.embed.swing.*;
-//import java.awt.*;
 import org.jgrapht.*;
+import org.jgrapht.event.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
-import org.jgrapht.event.*;
 import shrugUML.*;
 
 public class GUI extends Application {
   private Button add, remove, edit, save, load;
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter;
-  //mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
+  // mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
   public GUI() {}
 
@@ -50,25 +48,25 @@ public class GUI extends Application {
     primaryStage.show();
   }
 
-  //function to print class names and attributes
+  // function to print class names and attributes
 
   public SwingNode createSwingDiagram() {
-        SwingNode diagramNode = new SwingNode();
-        JPanel frame = new JPanel();
-        //layout.execute(jgxAdapter.getDefaultParent());
-        frame.add(new mxGraphComponent(jgxAdapter));
-        diagramNode.setContent(frame);
-        return diagramNode;
+    SwingNode diagramNode = new SwingNode();
+    JPanel frame = new JPanel();
+    // layout.execute(jgxAdapter.getDefaultParent());
+    // frame.add(new mxGraphComponent(jgxAdapter));
+    diagramNode.setContent(frame);
+    return diagramNode;
   }
 
-  public void initDiagram (BorderPane borderPane) {
+  public void initDiagram(BorderPane borderPane) {
     StackPane diagram = new StackPane();
     diagram.setStyle("-fx-background-color: antiquewhite;");
     diagram.setStyle("-fx-border-style: solid;");
     diagram.setStyle("-fx-border-color: black;");
   }
 
-  public void initMenuBar (BorderPane borderPane) {
+  public void initMenuBar(BorderPane borderPane) {
     final Menu file = new Menu("File");
     final Menu help = new Menu("Help");
     final Menu edit = new Menu("Edit");
@@ -95,7 +93,7 @@ public class GUI extends Application {
     borderPane.setTop(menuBar);
   }
 
-  public void initButtons (BorderPane borderPane) {
+  public void initButtons(BorderPane borderPane) {
     add = new Button("Add");
     add.setOnAction(this::processButtonPressAdd);
 
@@ -118,8 +116,9 @@ public class GUI extends Application {
   }
 
   public void processButtonPressAdd(ActionEvent event) {
-    //call controller to add vertex, controller returns class, and we need controller to return diagram from model
-    //call adapter.vertexAdded()
+    // call controller to add vertex, controller returns class, and we need controller to return
+    // diagram from model
+    // call adapter.vertexAdded()
   }
 
   public void processButtonPressRemove(ActionEvent event) {}

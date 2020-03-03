@@ -10,6 +10,15 @@ import java.util.Set;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
+/*
+ // Deconstruct
+ v = m_diagram.vertexSet ().toArray ();
+ e = m_diagram.edgeSet ().toArray ();
+ // Construct
+ foreach (v) add v;
+ foreach (e) add e;
+*/
+
 public class ShrugUMLDiagram {
   // Default Ctor - new Diagram with nothing in it
   public ShrugUMLDiagram() {
@@ -18,6 +27,9 @@ public class ShrugUMLDiagram {
 
   /** *********************************************************************** */
   // Public Methods
+
+  /** *********************************************************************** */
+  // Class Methods
 
   /*
    * Function: addClass (String className)
@@ -29,9 +41,15 @@ public class ShrugUMLDiagram {
     if (nameInDiagram(className)) {
       return false;
     } else {
-      ShrugUMLClass newClass = new ShrugUMLClass(className);
-      m_diagram.addVertex(newClass);
-      return true;
+      return m_diagram.addVertex(new ShrugUMLClass(className));
+    }
+  }
+
+  public boolean addClass(ShrugUMLClass c) {
+    if (nameInDiagram(c.getName())) {
+      return false;
+    } else {
+      return m_diagram.addVertex(c);
     }
   }
 
@@ -65,7 +83,7 @@ public class ShrugUMLDiagram {
    */
   public boolean nameInDiagram(String className) {
     for (ShrugUMLClass classElement : getClasses())
-      if (className.contentEquals(classElement.getName())) return true;
+      if (className.equals(classElement.getName())) return true;
     return false;
   }
 
@@ -83,6 +101,9 @@ public class ShrugUMLDiagram {
     }
     return null;
   }
+
+  /** *********************************************************************** */
+  // Relationship Methods
 
   /* Function: addRelationship (String c1, String c2)
    * Precondition:
@@ -119,7 +140,7 @@ public class ShrugUMLDiagram {
   }
 
   /* Function: getRelationship (String n1, String n2)
-   * Precondition:
+   * Precondition: graph exists
    * Postcondition: Returns the edge n1 -> n2; null if edge doesn't exist or one of the classes doesn't exist
    */
   public DefaultEdge getRelationship(String n1, String n2) {
@@ -130,12 +151,26 @@ public class ShrugUMLDiagram {
     else return null;
   }
 
+  /* Function: isRelationshipInDiagram (String n1, String n2)
+   * Precondition: graph exists
+   * Postcondition: Returns true if the edge n1 -> n2 exists. false otherwise
+   */
   public boolean isRelationshipInDiagram(String n1, String n2) {
     ShrugUMLClass c1 = findClass(n1);
     ShrugUMLClass c2 = findClass(n2);
     DefaultEdge edge = m_diagram.getEdge(c1, c2);
     if ((edge != null) && (c1 != null) && (c2 != null)) return true;
     else return false;
+  }
+
+  /** *********************************************************************** */
+  // Utility Methods
+  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
+    return m_diagram;
+  }
+
+  public void setGraph(SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> graph) {
+    m_diagram = graph;
   }
 
   /** *********************************************************************** */
