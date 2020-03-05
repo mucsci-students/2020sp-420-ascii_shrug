@@ -1,6 +1,6 @@
 package GUI;
 
-import controller.*;
+import Controller.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.*;
