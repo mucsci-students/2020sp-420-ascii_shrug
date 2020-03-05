@@ -108,7 +108,12 @@ public class ShrugUMLClass {
 
   @Override
   public String toString() {
-    return getName() + ": " + getAttributes();
+    String s = "";
+
+    for (String attr : getAttributes()) 
+      s += attr;
+
+    return getName() + " Attributes: " + s;
   }
   // Private Data Members
   private String m_className;

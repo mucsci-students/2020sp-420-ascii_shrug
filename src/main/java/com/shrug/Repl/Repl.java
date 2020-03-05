@@ -90,14 +90,18 @@ public class Repl {
    */
   private static void printHelp() {
     System.out.println(
-        "¯\\_(ツ)_/¯ UML Editor Help ¯\\_(ツ)_/¯\n"
-            + "Commands:\n\n"
-            + "add <classname>      : adds classname to the diagram\n"
-            + "remove <classname>   : removes classname from the diagram\n"
-            + "save <filename>.json : save the diagram in a specified json file\n"
-            + "load <filename>.json : load the diagram stored in specified json file\n"
-            + "print                : prints the current diagram\n"
-            + "exit                 : exit the editor (no warning for unsaved diagram)\n");
+        "¯\\_(ツ)_/¯ UML Editor Help ¯\\_(ツ)_/¯\n\n"
+            + "Commands:\n"
+            + "add <classname> [options]     : adds classname to the diagram\n"
+            + "remove <classname>  [options] : removes classname from the diagram\n"
+            + "save <filename>.json          : save the diagram in a specified json file\n"
+            + "load <filename>.json          : load the diagram stored in specified json file\n"
+            + "print                         : prints the current diagram\n"
+            + "exit                          : exit the editor (no warning for unsaved diagram)\n\n"
+            + "Options:\n\n"
+            + "\"-a\" [ID]                     : will add all ID as attributes of classname\n"
+            + "\"-r\" [ID]                     : will create relationships from classname to all ID\n");
+          
   }
 
   /* Function: add ()
@@ -106,27 +110,19 @@ public class Repl {
    */
   private static boolean add(ArrayList<String> cmds) {
 
-    control.addClass(cmds.get(1));
+    ArrayList<String> relationships = parseRelationships(cmds);
+    ArrayList<String> attributes = parseAttributes(cmds);
+    String name = cmds.get(1);
+    control.addClass(name);
 
-    // add relationships
-    if (cmds.contains("-r")) {
-      ArrayList<String> relationships = new ArrayList<String>();
-      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i < cmds.size(); ++i) {
-        relationships.add(cmds.get(i));
-      }
-      control.addRelationships(cmds.get(1), relationships);
-    }
+    if (!attributes.isEmpty())
+      control.addAttributes(name, attributes);
+    if(!relationships.isEmpty())
+      control.addRelationships(name, relationships);
 
-    // add attributes
-    if (cmds.contains("-a")) {
-      ArrayList<String> attributes = new ArrayList<String>();
-      for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i < cmds.size(); ++i) {
-        attributes.add(cmds.get(i));
-      }
-      control.addAttributes(cmds.get(1), attributes);
-    }
     return true;
   }
+
 
   /* Function: remove ()
    * precondition: repl is instantiated with an associated controller.
@@ -134,25 +130,51 @@ public class Repl {
    */
   private static boolean remove(ArrayList<String> cmds) {
 
-    // remove relationships
-    if (cmds.contains("-r")) {
-      ArrayList<String> relationships = new ArrayList<String>();
-      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) {
-        relationships.add(cmds.get(i));
-      }
-      control.removeRelationships(cmds.get(1), relationships);
-    }
+    ArrayList<String> relationships = parseRelationships(cmds);
+    ArrayList<String> attributes = parseAttributes(cmds);
+    String name = cmds.get(1);
 
-    // remove attributes
-    if (cmds.contains("-a")) {
-      ArrayList<String> attributes = new ArrayList<String>();
-      for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) {
-        attributes.add(cmds.get(i));
-      }
-      control.removeAttributes(cmds.get(1), attributes);
+    if (control.contains(name)){
+      if (!attributes.isEmpty())
+        control.removeAttributes(name, attributes);
+      if(!relationships.isEmpty())
+        control.removeRelationships(name, relationships);
+    }
+    else {
+      System.out.println(name + " is not in the diagram.\n");
     }
 
     return true;
+  }
+
+  /* Function: parse ()
+   * precondition: repl is instantiated with an associated controller.
+   * postcondition: returns an arraylist of the attributes
+  */
+  private static ArrayList<String> parseAttributes (ArrayList<String> cmds) {
+    
+    ArrayList<String> attributes = new ArrayList<String>();
+    // parse attribute arguments
+    if (cmds.contains("-a")) 
+      for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) 
+        attributes.add(cmds.get(i));
+
+    return attributes;        
+  }
+
+  /* Function: parse ()
+   * precondition: repl is instantiated with an associated controller.
+   * postcondition: returns an arraylist  of the relationships
+  */
+  private static ArrayList<String> parseRelationships (ArrayList<String> cmds) {
+    
+    ArrayList<String> relationships = new ArrayList<String>();
+    // parse relationship arguments
+    if (cmds.contains("-r")) 
+      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) 
+        relationships.add(cmds.get(i));
+
+    return relationships;        
   }
 
   /* Function: exit ()

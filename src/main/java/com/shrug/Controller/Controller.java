@@ -49,7 +49,7 @@ public class Controller {
    *
    */
   public boolean addClass(ShrugUMLClass c) {
-    return m_diagram.addClass(className);
+    return m_diagram.addClass(c);
   }
 
   /*
