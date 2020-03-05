@@ -1,14 +1,14 @@
 package GUI;
 
+import controller.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.paint.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.*;
 import javafx.stage.Stage;
-import Controller.*;
 
 public class GUI extends Application {
   private Button add, remove, edit, save, load;
@@ -32,7 +32,7 @@ public class GUI extends Application {
     primaryStage.show();
   }
 
-  public void initDiagram (BorderPane borderPane) {
+  public void initDiagram(BorderPane borderPane) {
     StackPane diagram = new StackPane();
     diagram.setStyle("-fx-background-color: antiquewhite;");
     diagram.setStyle("-fx-border-style: solid;");
@@ -40,7 +40,7 @@ public class GUI extends Application {
     borderPane.setCenter(diagram);
   }
 
-  public void initButtons (BorderPane borderPane) {
+  public void initButtons(BorderPane borderPane) {
     add = new Button("Add");
     add.setOnAction(this::processButtonPressAdd);
 
