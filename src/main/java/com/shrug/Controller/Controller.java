@@ -45,6 +45,14 @@ public class Controller {
   }
 
   /*
+   *
+   *
+   */
+  public boolean addClass(ShrugUMLClass c) {
+    return m_diagram.addClass(className);
+  }
+
+  /*
    * Method: remove (String className)
    * Precondition: className is the name of the class to be removed from the
    * diagram
