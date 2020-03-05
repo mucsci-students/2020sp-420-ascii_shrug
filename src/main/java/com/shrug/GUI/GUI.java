@@ -23,8 +23,13 @@ import shrugUML.*;
 
 public class GUI extends Application {
   private Button add, remove, edit, save, load;
-  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter;
-  // mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
+  private Controller control = new Controller();
+  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+
+  mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
+
+  private SwingNode diagramNode = new SwingNode();
+  private JPanel diagramFrame = new JPanel();
 
   public GUI() {}
 
@@ -51,11 +56,8 @@ public class GUI extends Application {
   // function to print class names and attributes
 
   public SwingNode createSwingDiagram() {
-    SwingNode diagramNode = new SwingNode();
-    JPanel frame = new JPanel();
-    // layout.execute(jgxAdapter.getDefaultParent());
-    // frame.add(new mxGraphComponent(jgxAdapter));
-    diagramNode.setContent(frame);
+    diagramFrame.add(new mxGraphComponent(jgxAdapter));
+    diagramNode.setContent(diagramFrame);
     return diagramNode;
   }
 
@@ -116,6 +118,12 @@ public class GUI extends Application {
   }
 
   public void processButtonPressAdd(ActionEvent event) {
+    ShrugUMLClass add = new ShrugUMLClass("a");
+    control.addClass("a");
+    jgxAdapter.vertexAdded(new GraphVertexChangeEvent<ShrugUMLClass>(control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
+    layout.execute(jgxAdapter.getDefaultParent());
+    diagramFrame.repaint();
+    diagramFrame.revalidate();
     // call controller to add vertex, controller returns class, and we need controller to return
     // diagram from model
     // call adapter.vertexAdded()
