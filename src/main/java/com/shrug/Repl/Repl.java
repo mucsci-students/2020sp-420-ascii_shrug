@@ -20,6 +20,12 @@ public class Repl {
     run();
   }
 
+  /*
+   *Method: parseLine ()
+   * Precondition: Repl exists and stdin is valid
+   * Postcondition: returns an array with commands parsed into
+   * an array by space.
+   */
   private static void run() {
     printHelp();
     while (true) {
@@ -93,7 +99,7 @@ public class Repl {
 
       s += "\nRelationships: ";
 
-      String relationships = control.getGraph().outgoingEdgesOf(c).toString().replace("[", "").replace("]", "");
+      String relationships = control.getGraph().outgoingEdgesOf(c).toString().replace("[", "").replace("]", "").replace(":", "->");
       System.out.println(s + relationships + "\n");
     }
   }
