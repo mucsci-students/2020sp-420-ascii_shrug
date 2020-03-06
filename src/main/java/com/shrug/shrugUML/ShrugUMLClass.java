@@ -106,14 +106,10 @@ public class ShrugUMLClass {
     return m_methods.addAll(methodNames);
   }
 
+  // TODO implement with stringbuilder
   @Override
   public String toString() {
-    String s = "";
-
-    for (String attr : getAttributes()) 
-      s += attr;
-
-    return getName() + " Attributes: " + s;
+    return m_className;
   }
   // Private Data Members
   private String m_className;

@@ -232,8 +232,7 @@ public class Controller {
     }
   }
 
-  /*
-   * Function: getGraph ()
+  /* * Function: getGraph ()
    * Precondition: this is instantiated
    * Postcondition: the underlying graph is returned
    */

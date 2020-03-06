@@ -9,6 +9,7 @@ import Controller.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Set;
 import shrugUML.*;
 
 public class Repl {
@@ -81,7 +82,20 @@ public class Repl {
    * Postcondition: The diagram is printed
    */
   private static void printDiagram() {
-    System.out.println(control.getGraph().toString());
+    for (ShrugUMLClass c : control.getClasses()) {
+      String s = "Name: " + c.getName() + "\nAttributes: ";
+
+      for (String attr : c.getAttributes()) 
+        s += attr + ", ";
+
+      if (s.charAt(s.length() - 2) == ',')
+        s = s.substring(0, s.length() - 2);
+
+      s += "\nRelationships: ";
+
+      String relationships = control.getGraph().outgoingEdgesOf(c).toString().replace("[", "").replace("]", "");
+      System.out.println(s + relationships + "\n");
+    }
   }
 
   /* Function: printHelp ()
