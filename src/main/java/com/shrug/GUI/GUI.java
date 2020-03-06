@@ -54,14 +54,20 @@ public class GUI extends Application {
     primaryStage.show();
   }
 
-  // function to print class names and attributes
-
+  /* SwingNode createSwingDiagram ()
+   * This function adds an mxGraphComponent to the GUI using the JGraphXAdapter
+   * The SwingNode returned is then added to the BorderPane
+   */
   public SwingNode createSwingDiagram() {
     diagramFrame.add(new mxGraphComponent(jgxAdapter));
     diagramNode.setContent(diagramFrame);
     return diagramNode;
   }
 
+  /* void initDiagram ()
+   * @param BorderPane borderPane : The Pane that the diagram is in
+   * Sets some styles for the diagram frame
+   */
   public void initDiagram(BorderPane borderPane) {
     StackPane diagram = new StackPane();
     diagram.setStyle("-fx-background-color: antiquewhite;");
@@ -69,6 +75,10 @@ public class GUI extends Application {
     diagram.setStyle("-fx-border-color: black;");
   }
 
+  /* void initMenuBar ()
+   * Initializes the menu options
+   * TODO: Change Add and Remove buttons to appear outside of the menu
+   */
   public void initMenuBar(BorderPane borderPane) {
     final Menu file = new Menu("File");
     final Menu help = new Menu("Help");
@@ -79,6 +89,7 @@ public class GUI extends Application {
     menuBar.getMenus().add(help);
     menuBar.getMenus().add(edit);
 
+    // Set callback functions for each button
     MenuItem add = new MenuItem("Add");
     add.setOnAction(this::processButtonPressAdd);
     MenuItem remove = new MenuItem("Remove");
@@ -96,6 +107,10 @@ public class GUI extends Application {
     borderPane.setTop(menuBar);
   }
 
+  /* void initButtons ()
+   * Initializes Buttons and adds them to a FlowPane to be displayed at the top of the window
+   * TODO: Use this for Add/Remove instead of the MenuBar
+   */
   public void initButtons(BorderPane borderPane) {
     add = new Button("Add");
     add.setOnAction(this::processButtonPressAdd);
@@ -118,6 +133,11 @@ public class GUI extends Application {
     borderPane.setTop(options);
   }
 
+  /* void processBurronPressAdd ()
+   * @param ActionEvent event : unused, but necessary for now
+   * Prompts the user for a class name and builds a UML object that's added
+   * Diagram is repainted
+   */
   public void processButtonPressAdd(ActionEvent event) {
     String name = JOptionPane.showInputDialog("Enter a class name:");
     ShrugUMLClass add = new ShrugUMLClass(name);
@@ -127,13 +147,14 @@ public class GUI extends Application {
             control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
     layout.execute(jgxAdapter.getDefaultParent());
     jgxAdapter.repaint();
-    // diagramFrame.repaint();
     diagramFrame.revalidate();
-    // call controller to add vertex, controller returns class, and we need controller to return
-    // diagram from model
-    // call adapter.vertexAdded()
   }
 
+  /* void processButtonPressRemove ()
+   * @param ActionEvent event : unused, but necessary for now
+   * Prompts the user for a class name and removes the object
+   * Diagram is repainted
+   */
   public void processButtonPressRemove(ActionEvent event) {
     String name = JOptionPane.showInputDialog("Enter a class name:");
     ShrugUMLClass remove = control.getDiagram().findClass(name);
@@ -146,6 +167,11 @@ public class GUI extends Application {
     diagramFrame.revalidate();
   }
 
+  /* void processButtonPressLoad ()
+   * @param ActionEvent event : unused, but necessary for now
+   * Prompts the user for a json file to load
+   * Draws the diagram from the json file
+   */
   public void processButtonPressLoad(ActionEvent event) {
     String load = JOptionPane.showInputDialog("Enter a .json file to load:");
     control.load(load);
@@ -156,19 +182,18 @@ public class GUI extends Application {
     diagramFrame.revalidate();
   }
 
+  /* void processButtonPressSave ()
+   * @param ActionEvent event : unused, but necessary for now
+   * User is prompted for a json file to save to
+   * TODO: basic handling for overwriting files
+   */
   public void processButtonPressSave(ActionEvent event) {
     String save = JOptionPane.showInputDialog("Enter a .json file to save:");
     control.save(save);
   }
 
+  /*
+   * TODO
+   */
   public void processButtonPressEdit(ActionEvent event) {}
 }
-
-/*public class GUI {
-
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
-    }
-
-}*/
