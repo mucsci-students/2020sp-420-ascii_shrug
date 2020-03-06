@@ -24,7 +24,8 @@ import shrugUML.*;
 public class GUI extends Application {
   private Button add, remove, edit, save, load;
   private Controller control = new Controller();
-  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
+      new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
 
   mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
@@ -118,22 +119,47 @@ public class GUI extends Application {
   }
 
   public void processButtonPressAdd(ActionEvent event) {
-    ShrugUMLClass add = new ShrugUMLClass("a");
-    control.addClass("a");
-    jgxAdapter.vertexAdded(new GraphVertexChangeEvent<ShrugUMLClass>(control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
+    String name = JOptionPane.showInputDialog("Enter a class name:");
+    ShrugUMLClass add = new ShrugUMLClass(name);
+    control.addClass(add);
+    jgxAdapter.vertexAdded(
+        new GraphVertexChangeEvent<ShrugUMLClass>(
+            control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
     layout.execute(jgxAdapter.getDefaultParent());
-    diagramFrame.repaint();
+    jgxAdapter.repaint();
+    // diagramFrame.repaint();
     diagramFrame.revalidate();
     // call controller to add vertex, controller returns class, and we need controller to return
     // diagram from model
     // call adapter.vertexAdded()
   }
 
-  public void processButtonPressRemove(ActionEvent event) {}
+  public void processButtonPressRemove(ActionEvent event) {
+    String name = JOptionPane.showInputDialog("Enter a class name:");
+    ShrugUMLClass remove = control.getDiagram().findClass(name);
+    control.removeClass(name);
+    jgxAdapter.vertexRemoved(
+        new GraphVertexChangeEvent<ShrugUMLClass>(
+            control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
+    layout.execute(jgxAdapter.getDefaultParent());
+    jgxAdapter.repaint();
+    diagramFrame.revalidate();
+  }
 
-  public void processButtonPressLoad(ActionEvent event) {}
+  public void processButtonPressLoad(ActionEvent event) {
+    String load = JOptionPane.showInputDialog("Enter a .json file to load:");
+    control.load(load);
+    jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+    diagramFrame.add(new mxGraphComponent(jgxAdapter));
+    layout.execute(jgxAdapter.getDefaultParent());
+    jgxAdapter.repaint();
+    diagramFrame.revalidate();
+  }
 
-  public void processButtonPressSave(ActionEvent event) {}
+  public void processButtonPressSave(ActionEvent event) {
+    String save = JOptionPane.showInputDialog("Enter a .json file to save:");
+    control.save(save);
+  }
 
   public void processButtonPressEdit(ActionEvent event) {}
 }

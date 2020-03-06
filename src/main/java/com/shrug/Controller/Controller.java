@@ -40,6 +40,7 @@ public class Controller {
    * Postcondition: className is added to the diagram if the name is valid. Returns true if it's added, false if it's
    * not
    */
+
   public boolean addClass(String className) {
     return m_diagram.addClass(className);
   }
@@ -239,6 +240,10 @@ public class Controller {
    */
   public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
     return m_diagram.getGraph();
+  }
+
+  public ShrugUMLDiagram getDiagram() {
+    return m_diagram;
   }
 
   /*
