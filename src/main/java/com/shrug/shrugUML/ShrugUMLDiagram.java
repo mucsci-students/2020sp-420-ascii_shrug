@@ -7,19 +7,9 @@
 package shrugUML;
 
 // Includes
-import java.util.ArrayList;
 import java.util.Set;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
-
-/*
- // Deconstruct
- v = m_diagram.vertexSet ().toArray ();
- e = m_diagram.edgeSet ().toArray ();
- // Construct
- foreach (v) add v;
- foreach (e) add e;
-*/
 
 public class ShrugUMLDiagram {
   // Default Ctor - new Diagram with nothing in it
@@ -47,6 +37,10 @@ public class ShrugUMLDiagram {
     }
   }
 
+  /* Function: addClass (ShrugUMLClass c)
+   * Precondition: c is the class to be added to the diagram; this is instantiated
+   * Postcondition: c is added to the diagram; returns true if sucessful, false otherwise
+   */
   public boolean addClass(ShrugUMLClass c) {
     if (nameInDiagram(c.getName())) {
       return false;
@@ -70,7 +64,7 @@ public class ShrugUMLDiagram {
     }
   }
 
-  /* Function: getClassesAsSet ()
+  /* Function: getClasses ()
    * Precondition: this is instantiated
    * Postcondition: the classes in the diagram are returned as a set
    */
@@ -165,14 +159,13 @@ public class ShrugUMLDiagram {
     else return false;
   }
 
-
   /** *********************************************************************** */
   // Utility Methods
   public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
     return m_diagram;
   }
 
-  public void setGraph (SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> graph) {
+  public void setGraph(SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> graph) {
     m_diagram = graph;
   }
 

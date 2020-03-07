@@ -13,16 +13,17 @@ import java.util.HashSet;
 public class ShrugUMLClass {
   // Default Ctor - sets the m_className to null
   public ShrugUMLClass() {
-    m_className = null;
-    m_attributes = new HashSet<String>();
-    m_methods = new HashSet<String>();
+    this.m_className = null;
+    this.m_attributes = new HashSet<String>();
+    this.m_methods = new HashSet<String>();
   }
 
   // ArrayList Ctor
   public ShrugUMLClass(String newName, ArrayList<String> attributes, ArrayList<String> methods) {
-    setName(newName);
-    addAttributes(attributes);
-    addMethods(methods);
+    this();
+    this.setName(newName);
+    this.addAttributes(attributes);
+    this.addMethods(methods);
   }
 
   // HashSet ctor
