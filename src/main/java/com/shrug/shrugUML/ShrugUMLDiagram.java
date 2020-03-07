@@ -3,7 +3,6 @@
  * Package:     shrugUML
  * Description: A class representing a UML diagram
  */
-
 package shrugUML;
 
 // Includes

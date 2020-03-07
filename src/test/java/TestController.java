@@ -1,10 +1,10 @@
 import static org.junit.Assert.*;
 
-import java.io.File;
 import Controller.*;
+import java.io.File;
+import java.util.ArrayList;
 import org.junit.*;
 import shrugUML.*;
-import java.util.ArrayList;
 
 public class TestController {
 
@@ -29,7 +29,7 @@ public class TestController {
     assertTrue(controller.addClass("newClass"));
     ArrayList<String> attributes = new ArrayList<String>();
     attributes.add("attr1");
-    assertTrue(controller.addAttributes("newClass" , attributes));
+    assertTrue(controller.addAttributes("newClass", attributes));
   }
 
   @Test
@@ -38,8 +38,8 @@ public class TestController {
     assertTrue(controller.addClass("newClass"));
     ArrayList<String> attributes = new ArrayList<String>();
     attributes.add("attr1");
-    controller.addAttributes("newClass" , attributes);
-    assertTrue(controller.removeAttributes("newClass" , attributes));
+    controller.addAttributes("newClass", attributes);
+    assertTrue(controller.removeAttributes("newClass", attributes));
   }
 
   /** *********************************************************************** */
@@ -51,7 +51,7 @@ public class TestController {
     controller.addClass("c2");
     ArrayList<String> vectorList = new ArrayList<String>();
     vectorList.add("c2");
-    assertTrue(controller.addRelationships ("c1", vectorList));
+    assertTrue(controller.addRelationships("c1", vectorList));
   }
 
   @Test
@@ -61,7 +61,7 @@ public class TestController {
     controller.addClass("c2");
     ArrayList<String> vectorList = new ArrayList<String>();
     vectorList.add("c2");
-    controller.addRelationships ("c1", vectorList);
+    controller.addRelationships("c1", vectorList);
     assertTrue(controller.removeRelationships("c1", vectorList));
   }
 
@@ -73,7 +73,6 @@ public class TestController {
     assertTrue(controller.save("test.json"));
     File testFile = new File("./test.json");
     testFile.delete();
-
   }
 
   @Test
