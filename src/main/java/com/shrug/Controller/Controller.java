@@ -74,12 +74,18 @@ public class Controller {
    *                valid attributes are given to className if className exists.
    */
   public boolean addAttributes(String className, ArrayList<String> attributeList) {
+    ArrayList<String> validList = new ArrayList<String>();
+
+    for (String s : attributeList) {
+      if (isJavaID(s))
+        validList.add(s);
+    }
 
     if (m_diagram.nameInDiagram(className))
-      return m_diagram.findClass(className).addAttributes(attributeList);
+      return m_diagram.findClass(className).addAttributes(validList);
     else {
       addClass(className);
-      return m_diagram.findClass(className).addAttributes(attributeList);
+      return m_diagram.findClass(className).addAttributes(validList);
     }
   }
 
@@ -106,7 +112,12 @@ public class Controller {
   public boolean addRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList) success |= m_diagram.addRelationship(className, v);
+    for (String v : vectorList) 
+    {
+      if (isJavaID(v))
+        success |= m_diagram.addRelationship(className, v);
+    }
+    
 
     return success;
   }
@@ -119,7 +130,8 @@ public class Controller {
   public boolean removeRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList) success |= m_diagram.removeRelationship(className, v);
+    for (String v : vectorList)
+      success |= m_diagram.removeRelationship(className, v);
 
     return success;
   }
@@ -252,5 +264,22 @@ public class Controller {
    */
   public Set<ShrugUMLClass> getClasses() {
     return m_diagram.getClasses();
+  }
+
+  /* Function: isJavaID ()
+   * precondition: input needs to be parsed
+   * postcondition: returns if it is a valid identifier
+   */
+  public static boolean isJavaID (String name) {
+    if (!(Character.isJavaIdentifierStart(name.charAt(0))))
+      return false;
+
+    for (int i = 1; i < name.length(); i++)
+    {
+      if (!(Character.isJavaIdentifierPart(name.charAt(i))))
+        return false;
+    }
+
+    return true;
   }
 }
