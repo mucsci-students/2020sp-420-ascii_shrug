@@ -3,17 +3,28 @@ package GUI;
 import Controller.*;
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.util.*;
-import javax.swing.*;
-import org.jgrapht.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.jgrapht.event.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
 import shrugUML.*;
 
-public class GUI extends JFrame {
+public class GUI {
+
+  private JFrame frame;
   private JButton add, remove, edit, save, load;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
@@ -21,35 +32,83 @@ public class GUI extends JFrame {
 
   private mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
-  // private SwingNode diagramNode = new SwingNode();
-  private JPanel panel = new JPanel(new BorderLayout());
-
-  private JLabel diagramLabel = new JLabel();
+  private mxGraphComponent graph;
+  private JPanel content;
 
   public GUI() {
-    super("UML Editor");
+
+    try {
+      JFrame.setDefaultLookAndFeelDecorated(true);
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      System.setProperty("apple.laf.useScreenMenuBar", "true");
+      System.setProperty("com.apple.mrj.application.apple.menu.about.name", "shrug_uml");
+    } catch (ClassNotFoundException
+        | InstantiationException
+        | IllegalAccessException
+        | UnsupportedLookAndFeelException e) {
+    }
+
     start();
   }
 
   public void start() {
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(1000, 1000);
-    // initDiagram(borderLayout);
-    // initMenuBar(borderPane);
+
+    frame = new JFrame();
+    frame.setName("GUI");
+
+    content = new JPanel(new BorderLayout(30, 30));
+    content.setPreferredSize(new Dimension(600, 400));
+    frame.setContentPane(content);
+
+    createSwingDiagram();
+
+    initMenuBar();
     initButtons();
 
-    panel.add(createSwingDiagram(), BorderLayout.CENTER);
-    add(diagramLabel);
-    setVisible(true);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.pack();
+    frame.setVisible(true);
   }
 
   /* SwingNode createSwingDiagram ()
    * This function adds an mxGraphComponent to the GUI using the JGraphXAdapter
    * The SwingNode returned is then added to the BorderPane
    */
-  public JLabel createSwingDiagram() {
-    diagramLabel.add(new mxGraphComponent(jgxAdapter));
-    return diagramLabel;
+  public void createSwingDiagram() {
+    graph = new mxGraphComponent(jgxAdapter);
+    content.add(graph, BorderLayout.CENTER);
+  }
+
+  /* void initMenuBar ()
+   * Initializes the menu options
+   * TODO: Change Add and Remove buttons to appear outside of the menu
+   */
+  public void initMenuBar() {
+    final JMenu file = new JMenu("File");
+    final JMenu help = new JMenu("Help");
+    final JMenu edit = new JMenu("Edit");
+
+    JMenuBar menuBar = new JMenuBar();
+    menuBar.add(file);
+    menuBar.add(edit);
+    menuBar.add(help);
+
+    // Set callback functions for each button
+    JMenuItem add = new JMenuItem("Add");
+    add.addActionListener(this::processButtonPressAdd);
+    JMenuItem remove = new JMenuItem("Remove");
+    remove.addActionListener(this::processButtonPressRemove);
+    JMenuItem save = new JMenuItem("Save");
+    save.addActionListener(this::processButtonPressSave);
+    JMenuItem load = new JMenuItem("Load");
+    load.addActionListener(this::processButtonPressLoad);
+
+    file.add(add);
+    file.add(remove);
+    file.add(save);
+    file.add(load);
+
+    frame.setJMenuBar(menuBar);
   }
 
   /* void initButtons ()
@@ -58,23 +117,27 @@ public class GUI extends JFrame {
    */
   public void initButtons() {
     add = new JButton("Add");
-    add.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-            processButtonPressAdd();
-          }
-        });
+    add.addActionListener(this::processButtonPressAdd);
 
     remove = new JButton("Remove");
-    remove.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-            processButtonPressRemove();
-          }
-        });
+    remove.addActionListener(this::processButtonPressRemove);
 
-    panel.add(add, BorderLayout.NORTH);
-    panel.add(remove, BorderLayout.NORTH);
+    load = new JButton("Load");
+    load.addActionListener(this::processButtonPressLoad);
+
+    save = new JButton("Save");
+    save.addActionListener(this::processButtonPressSave);
+
+    edit = new JButton("Edit");
+    edit.addActionListener(this::processButtonPressEdit);
+
+    JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+    flow.add(add);
+    flow.add(remove);
+    flow.add(load);
+    flow.add(save);
+    flow.add(edit);
+    content.add(flow, BorderLayout.NORTH);
   }
 
   /* void processBurronPressAdd ()
@@ -82,7 +145,7 @@ public class GUI extends JFrame {
    * Prompts the user for a class name and builds a UML object that's added
    * Diagram is repainted
    */
-  public void processButtonPressAdd() {
+  public void processButtonPressAdd(ActionEvent event) {
     // String name = JOptionPane.showInputDialog(null, "Enter a class name:");
     String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
     ShrugUMLClass add = new ShrugUMLClass(name);
@@ -98,7 +161,7 @@ public class GUI extends JFrame {
    * Prompts the user for a class name and removes the object
    * Diagram is repainted
    */
-  public void processButtonPressRemove() {
+  public void processButtonPressRemove(ActionEvent event) {
     String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
     ShrugUMLClass remove = control.getDiagram().findClass(name);
     control.removeClass(name);
@@ -113,7 +176,7 @@ public class GUI extends JFrame {
    * Prompts the user for a json file to load
    * Draws the diagram from the json file
    */
-  public void processButtonPressLoad() {
+  public void processButtonPressLoad(ActionEvent event) {
     String load = getInputDialogBox("Load", "Load", "Enter a json file:");
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
@@ -126,7 +189,7 @@ public class GUI extends JFrame {
    * User is prompted for a json file to save to
    * TODO: basic handling for overwriting files
    */
-  public void processButtonPressSave() {
+  public void processButtonPressSave(ActionEvent event) {
     String save = getInputDialogBox("Save", "Save", "Enter a json file:");
     control.save(save);
   }
@@ -134,11 +197,13 @@ public class GUI extends JFrame {
   /*
    * TODO
    */
-  public void processButtonPressEdit() {}
+  public void processButtonPressEdit(ActionEvent event) {}
 
   public String getInputDialogBox(String title, String header, String content) {
-    JOptionPane dialog = new JOptionPane();
-    String result = dialog.showInputDialog(content);
+    String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
+    if (result == null) {
+      return ".";
+    }
     return result;
   }
 }
