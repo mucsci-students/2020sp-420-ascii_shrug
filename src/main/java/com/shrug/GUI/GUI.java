@@ -90,7 +90,6 @@ public class GUI {
 
     JMenuBar menuBar = new JMenuBar();
     menuBar.add(file);
-    menuBar.add(edit);
     menuBar.add(help);
 
     // Set callback functions for each button
@@ -167,6 +166,7 @@ public class GUI {
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
     createSwingDiagram();
+    layout.execute(jgxAdapter.getDefaultParent());
     jgxAdapter.repaint();
   }
 
@@ -184,7 +184,7 @@ public class GUI {
    * TODO
    */
   public void processButtonPressEdit(ActionEvent event) {
-    String edit = getInputDialogBox("Edit", "Edit", "Enter a class to edit:");
+    String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
     ShrugUMLClass c = control.getDiagram().findClass(edit);
     String add =
         getInputDialogBox(
