@@ -139,6 +139,7 @@ public class GUI {
         new GraphVertexChangeEvent<ShrugUMLClass>(
             control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
     jgxAdapter.repaint();
+    content.revalidate();
   }
 
   /* void processButtonPressRemove ()
@@ -154,6 +155,7 @@ public class GUI {
         new GraphVertexChangeEvent<ShrugUMLClass>(
             control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
     jgxAdapter.repaint();
+    content.revalidate();
   }
 
   /* void processButtonPressLoad ()
@@ -168,6 +170,7 @@ public class GUI {
     createSwingDiagram();
     layout.execute(jgxAdapter.getDefaultParent());
     jgxAdapter.repaint();
+    content.revalidate();
   }
 
   /* void processButtonPressSave ()
@@ -191,6 +194,7 @@ public class GUI {
             "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
     ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
     control.addAttributes(c.getName(), addAttr);
+    content.revalidate();
   }
 
   public String getInputDialogBox(String title, String header, String content) {
