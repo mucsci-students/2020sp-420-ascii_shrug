@@ -112,6 +112,17 @@ public class ShrugUMLClass {
   public String toString() {
     return m_className;
   }
+
+  public String toStringFull() {
+    return "Name: "
+        + m_className
+        + "\n"
+        + "Attributes: "
+        + m_attributes.toString().replace("[", "").replace("]", "")
+        + "\n"
+        + "Methods: "
+        + m_methods.toString().replace("[", "").replace("]", "");
+  }
   // Private Data Members
   private String m_className;
   private HashSet<String> m_attributes;
