@@ -134,6 +134,11 @@ public class Repl {
     if (isJavaID (name)) {
       ArrayList<String> relationships = parseRelationships(cmds);
       ArrayList<String> attributes = parseAttributes(cmds);
+      
+      if (relationships.isEmpty() && attributes.isEmpty() && control.contains(name)){
+        System.out.println ("This class already exists");
+      }
+      
       control.addClass(name);
 
       if (!attributes.isEmpty())
