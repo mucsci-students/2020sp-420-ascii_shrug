@@ -183,7 +183,15 @@ public class GUI {
   /*
    * TODO
    */
-  public void processButtonPressEdit(ActionEvent event) {}
+  public void processButtonPressEdit(ActionEvent event) {
+    String edit = getInputDialogBox("Edit", "Edit", "Enter a class to edit:");
+    ShrugUMLClass c = control.getDiagram().findClass(edit);
+    String add =
+        getInputDialogBox(
+            "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+    ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
+    control.addAttributes(c.getName(), addAttr);
+  }
 
   public String getInputDialogBox(String title, String header, String content) {
     String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
