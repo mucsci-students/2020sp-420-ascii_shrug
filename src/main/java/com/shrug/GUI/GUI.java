@@ -167,8 +167,6 @@ public class GUI {
     String load = getInputDialogBox("Load", "Load", "Enter a json file:");
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-    createSwingDiagram();
-    layout.execute(jgxAdapter.getDefaultParent());
     jgxAdapter.repaint();
     content.revalidate();
   }
