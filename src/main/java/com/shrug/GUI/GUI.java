@@ -3,133 +3,127 @@ package GUI;
 import Controller.*;
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.util.*;
-import javafx.application.Application;
-import javafx.embed.swing.*;
-import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
-import javafx.geometry.*;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
-import javafx.stage.Stage;
-import javax.swing.*;
-import org.jgrapht.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.jgrapht.event.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
 import shrugUML.*;
 
-public class GUI extends Application {
-  private Button add, remove, edit, save, load;
+public class GUI {
+
+  private JFrame frame;
+  private JButton add, remove, edit, save, load;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
 
   private mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
-  private SwingNode diagramNode = new SwingNode();
+  private mxGraphComponent graph;
+  private JPanel content;
 
-  public GUI() {}
+  public GUI() {
 
-  @Override
-  public void start(Stage primaryStage) {
+    try {
+      JFrame.setDefaultLookAndFeelDecorated(true);
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      System.setProperty("apple.laf.useScreenMenuBar", "true");
+      System.setProperty("com.apple.mrj.application.apple.menu.about.name", "shrug_uml");
+    } catch (ClassNotFoundException
+        | InstantiationException
+        | IllegalAccessException
+        | UnsupportedLookAndFeelException e) {
+    }
 
-    primaryStage.setTitle("GUI");
+    start();
+  }
 
-    BorderPane borderPane = new BorderPane();
+  public void start() {
 
-    Scene scene = new Scene(borderPane, 600, 600);
+    frame = new JFrame();
+    frame.setName("GUI");
 
-    initDiagram(borderPane);
-    initMenuBar(borderPane);
+    content = new JPanel(new BorderLayout(30, 30));
+    content.setPreferredSize(new Dimension(600, 400));
+    frame.setContentPane(content);
 
-    borderPane.setCenter(createSwingDiagram());
+    createSwingDiagram();
 
-    borderPane.setMargin(borderPane.getCenter(), new Insets(30));
+    initMenuBar();
+    initButtons();
 
-    primaryStage.setScene(scene);
-    primaryStage.show();
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.pack();
+    frame.setVisible(true);
   }
 
   /* SwingNode createSwingDiagram ()
    * This function adds an mxGraphComponent to the GUI using the JGraphXAdapter
    * The SwingNode returned is then added to the BorderPane
    */
-  public SwingNode createSwingDiagram() {
-    diagramNode.setContent(new mxGraphComponent(jgxAdapter));
-    return diagramNode;
-  }
-
-  /* void initDiagram ()
-   * @param BorderPane borderPane : The Pane that the diagram is in
-   * Sets some styles for the diagram frame
-   */
-  public void initDiagram(BorderPane borderPane) {
-    StackPane diagram = new StackPane();
-    diagram.setStyle("-fx-background-color: antiquewhite;");
-    diagram.setStyle("-fx-border-style: solid;");
-    diagram.setStyle("-fx-border-color: black;");
+  public void createSwingDiagram() {
+    graph = new mxGraphComponent(jgxAdapter);
+    content.add(graph, BorderLayout.CENTER);
   }
 
   /* void initMenuBar ()
    * Initializes the menu options
    * TODO: Change Add and Remove buttons to appear outside of the menu
    */
-  public void initMenuBar(BorderPane borderPane) {
-    final Menu file = new Menu("File");
-    final Menu help = new Menu("Help");
-    final Menu edit = new Menu("Edit");
+  public void initMenuBar() {
+    final JMenu file = new JMenu("File");
+    final JMenu help = new JMenu("Help");
+    final JMenu edit = new JMenu("Edit");
 
-    MenuBar menuBar = new MenuBar();
-    menuBar.getMenus().add(file);
-    menuBar.getMenus().add(help);
-    menuBar.getMenus().add(edit);
+    JMenuBar menuBar = new JMenuBar();
+    menuBar.add(file);
+    menuBar.add(edit);
+    menuBar.add(help);
 
     // Set callback functions for each button
-    MenuItem add = new MenuItem("Add");
-    add.setOnAction(this::processButtonPressAdd);
-    MenuItem remove = new MenuItem("Remove");
-    remove.setOnAction(this::processButtonPressRemove);
-    MenuItem save = new MenuItem("Save");
-    save.setOnAction(this::processButtonPressSave);
-    MenuItem load = new MenuItem("Load");
-    load.setOnAction(this::processButtonPressLoad);
+    JMenuItem save = new JMenuItem("Save");
+    save.addActionListener(this::processButtonPressSave);
+    JMenuItem load = new JMenuItem("Load");
+    load.addActionListener(this::processButtonPressLoad);
 
-    file.getItems().add(add);
-    file.getItems().add(remove);
-    file.getItems().add(save);
-    file.getItems().add(load);
+    file.add(save);
+    file.add(load);
 
-    borderPane.setTop(menuBar);
+    frame.setJMenuBar(menuBar);
   }
 
   /* void initButtons ()
    * Initializes Buttons and adds them to a FlowPane to be displayed at the top of the window
    * TODO: Use this for Add/Remove instead of the MenuBar
    */
-  public void initButtons(BorderPane borderPane) {
-    add = new Button("Add");
-    add.setOnAction(this::processButtonPressAdd);
+  public void initButtons() {
+    add = new JButton("Add");
+    add.addActionListener(this::processButtonPressAdd);
 
-    remove = new Button("Remove");
-    remove.setOnAction(this::processButtonPressRemove);
+    remove = new JButton("Remove");
+    remove.addActionListener(this::processButtonPressRemove);
 
-    load = new Button("Load");
-    load.setOnAction(this::processButtonPressLoad);
+    edit = new JButton("Edit");
+    edit.addActionListener(this::processButtonPressEdit);
 
-    save = new Button("Save");
-    save.setOnAction(this::processButtonPressSave);
-
-    edit = new Button("Edit");
-    edit.setOnAction(this::processButtonPressEdit);
-
-    FlowPane options = new FlowPane(add, remove, load, save, edit);
-    options.setAlignment(Pos.CENTER);
-    options.setHgap(10);
-    borderPane.setTop(options);
+    JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+    flow.add(add);
+    flow.add(remove);
+    flow.add(edit);
+    content.add(flow, BorderLayout.NORTH);
   }
 
   /* void processBurronPressAdd ()
@@ -192,15 +186,10 @@ public class GUI extends Application {
   public void processButtonPressEdit(ActionEvent event) {}
 
   public String getInputDialogBox(String title, String header, String content) {
-    TextInputDialog dialog = new TextInputDialog("");
-    dialog.setTitle(title);
-    dialog.setContentText(content);
-    dialog.setHeaderText(header);
-    Optional<String> result = dialog.showAndWait();
-    if (result.isPresent()) {
-      return result.get();
-    } else {
+    String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
+    if (result == null) {
       return ".";
     }
+    return result;
   }
 }

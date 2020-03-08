@@ -42,7 +42,8 @@ public class Controller {
    */
 
   public boolean addClass(String className) {
-    return m_diagram.addClass(className);
+    if (isJavaID(className)) return m_diagram.addClass(className);
+    else return false;
   }
 
   /*
@@ -50,7 +51,8 @@ public class Controller {
    *
    */
   public boolean addClass(ShrugUMLClass c) {
-    return m_diagram.addClass(c);
+    if (isJavaID(c.getName())) return m_diagram.addClass(c);
+    else return false;
   }
 
   /*
@@ -77,8 +79,7 @@ public class Controller {
     ArrayList<String> validList = new ArrayList<String>();
 
     for (String s : attributeList) {
-      if (isJavaID(s))
-        validList.add(s);
+      if (isJavaID(s)) validList.add(s);
     }
 
     if (m_diagram.nameInDiagram(className))
@@ -112,12 +113,9 @@ public class Controller {
   public boolean addRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList) 
-    {
-      if (isJavaID(v))
-        success |= m_diagram.addRelationship(className, v);
+    for (String v : vectorList) {
+      if (isJavaID(v)) success |= m_diagram.addRelationship(className, v);
     }
-    
 
     return success;
   }
@@ -130,8 +128,7 @@ public class Controller {
   public boolean removeRelationships(String className, ArrayList<String> vectorList) {
     boolean success = false;
 
-    for (String v : vectorList)
-      success |= m_diagram.removeRelationship(className, v);
+    for (String v : vectorList) success |= m_diagram.removeRelationship(className, v);
 
     return success;
   }
@@ -270,14 +267,11 @@ public class Controller {
    * precondition: input needs to be parsed
    * postcondition: returns if it is a valid identifier
    */
-  public static boolean isJavaID (String name) {
-    if (!(Character.isJavaIdentifierStart(name.charAt(0))))
-      return false;
+  public static boolean isJavaID(String name) {
+    if (!(Character.isJavaIdentifierStart(name.charAt(0)))) return false;
 
-    for (int i = 1; i < name.length(); i++)
-    {
-      if (!(Character.isJavaIdentifierPart(name.charAt(i))))
-        return false;
+    for (int i = 1; i < name.length(); i++) {
+      if (!(Character.isJavaIdentifierPart(name.charAt(i)))) return false;
     }
 
     return true;
