@@ -33,7 +33,7 @@ public class GUI extends JFrame {
 
   public void start() {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    setSize(1000, 1000);
     // initDiagram(borderLayout);
     // initMenuBar(borderPane);
     initButtons();
@@ -72,6 +72,9 @@ public class GUI extends JFrame {
             processButtonPressRemove();
           }
         });
+
+    panel.add(add, BorderLayout.NORTH);
+    panel.add(remove, BorderLayout.NORTH);
   }
 
   /* void processBurronPressAdd ()
