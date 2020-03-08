@@ -94,10 +94,6 @@ public class GUI {
     menuBar.add(help);
 
     // Set callback functions for each button
-    JMenuItem add = new JMenuItem("Add");
-    add.addActionListener(this::processButtonPressAdd);
-    JMenuItem remove = new JMenuItem("Remove");
-    remove.addActionListener(this::processButtonPressRemove);
     JMenuItem save = new JMenuItem("Save");
     save.addActionListener(this::processButtonPressSave);
     JMenuItem load = new JMenuItem("Load");
@@ -122,20 +118,12 @@ public class GUI {
     remove = new JButton("Remove");
     remove.addActionListener(this::processButtonPressRemove);
 
-    load = new JButton("Load");
-    load.addActionListener(this::processButtonPressLoad);
-
-    save = new JButton("Save");
-    save.addActionListener(this::processButtonPressSave);
-
     edit = new JButton("Edit");
     edit.addActionListener(this::processButtonPressEdit);
 
     JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
     flow.add(add);
     flow.add(remove);
-    flow.add(load);
-    flow.add(save);
     flow.add(edit);
     content.add(flow, BorderLayout.NORTH);
   }
