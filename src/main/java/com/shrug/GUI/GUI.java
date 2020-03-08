@@ -3,6 +3,7 @@ package GUI;
 import Controller.*;
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
+import java.util.*;
 import javafx.application.Application;
 import javafx.embed.swing.*;
 import javafx.embed.swing.SwingNode;
@@ -27,10 +28,9 @@ public class GUI extends Application {
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
 
-  mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
+  private mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
   private SwingNode diagramNode = new SwingNode();
-  private JPanel diagramFrame = new JPanel();
 
   public GUI() {}
 
@@ -59,8 +59,7 @@ public class GUI extends Application {
    * The SwingNode returned is then added to the BorderPane
    */
   public SwingNode createSwingDiagram() {
-    diagramFrame.add(new mxGraphComponent(jgxAdapter));
-    diagramNode.setContent(diagramFrame);
+    diagramNode.setContent(new mxGraphComponent(jgxAdapter));
     return diagramNode;
   }
 
@@ -139,15 +138,14 @@ public class GUI extends Application {
    * Diagram is repainted
    */
   public void processButtonPressAdd(ActionEvent event) {
-    String name = JOptionPane.showInputDialog("Enter a class name:");
+    // String name = JOptionPane.showInputDialog(null, "Enter a class name:");
+    String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
     ShrugUMLClass add = new ShrugUMLClass(name);
     control.addClass(add);
     jgxAdapter.vertexAdded(
         new GraphVertexChangeEvent<ShrugUMLClass>(
             control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
-    layout.execute(jgxAdapter.getDefaultParent());
     jgxAdapter.repaint();
-    diagramFrame.revalidate();
   }
 
   /* void processButtonPressRemove ()
@@ -156,15 +154,13 @@ public class GUI extends Application {
    * Diagram is repainted
    */
   public void processButtonPressRemove(ActionEvent event) {
-    String name = JOptionPane.showInputDialog("Enter a class name:");
+    String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
     ShrugUMLClass remove = control.getDiagram().findClass(name);
     control.removeClass(name);
     jgxAdapter.vertexRemoved(
         new GraphVertexChangeEvent<ShrugUMLClass>(
             control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
-    layout.execute(jgxAdapter.getDefaultParent());
     jgxAdapter.repaint();
-    diagramFrame.revalidate();
   }
 
   /* void processButtonPressLoad ()
@@ -173,13 +169,11 @@ public class GUI extends Application {
    * Draws the diagram from the json file
    */
   public void processButtonPressLoad(ActionEvent event) {
-    String load = JOptionPane.showInputDialog("Enter a .json file to load:");
+    String load = getInputDialogBox("Load", "Load", "Enter a json file:");
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-    diagramFrame.add(new mxGraphComponent(jgxAdapter));
-    layout.execute(jgxAdapter.getDefaultParent());
+    createSwingDiagram();
     jgxAdapter.repaint();
-    diagramFrame.revalidate();
   }
 
   /* void processButtonPressSave ()
@@ -188,7 +182,7 @@ public class GUI extends Application {
    * TODO: basic handling for overwriting files
    */
   public void processButtonPressSave(ActionEvent event) {
-    String save = JOptionPane.showInputDialog("Enter a .json file to save:");
+    String save = getInputDialogBox("Save", "Save", "Enter a json file:");
     control.save(save);
   }
 
@@ -196,4 +190,17 @@ public class GUI extends Application {
    * TODO
    */
   public void processButtonPressEdit(ActionEvent event) {}
+
+  public String getInputDialogBox(String title, String header, String content) {
+    TextInputDialog dialog = new TextInputDialog("");
+    dialog.setTitle(title);
+    dialog.setContentText(content);
+    dialog.setHeaderText(header);
+    Optional<String> result = dialog.showAndWait();
+    if (result.isPresent()) {
+      return result.get();
+    } else {
+      return ".";
+    }
+  }
 }
