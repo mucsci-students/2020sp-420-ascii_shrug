@@ -13,8 +13,8 @@ import java.util.Set;
 import shrugUML.*;
 
 public class Repl {
-  private static Scanner scan = new Scanner(System.in);
-  private static Controller control = new Controller();
+  public static Scanner scan = new Scanner(System.in);
+  public static Controller control = new Controller();
 
   public Repl() {
     run();
@@ -26,11 +26,11 @@ public class Repl {
    * Postcondition: returns an array with commands parsed into
    * an array by space.
    */
-  private static void run() {
+  public static void run() {
     printHelp();
     while (true) {
       System.out.print("-> ");
-      execute(parseLine());
+      execute(parseLine(scan.nextLine()));
       continue;
     }
   }
@@ -41,8 +41,8 @@ public class Repl {
    * Postcondition: returns an array with commands parsed into
    * an array by space.
    */
-  private static ArrayList<String> parseLine() {
-    return new ArrayList<String>(Arrays.asList(scan.nextLine().trim().split("\\s+")));
+  public static ArrayList<String> parseLine(String line) {
+    return new ArrayList<String>(Arrays.asList(line.trim().split("\\s+")));
   }
 
   /*
@@ -51,7 +51,7 @@ public class Repl {
    * Precondition: Repl is initialized.
    * Postcondition: An action occurs to load, save, or modify the state of a UML diagram.
    */
-  private static boolean execute(ArrayList<String> cmds) {
+  public static boolean execute(ArrayList<String> cmds) {
     switch (cmds.get(0).toLowerCase()) {
       case "add":
         return add(cmds);
@@ -87,7 +87,7 @@ public class Repl {
    * Precondition: control is instantiated
    * Postcondition: The diagram is printed
    */
-  private static void printDiagram() {
+  public static void printDiagram() {
     for (ShrugUMLClass c : control.getClasses()) {
       String s = "Name: " + c.getName() + "\nAttributes: ";
 
@@ -108,7 +108,7 @@ public class Repl {
    * Precondition: None
    * Postcondition: help command is printed
    */
-  private static void printHelp() {
+  public static void printHelp() {
     System.out.println(
         "¯\\_(ツ)_/¯ UML Editor Help ¯\\_(ツ)_/¯\n\n"
             + "Commands:\n"
@@ -128,19 +128,31 @@ public class Repl {
    * precondition: repl is instantiated with an associated controller.
    * postcondition: the UML object is added to the diagram.
    */
-  private static boolean add(ArrayList<String> cmds) {
+  public static boolean add(ArrayList<String> cmds) {
 
-    ArrayList<String> relationships = parseRelationships(cmds);
-    ArrayList<String> attributes = parseAttributes(cmds);
     String name = cmds.get(1);
-    control.addClass(name);
+    if (isJavaID (name)) {
+      ArrayList<String> relationships = parseRelationships(cmds);
+      ArrayList<String> attributes = parseAttributes(cmds);
+      
+      if (relationships.isEmpty() && attributes.isEmpty() && control.contains(name)){
+        System.out.println ("This class already exists");
+      }
+      
+      control.addClass(name);
 
-    if (!attributes.isEmpty())
-      control.addAttributes(name, attributes);
-    if(!relationships.isEmpty())
-      control.addRelationships(name, relationships);
+      if (!attributes.isEmpty())
+        control.addAttributes(name, attributes);
+      if(!relationships.isEmpty())
+        control.addRelationships(name, relationships);
 
-    return true;
+      return true;
+    }
+    else
+    {
+      System.out.println(name + " is not a valid ID");
+      return false;
+    }
   }
 
 
@@ -148,36 +160,51 @@ public class Repl {
    * precondition: repl is instantiated with an associated controller.
    * postcondition: the UML object is removed from the diagram.
    */
-  private static boolean remove(ArrayList<String> cmds) {
+  public static boolean remove(ArrayList<String> cmds) {
 
     ArrayList<String> relationships = parseRelationships(cmds);
     ArrayList<String> attributes = parseAttributes(cmds);
     String name = cmds.get(1);
+
 
     if (control.contains(name)){
       if (!attributes.isEmpty())
         control.removeAttributes(name, attributes);
       if(!relationships.isEmpty())
         control.removeRelationships(name, relationships);
+      return true;
     }
-    else {
+    else if (!isJavaID(name))
+    {
+      System.out.println (name + " is not a valid ID");
+      return false;
+    }
+    else 
+    {
       System.out.println(name + " is not in the diagram.\n");
+      return false;
     }
 
-    return true;
   }
 
   /* Function: parse ()
    * precondition: repl is instantiated with an associated controller.
    * postcondition: returns an arraylist of the attributes
   */
-  private static ArrayList<String> parseAttributes (ArrayList<String> cmds) {
+  public static ArrayList<String> parseAttributes (ArrayList<String> cmds) {
     
     ArrayList<String> attributes = new ArrayList<String>();
     // parse attribute arguments
     if (cmds.contains("-a")) 
+    {
       for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) 
-        attributes.add(cmds.get(i));
+      {
+        if (isJavaID(cmds.get(i)))
+          attributes.add(cmds.get(i));
+        else
+          System.out.println(cmds.get(i) + " is not a valid Java ID");
+      }
+    }
 
     return attributes;        
   }
@@ -186,13 +213,20 @@ public class Repl {
    * precondition: repl is instantiated with an associated controller.
    * postcondition: returns an arraylist  of the relationships
   */
-  private static ArrayList<String> parseRelationships (ArrayList<String> cmds) {
+  public static ArrayList<String> parseRelationships (ArrayList<String> cmds) {
     
     ArrayList<String> relationships = new ArrayList<String>();
     // parse relationship arguments
     if (cmds.contains("-r")) 
+    {
       for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) 
-        relationships.add(cmds.get(i));
+      {
+        if (isJavaID(cmds.get(i)))
+          relationships.add(cmds.get(i));
+        else 
+          System.out.println(cmds.get(i) + "is not a valid Java ID");
+      }
+    }
 
     return relationships;        
   }
@@ -201,8 +235,25 @@ public class Repl {
    * precondition: program is running and exit is entered into Repl.
    * postcondition: program is terminated.
    */
-  private static boolean exit() {
+  public static boolean exit() {
     System.exit(0);
+    return true;
+  }
+
+  /* Function: isJavaID ()
+   * precondition: input needs to be parsed
+   * postcondition: returns if it is a valid identifier
+   */
+  public static boolean isJavaID (String name) {
+    if (!(Character.isJavaIdentifierStart(name.charAt(0))))
+      return false;
+
+    for (int i = 1; i < name.length(); i++)
+    {
+      if (!(Character.isJavaIdentifierPart(name.charAt(i))))
+        return false;
+    }
+
     return true;
   }
 }
