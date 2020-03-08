@@ -28,9 +28,7 @@ public class Repl {
    */
   public static void run() {
     printHelp();
-    while (true) {
-      System.out.print("-> ");
-      execute(parseLine(scan.nextLine()));
+    while (true) { System.out.print("-> "); execute(parseLine(scan.nextLine()));
       continue;
     }
   }
@@ -167,7 +165,9 @@ public class Repl {
     String name = cmds.get(1);
 
 
-    if (control.contains(name)){
+    if (control.contains(name))
+    {
+      control.removeClass(name);
       if (!attributes.isEmpty())
         control.removeAttributes(name, attributes);
       if(!relationships.isEmpty())
