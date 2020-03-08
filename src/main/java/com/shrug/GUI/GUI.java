@@ -145,6 +145,7 @@ public class GUI extends Application {
     TextInputDialog dialog = new TextInputDialog("");
     dialog.setTitle("Class name");
     dialog.setContentText("Class name:");
+    dialog.setHeaderText("Add Class");
     Optional<String> result = dialog.showAndWait();
     if (result.isPresent()) {
       name = result.get();
@@ -169,6 +170,7 @@ public class GUI extends Application {
     TextInputDialog dialog = new TextInputDialog("");
     dialog.setTitle("Class name");
     dialog.setContentText("Class name:");
+    dialog.setHeaderText("Remove Class");
     Optional<String> result = dialog.showAndWait();
     if (result.isPresent()) {
       name = result.get();
@@ -193,6 +195,7 @@ public class GUI extends Application {
     TextInputDialog dialog = new TextInputDialog("");
     dialog.setTitle(".json file name:");
     dialog.setContentText(".json file name:");
+    dialog.setHeaderText("Load");
     Optional<String> result = dialog.showAndWait();
     if (result.isPresent()) {
       load = result.get();
@@ -200,7 +203,7 @@ public class GUI extends Application {
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
       diagramFrame.add(new mxGraphComponent(jgxAdapter));
       layout.execute(jgxAdapter.getDefaultParent());
-      jgxAdapter.repaint();
+      diagramFrame.repaint();
       diagramFrame.revalidate();
     }
   }
@@ -215,6 +218,7 @@ public class GUI extends Application {
     TextInputDialog dialog = new TextInputDialog("");
     dialog.setTitle(".json file name:");
     dialog.setContentText(".json file name:");
+    dialog.setHeaderText("Save");
     Optional<String> result = dialog.showAndWait();
     if (result.isPresent()) {
       save = result.get();
