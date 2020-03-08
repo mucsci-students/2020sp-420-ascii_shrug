@@ -31,7 +31,6 @@ public class GUI extends Application {
   private mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
   private SwingNode diagramNode = new SwingNode();
-  private JPanel diagramFrame = new JPanel();
 
   public GUI() {}
 
@@ -140,24 +139,13 @@ public class GUI extends Application {
    */
   public void processButtonPressAdd(ActionEvent event) {
     // String name = JOptionPane.showInputDialog(null, "Enter a class name:");
-    String name;
-    TextInputDialog dialog = new TextInputDialog("");
-    dialog.setTitle("Class name");
-    dialog.setContentText("Class name:");
-    dialog.setHeaderText("Add Class");
-    Optional<String> result = dialog.showAndWait();
-    if (result.isPresent()) {
-      name = result.get();
-      ShrugUMLClass add = new ShrugUMLClass(name);
-      control.addClass(add);
-      jgxAdapter.vertexAdded(
-          new GraphVertexChangeEvent<ShrugUMLClass>(
-              control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
-      layout.execute(jgxAdapter.getDefaultParent());
-      jgxAdapter.repaint();
-      diagramFrame.repaint();
-      diagramFrame.revalidate();
-    } else return;
+    String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
+    ShrugUMLClass add = new ShrugUMLClass(name);
+    control.addClass(add);
+    jgxAdapter.vertexAdded(
+        new GraphVertexChangeEvent<ShrugUMLClass>(
+            control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
+    jgxAdapter.repaint();
   }
 
   /* void processButtonPressRemove ()
@@ -166,24 +154,13 @@ public class GUI extends Application {
    * Diagram is repainted
    */
   public void processButtonPressRemove(ActionEvent event) {
-    String name;
-    TextInputDialog dialog = new TextInputDialog("");
-    dialog.setTitle("Class name");
-    dialog.setContentText("Class name:");
-    dialog.setHeaderText("Remove Class");
-    Optional<String> result = dialog.showAndWait();
-    if (result.isPresent()) {
-      name = result.get();
-      ShrugUMLClass remove = control.getDiagram().findClass(name);
-      control.removeClass(name);
-      jgxAdapter.vertexRemoved(
-          new GraphVertexChangeEvent<ShrugUMLClass>(
-              control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
-      layout.execute(jgxAdapter.getDefaultParent());
-      jgxAdapter.repaint();
-      diagramFrame.repaint();
-      diagramFrame.revalidate();
-    }
+    String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
+    ShrugUMLClass remove = control.getDiagram().findClass(name);
+    control.removeClass(name);
+    jgxAdapter.vertexRemoved(
+        new GraphVertexChangeEvent<ShrugUMLClass>(
+            control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
+    jgxAdapter.repaint();
   }
 
   /* void processButtonPressLoad ()
@@ -192,22 +169,11 @@ public class GUI extends Application {
    * Draws the diagram from the json file
    */
   public void processButtonPressLoad(ActionEvent event) {
-    String load;
-    TextInputDialog dialog = new TextInputDialog("");
-    dialog.setTitle(".json file name:");
-    dialog.setContentText(".json file name:");
-    dialog.setHeaderText("Load");
-    Optional<String> result = dialog.showAndWait();
-    if (result.isPresent()) {
-      load = result.get();
-      control.load(load);
-      jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-      createSwingDiagram();
-      layout.execute(jgxAdapter.getDefaultParent());
-      jgxAdapter.repaint();
-      diagramFrame.repaint();
-      diagramFrame.revalidate();
-    }
+    String load = getInputDialogBox("Load", "Load", "Enter a json file:");
+    control.load(load);
+    jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+    createSwingDiagram();
+    jgxAdapter.repaint();
   }
 
   /* void processButtonPressSave ()
@@ -216,20 +182,25 @@ public class GUI extends Application {
    * TODO: basic handling for overwriting files
    */
   public void processButtonPressSave(ActionEvent event) {
-    String save;
-    TextInputDialog dialog = new TextInputDialog("");
-    dialog.setTitle(".json file name:");
-    dialog.setContentText(".json file name:");
-    dialog.setHeaderText("Save");
-    Optional<String> result = dialog.showAndWait();
-    if (result.isPresent()) {
-      save = result.get();
-      control.save(save);
-    }
+    String save = getInputDialogBox("Save", "Save", "Enter a json file:");
+    control.save(save);
   }
 
   /*
    * TODO
    */
   public void processButtonPressEdit(ActionEvent event) {}
+
+  public String getInputDialogBox(String title, String header, String content) {
+    TextInputDialog dialog = new TextInputDialog("");
+    dialog.setTitle(title);
+    dialog.setContentText(content);
+    dialog.setHeaderText(header);
+    Optional<String> result = dialog.showAndWait();
+    if (result.isPresent()) {
+      return result.get();
+    } else {
+      return ".";
+    }
+  }
 }
