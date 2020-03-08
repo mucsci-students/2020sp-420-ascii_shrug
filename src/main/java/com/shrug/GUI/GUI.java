@@ -60,6 +60,7 @@ public class GUI extends Application {
    * The SwingNode returned is then added to the BorderPane
    */
   public SwingNode createSwingDiagram() {
+    diagramFrame.removeAll();
     diagramFrame.add(new mxGraphComponent(jgxAdapter));
     diagramNode.setContent(diagramFrame);
     return diagramNode;
@@ -203,7 +204,7 @@ public class GUI extends Application {
       load = result.get();
       control.load(load);
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-      diagramFrame.add(new mxGraphComponent(jgxAdapter));
+      createSwingDiagram();
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       diagramFrame.repaint();
