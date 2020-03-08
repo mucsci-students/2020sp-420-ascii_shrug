@@ -99,8 +99,6 @@ public class GUI {
     JMenuItem load = new JMenuItem("Load");
     load.addActionListener(this::processButtonPressLoad);
 
-    file.add(add);
-    file.add(remove);
     file.add(save);
     file.add(load);
 
