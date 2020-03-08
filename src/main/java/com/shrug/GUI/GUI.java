@@ -139,7 +139,7 @@ public class GUI extends Application {
    * Diagram is repainted
    */
   public void processButtonPressAdd(ActionEvent event) {
-    String name = JOptionPane.showInputDialog("Enter a class name:");
+    String name = JOptionPane.showInputDialog(null, "Enter a class name:");
     ShrugUMLClass add = new ShrugUMLClass(name);
     control.addClass(add);
     jgxAdapter.vertexAdded(
@@ -156,7 +156,7 @@ public class GUI extends Application {
    * Diagram is repainted
    */
   public void processButtonPressRemove(ActionEvent event) {
-    String name = JOptionPane.showInputDialog("Enter a class name:");
+    String name = JOptionPane.showInputDialog(null, "Enter a class name:");
     ShrugUMLClass remove = control.getDiagram().findClass(name);
     control.removeClass(name);
     jgxAdapter.vertexRemoved(
@@ -173,7 +173,7 @@ public class GUI extends Application {
    * Draws the diagram from the json file
    */
   public void processButtonPressLoad(ActionEvent event) {
-    String load = JOptionPane.showInputDialog("Enter a .json file to load:");
+    String load = JOptionPane.showInputDialog(null, "Enter a .json file to load:");
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
     diagramFrame.add(new mxGraphComponent(jgxAdapter));
@@ -188,7 +188,7 @@ public class GUI extends Application {
    * TODO: basic handling for overwriting files
    */
   public void processButtonPressSave(ActionEvent event) {
-    String save = JOptionPane.showInputDialog("Enter a .json file to save:");
+    String save = JOptionPane.showInputDialog(null, "Enter a .json file to save:");
     control.save(save);
   }
 
