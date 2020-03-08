@@ -28,7 +28,7 @@ public class GUI extends Application {
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
 
-  mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
+  private mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
   private SwingNode diagramNode = new SwingNode();
   private JPanel diagramFrame = new JPanel();
@@ -60,9 +60,7 @@ public class GUI extends Application {
    * The SwingNode returned is then added to the BorderPane
    */
   public SwingNode createSwingDiagram() {
-    diagramFrame.removeAll();
-    diagramFrame.add(new mxGraphComponent(jgxAdapter));
-    diagramNode.setContent(diagramFrame);
+    diagramNode.setContent(new mxGraphComponent(jgxAdapter));
     return diagramNode;
   }
 
