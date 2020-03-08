@@ -156,6 +156,7 @@ public class GUI extends Application {
               control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
+      diagramFrame.repaint();
       diagramFrame.revalidate();
     } else return;
   }
@@ -181,6 +182,7 @@ public class GUI extends Application {
               control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
+      diagramFrame.repaint();
       diagramFrame.revalidate();
     }
   }
@@ -203,6 +205,7 @@ public class GUI extends Application {
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
       diagramFrame.add(new mxGraphComponent(jgxAdapter));
       layout.execute(jgxAdapter.getDefaultParent());
+      jgxAdapter.repaint();
       diagramFrame.repaint();
       diagramFrame.revalidate();
     }
