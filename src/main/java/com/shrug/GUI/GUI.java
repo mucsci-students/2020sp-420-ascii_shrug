@@ -71,7 +71,7 @@ public class GUI {
   }
 
   public void initGraphComponent() {
-    content.remove(graph);
+    if (graph != null) content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
     content.add(graph, BorderLayout.CENTER);
   }
