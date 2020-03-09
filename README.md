@@ -18,10 +18,11 @@ GUI
 1. run `java -jar target/uml-VERSION-jar-with-dependencies.jar` (replace VERSION with the version number)
 
 #### Usage:
-`CLI
+
+#### CLI
+```
 
 ¯\_(ツ)_/¯ UML Editor Help ¯\_(ツ)_/¯
-
 
 Commands:
 
@@ -45,8 +46,9 @@ Options:
 
 "-r" [ID]                     : will create relationships from classname to all ID``
 
+```
 
-GUI
+#### GUI
 
 -To add a class, click add and supply a valid name.
 
@@ -59,13 +61,12 @@ GUI
 
 -To load a diagram, click load and enter a file name.
 
-```
 #### Quirks:
 
-`- Able to modify attributes in GUI, they will not display.
+- Able to modify attributes in GUI, they will not display.
 
 - Relationships made by hovering and dragging from one class to another
   will not modify the model. 
 
-  - Classes can be double clicked to change the representation. The mode is
+- Classes can be double clicked to change the representation. The mode is
   not changed.
