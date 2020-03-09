@@ -30,7 +30,7 @@ public class GUI {
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
 
-  private mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
+  private mxGraphLayout layout = new mxCircleLayout(jgxAdapter);
 
   private mxGraphComponent graph;
   private JPanel content;
