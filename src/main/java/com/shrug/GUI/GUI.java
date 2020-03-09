@@ -137,15 +137,19 @@ public class GUI {
    * Diagram is repainted
    */
   public void processButtonPressAdd(ActionEvent event) {
-    // String name = JOptionPane.showInputDialog(null, "Enter a class name:");
-    String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
-    ShrugUMLClass add = new ShrugUMLClass(name);
-    control.addClass(add);
-    jgxAdapter.vertexAdded(
-        new GraphVertexChangeEvent<ShrugUMLClass>(
-            control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
-    jgxAdapter.repaint();
-    content.revalidate();
+    try {
+      // String name = JOptionPane.showInputDialog(null, "Enter a class name:");
+      String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
+      ShrugUMLClass add = new ShrugUMLClass(name);
+      control.addClass(add);
+      jgxAdapter.vertexAdded(
+          new GraphVertexChangeEvent<ShrugUMLClass>(
+              control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
+      jgxAdapter.repaint();
+      content.revalidate();
+    } catch (NullPointerException e) {
+
+    }
   }
 
   /* void processButtonPressRemove ()
@@ -154,14 +158,18 @@ public class GUI {
    * Diagram is repainted
    */
   public void processButtonPressRemove(ActionEvent event) {
-    String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
-    ShrugUMLClass remove = control.getDiagram().findClass(name);
-    control.removeClass(name);
-    jgxAdapter.vertexRemoved(
-        new GraphVertexChangeEvent<ShrugUMLClass>(
-            control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
-    jgxAdapter.repaint();
-    content.revalidate();
+    try {
+      String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
+      ShrugUMLClass remove = control.getDiagram().findClass(name);
+      control.removeClass(name);
+      jgxAdapter.vertexRemoved(
+          new GraphVertexChangeEvent<ShrugUMLClass>(
+              control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
+      jgxAdapter.repaint();
+      content.revalidate();
+    } catch (NullPointerException e) {
+
+    }
   }
 
   /* void processButtonPressLoad ()
@@ -170,13 +178,17 @@ public class GUI {
    * Draws the diagram from the json file
    */
   public void processButtonPressLoad(ActionEvent event) {
-    String load = getInputDialogBox("Load", "Load", "Enter a json file:");
-    control = new Controller();
-    control.load(load);
-    jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-    initGraphComponent();
-    jgxAdapter.repaint();
-    content.revalidate();
+    try {
+      String load = getInputDialogBox("Load", "Load", "Enter a json file:");
+      control = new Controller();
+      control.load(load);
+      jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+      initGraphComponent();
+      jgxAdapter.repaint();
+      content.revalidate();
+    } catch (NullPointerException e) {
+
+    }
   }
 
   /* void processButtonPressSave ()
@@ -185,80 +197,99 @@ public class GUI {
    * TODO: basic handling for overwriting files
    */
   public void processButtonPressSave(ActionEvent event) {
-    String save = getInputDialogBox("Save", "Save", "Enter a json file:");
-    control.save(save);
+    try {
+      String save = getInputDialogBox("Save", "Save", "Enter a json file:");
+      control.save(save);
+    } catch (NullPointerException e) {
+
+    }
   }
 
   /*
    * TODO
    */
   public void processButtonPressEdit(ActionEvent event) {
-    String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
-    ShrugUMLClass c = control.getDiagram().findClass(edit);
+    try {
+      String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
+      ShrugUMLClass c = control.getDiagram().findClass(edit);
 
-    String add =
-        getInputDialogBox(
-            "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
-    ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
-    control.addAttributes(c.getName(), addAttr);
+      String add =
+          getInputDialogBox(
+              "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+      ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
+      control.addAttributes(c.getName(), addAttr);
 
-    String remove =
-        getInputDialogBox(
-            "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
-    ArrayList<String> removeAttr =
-        new ArrayList<String>(Arrays.asList(remove.trim().split("\\s+")));
-    control.removeAttributes(c.getName(), removeAttr);
-    jgxAdapter.repaint();
-    content.revalidate();
+      String remove =
+          getInputDialogBox(
+              "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+      ArrayList<String> removeAttr =
+          new ArrayList<String>(Arrays.asList(remove.trim().split("\\s+")));
+      control.removeAttributes(c.getName(), removeAttr);
+      jgxAdapter.repaint();
+      content.revalidate();
+    } catch (NullPointerException e) {
+
+    }
   }
 
   public void processButtonPressAddR(ActionEvent event) {
-    String src = getInputDialogBox("Relationship", "Add a relation", "Enter source class:").trim();
-    String dest =
-        getInputDialogBox(
-            "Relationship", "Add a relation", "Enter destination classes separated by whitespace:");
-    ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-    control.addRelationships(src, destL);
-    for (String className : destL) {
-      jgxAdapter.edgeAdded(
-          new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
-              control.getGraph(),
-              GraphEdgeChangeEvent.EDGE_ADDED,
-              control.getDiagram().getRelationship(src, className),
-              control.getDiagram().findClass(src),
-              control.getDiagram().findClass(className)));
+    try {
+      String src =
+          getInputDialogBox("Relationship", "Add a relation", "Enter source class:").trim();
+      String dest =
+          getInputDialogBox(
+              "Relationship",
+              "Add a relation",
+              "Enter destination classes separated by whitespace:");
+      ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
+      control.addRelationships(src, destL);
+      for (String className : destL) {
+        jgxAdapter.edgeAdded(
+            new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
+                control.getGraph(),
+                GraphEdgeChangeEvent.EDGE_ADDED,
+                control.getDiagram().getRelationship(src, className),
+                control.getDiagram().findClass(src),
+                control.getDiagram().findClass(className)));
+      }
+      jgxAdapter.repaint();
+      content.revalidate();
+    } catch (NullPointerException e) {
+
     }
-    jgxAdapter.repaint();
-    content.revalidate();
   }
 
   public void processButtonPressRemoveR(ActionEvent event) {
-    String src =
-        getInputDialogBox("Relationship", "Remove a relation", "Enter source class:").trim();
-    String dest =
-        getInputDialogBox(
-            "Relationship",
-            "Remove a relation",
-            "Enter destination classes separated by whitespace:");
-    ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-    for (String className : destL) {
-      jgxAdapter.edgeRemoved(
-          new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
-              control.getGraph(),
-              GraphEdgeChangeEvent.BEFORE_EDGE_REMOVED,
-              control.getDiagram().getRelationship(src, className),
-              control.getDiagram().findClass(src),
-              control.getDiagram().findClass(className)));
+    try {
+      String src =
+          getInputDialogBox("Relationship", "Remove a relation", "Enter source class:").trim();
+      String dest =
+          getInputDialogBox(
+              "Relationship",
+              "Remove a relation",
+              "Enter destination classes separated by whitespace:");
+      ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
+      for (String className : destL) {
+        jgxAdapter.edgeRemoved(
+            new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
+                control.getGraph(),
+                GraphEdgeChangeEvent.BEFORE_EDGE_REMOVED,
+                control.getDiagram().getRelationship(src, className),
+                control.getDiagram().findClass(src),
+                control.getDiagram().findClass(className)));
+      }
+      control.removeRelationships(src, destL);
+      jgxAdapter.repaint();
+      content.revalidate();
+    } catch (NullPointerException e) {
+
     }
-    control.removeRelationships(src, destL);
-    jgxAdapter.repaint();
-    content.revalidate();
   }
 
   public String getInputDialogBox(String title, String header, String content) {
     String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
     if (result == null) {
-      return ".";
+      return null;
     }
     return result;
   }
