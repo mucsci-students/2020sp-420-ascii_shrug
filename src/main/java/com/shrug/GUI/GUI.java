@@ -60,21 +60,18 @@ public class GUI {
     content.setPreferredSize(new Dimension(600, 400));
     frame.setContentPane(content);
 
-    createSwingDiagram();
-
     initMenuBar();
     initButtons();
+
+    initGraphComponent();
 
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
   }
 
-  /* SwingNode createSwingDiagram ()
-   * This function adds an mxGraphComponent to the GUI using the JGraphXAdapter
-   * The SwingNode returned is then added to the BorderPane
-   */
-  public void createSwingDiagram() {
+  public void initGraphComponent() {
+    if (graph != null) content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
     content.add(graph, BorderLayout.CENTER);
   }
@@ -90,7 +87,6 @@ public class GUI {
 
     JMenuBar menuBar = new JMenuBar();
     menuBar.add(file);
-    menuBar.add(edit);
     menuBar.add(help);
 
     // Set callback functions for each button
@@ -140,6 +136,7 @@ public class GUI {
         new GraphVertexChangeEvent<ShrugUMLClass>(
             control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
     jgxAdapter.repaint();
+    content.revalidate();
   }
 
   /* void processButtonPressRemove ()
@@ -155,6 +152,7 @@ public class GUI {
         new GraphVertexChangeEvent<ShrugUMLClass>(
             control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
     jgxAdapter.repaint();
+    content.revalidate();
   }
 
   /* void processButtonPressLoad ()
@@ -164,10 +162,12 @@ public class GUI {
    */
   public void processButtonPressLoad(ActionEvent event) {
     String load = getInputDialogBox("Load", "Load", "Enter a json file:");
+    control = new Controller();
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-    createSwingDiagram();
+    initGraphComponent();
     jgxAdapter.repaint();
+    content.revalidate();
   }
 
   /* void processButtonPressSave ()
@@ -183,7 +183,24 @@ public class GUI {
   /*
    * TODO
    */
-  public void processButtonPressEdit(ActionEvent event) {}
+  public void processButtonPressEdit(ActionEvent event) {
+    String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
+    ShrugUMLClass c = control.getDiagram().findClass(edit);
+
+    String add =
+        getInputDialogBox(
+            "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+    ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
+    control.addAttributes(c.getName(), addAttr);
+
+    String remove =
+        getInputDialogBox(
+            "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+    ArrayList<String> removeAttr =
+        new ArrayList<String>(Arrays.asList(remove.trim().split("\\s+")));
+    control.removeAttributes(c.getName(), removeAttr);
+    content.revalidate();
+  }
 
   public String getInputDialogBox(String title, String header, String content) {
     String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
