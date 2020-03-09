@@ -185,6 +185,7 @@ public class GUI {
       control = new Controller();
       control.load(load);
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+      layout = new mxOrganicLayout(jgxAdapter);
       initGraphComponent();
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
