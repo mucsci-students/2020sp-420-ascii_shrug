@@ -30,7 +30,7 @@ public class GUI {
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
 
-  private mxGraphLayout layout = new mxCircleLayout(jgxAdapter);
+  private mxGraphLayout layout = new mxOrganicLayout(jgxAdapter);
 
   private mxGraphComponent graph;
   private JPanel content;
@@ -73,8 +73,8 @@ public class GUI {
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
-    content.add(graph, BorderLayout.CENTER);
     layout.execute(jgxAdapter.getDefaultParent());
+    content.add(graph, BorderLayout.CENTER);
   }
 
   /* void initMenuBar ()
