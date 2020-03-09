@@ -61,6 +61,7 @@ public class GUI {
     frame.setContentPane(content);
 
     createSwingDiagram();
+    layout.execute(jgxAdapter.getDefaultParent());
 
     initMenuBar();
     initButtons();
