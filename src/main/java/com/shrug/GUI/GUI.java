@@ -73,8 +73,8 @@ public class GUI {
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
-    content.add(graph, BorderLayout.CENTER);
     layout.execute(jgxAdapter.getDefaultParent());
+    content.add(graph, BorderLayout.CENTER);
   }
 
   /* void initMenuBar ()
@@ -145,7 +145,6 @@ public class GUI {
       jgxAdapter.vertexAdded(
           new GraphVertexChangeEvent<ShrugUMLClass>(
               control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
-      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -166,7 +165,6 @@ public class GUI {
       jgxAdapter.vertexRemoved(
           new GraphVertexChangeEvent<ShrugUMLClass>(
               control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
-      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
