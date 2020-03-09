@@ -73,9 +73,8 @@ public class GUI {
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
-    System.out.println(graph.getParent());
-    layout.execute(graph.getParent());
     content.add(graph, BorderLayout.CENTER);
+    layout.execute(jgxAdapter.getDefaultParent());
   }
 
   /* void initMenuBar ()
