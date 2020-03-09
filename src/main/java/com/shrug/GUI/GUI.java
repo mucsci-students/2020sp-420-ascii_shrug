@@ -232,7 +232,28 @@ public class GUI {
     content.revalidate();
   }
 
-  public void processButtonPressRemoveR(ActionEvent event) {}
+  public void processButtonPressRemoveR(ActionEvent event) {
+    String src =
+        getInputDialogBox("Relationship", "Remove a relation", "Enter source class:").trim();
+    String dest =
+        getInputDialogBox(
+            "Relationship",
+            "Remove a relation",
+            "Enter destination classes separated by whitespace:");
+    ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
+    control.removeRelationships(src, destL);
+    for (String className : destL) {
+      jgxAdapter.edgeRemoved(
+          new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
+              control.getGraph(),
+              GraphEdgeChangeEvent.EDGE_REMOVED,
+              control.getDiagram().getRelationship(src, className),
+              control.getDiagram().findClass(src),
+              control.getDiagram().findClass(className)));
+    }
+    jgxAdapter.repaint();
+    content.revalidate();
+  }
 
   public String getInputDialogBox(String title, String header, String content) {
     String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
