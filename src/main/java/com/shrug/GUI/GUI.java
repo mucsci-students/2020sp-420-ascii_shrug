@@ -60,8 +60,7 @@ public class GUI {
     content.setPreferredSize(new Dimension(600, 400));
     frame.setContentPane(content);
 
-    createSwingDiagram();
-    layout.execute(jgxAdapter.getDefaultParent());
+    // createSwingDiagram();
 
     initMenuBar();
     initButtons();
@@ -169,8 +168,7 @@ public class GUI {
     control = new Controller();
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-    createSwingDiagram();
-    layout.execute(jgxAdapter.getDefaultParent());
+
     jgxAdapter.repaint();
     content.revalidate();
   }
