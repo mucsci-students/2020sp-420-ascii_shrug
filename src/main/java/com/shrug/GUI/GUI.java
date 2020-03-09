@@ -145,6 +145,7 @@ public class GUI {
       jgxAdapter.vertexAdded(
           new GraphVertexChangeEvent<ShrugUMLClass>(
               control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
+      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -165,6 +166,7 @@ public class GUI {
       jgxAdapter.vertexRemoved(
           new GraphVertexChangeEvent<ShrugUMLClass>(
               control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
+      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -184,6 +186,7 @@ public class GUI {
       control.load(load);
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
       initGraphComponent();
+      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
