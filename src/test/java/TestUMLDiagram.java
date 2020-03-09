@@ -140,15 +140,6 @@ public class TestUMLDiagram {
     assertTrue(s.containsAll(classes));
   }
 
-  @Test
-  public void testValidGetRelationshipsOfClass() {
-    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
-    testDiagram.addClass("a");
-    testDiagram.addClass("b");
-    testDiagram.addRelationship("a", "b");
-    // Kind of have to do string checking here because of protected members
-    assertEquals(testDiagram.getRelationshipsOfClass("a").toString(), "[(a : b)]");
-  }
 
   @Test
   public void testEmptyGetRelationshipsOfClass() {
@@ -163,15 +154,6 @@ public class TestUMLDiagram {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     testDiagram.addClass("a");
     assertNull(testDiagram.getRelationshipsOfClass("b"));
-  }
-
-  @Test
-  public void testValidGetRelationship() {
-    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
-    testDiagram.addClass("a");
-    testDiagram.addClass("b");
-    testDiagram.addRelationship("a", "b");
-    assertEquals(testDiagram.getRelationship("a", "b").toString(), "(a : b)");
   }
 
   @Test
