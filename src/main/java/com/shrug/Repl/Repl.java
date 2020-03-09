@@ -50,35 +50,51 @@ public class Repl {
    * Postcondition: An action occurs to load, save, or modify the state of a UML diagram.
    */
   public static boolean execute(ArrayList<String> cmds) {
-    switch (cmds.get(0).toLowerCase()) {
-      case "add":
-        return add(cmds);
-      case "remove":
-        return remove(cmds);
-      case "save":
-        return control.save(cmds.get(1));
-      case "load":
-        return control.load(cmds.get(1));
-      case "print":
-        {
-          printDiagram();
+    if (cmds.size() > 1)
+    {
+      switch (cmds.get(0).toLowerCase()) {
+        case "add":
+          return add(cmds);
+        case "remove":
+          return remove(cmds);
+        case "save":
+          return control.save(cmds.get(1));
+        case "load":
+          return control.load(cmds.get(1));
+        case "":
           return true;
-        }
-      case "exit":
-        return exit();
-      case "help":
-        {
-          printHelp();
+        case "help":
+          {
+            printHelp();
+            return true;
+          }
+        default:
+          {
+            System.out.println("Error: Invalid Command (type 'help' for valid commands)");
+            return false;
+          }
+      }
+    }
+    else
+    {
+      switch (cmds.get(0).toLowerCase()) {
+        case "exit":
+          return exit ();
+        case "":
           return true;
-        }
-      case "":
-        return true;
-      default:
+        case "print":
+          {
+            printDiagram();
+            return true;
+          }
+        default:
         {
           System.out.println("Error: Invalid Command (type 'help' for valid commands)");
           return false;
         }
+      }
     }
+
   }
 
   /* Function: printDiagram ()
@@ -135,16 +151,20 @@ public class Repl {
       
       if (relationships.isEmpty() && attributes.isEmpty() && control.contains(name)){
         System.out.println ("This class already exists");
+        return false;
       }
+      else 
+      {
       
-      control.addClass(name);
+        control.addClass(name);
 
-      if (!attributes.isEmpty())
-        control.addAttributes(name, attributes);
-      if(!relationships.isEmpty())
-        control.addRelationships(name, relationships);
+        if (!attributes.isEmpty())
+          control.addAttributes(name, attributes);
+        if(!relationships.isEmpty())
+          control.addRelationships(name, relationships);
 
-      return true;
+        return true;
+      }
     }
     else
     {
