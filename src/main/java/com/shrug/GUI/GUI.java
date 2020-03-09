@@ -73,7 +73,6 @@ public class GUI {
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     jgxAdapter.setAutoSizeCells(true);
-    jgxAdapter.setAlternateEdgeStyle("");
     graph = new mxGraphComponent(jgxAdapter);
     content.add(graph, BorderLayout.CENTER);
     layout.execute(jgxAdapter.getDefaultParent());
