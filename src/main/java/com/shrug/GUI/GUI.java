@@ -25,12 +25,12 @@ import shrugUML.*;
 public class GUI {
 
   private JFrame frame;
-  private JButton add, remove, edit, save, load;
+  private JButton add, remove, edit, save, load, addR, removeR;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
 
-  private mxIGraphLayout layout = new mxCircleLayout(jgxAdapter);
+  private mxGraphLayout layout = new mxOrganicLayout(jgxAdapter);
 
   private mxGraphComponent graph;
   private JPanel content;
@@ -73,6 +73,7 @@ public class GUI {
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
+    layout.execute(jgxAdapter.getDefaultParent());
     content.add(graph, BorderLayout.CENTER);
   }
 
@@ -106,19 +107,27 @@ public class GUI {
    * TODO: Use this for Add/Remove instead of the MenuBar
    */
   public void initButtons() {
-    add = new JButton("Add");
+    add = new JButton("Add Class");
     add.addActionListener(this::processButtonPressAdd);
 
-    remove = new JButton("Remove");
+    remove = new JButton("Remove Class");
     remove.addActionListener(this::processButtonPressRemove);
 
-    edit = new JButton("Edit");
+    edit = new JButton("Edit Attributes");
     edit.addActionListener(this::processButtonPressEdit);
+
+    addR = new JButton("Add Relation");
+    addR.addActionListener(this::processButtonPressAddR);
+
+    removeR = new JButton("Remove Relation");
+    removeR.addActionListener(this::processButtonPressRemoveR);
 
     JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
     flow.add(add);
     flow.add(remove);
     flow.add(edit);
+    flow.add(addR);
+    flow.add(removeR);
     content.add(flow, BorderLayout.NORTH);
   }
 
@@ -199,6 +208,50 @@ public class GUI {
     ArrayList<String> removeAttr =
         new ArrayList<String>(Arrays.asList(remove.trim().split("\\s+")));
     control.removeAttributes(c.getName(), removeAttr);
+    jgxAdapter.repaint();
+    content.revalidate();
+  }
+
+  public void processButtonPressAddR(ActionEvent event) {
+    String src = getInputDialogBox("Relationship", "Add a relation", "Enter source class:").trim();
+    String dest =
+        getInputDialogBox(
+            "Relationship", "Add a relation", "Enter destination classes separated by whitespace:");
+    ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
+    control.addRelationships(src, destL);
+    for (String className : destL) {
+      jgxAdapter.edgeAdded(
+          new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
+              control.getGraph(),
+              GraphEdgeChangeEvent.EDGE_ADDED,
+              control.getDiagram().getRelationship(src, className),
+              control.getDiagram().findClass(src),
+              control.getDiagram().findClass(className)));
+    }
+    jgxAdapter.repaint();
+    content.revalidate();
+  }
+
+  public void processButtonPressRemoveR(ActionEvent event) {
+    String src =
+        getInputDialogBox("Relationship", "Remove a relation", "Enter source class:").trim();
+    String dest =
+        getInputDialogBox(
+            "Relationship",
+            "Remove a relation",
+            "Enter destination classes separated by whitespace:");
+    ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
+    for (String className : destL) {
+      jgxAdapter.edgeRemoved(
+          new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
+              control.getGraph(),
+              GraphEdgeChangeEvent.BEFORE_EDGE_REMOVED,
+              control.getDiagram().getRelationship(src, className),
+              control.getDiagram().findClass(src),
+              control.getDiagram().findClass(className)));
+    }
+    control.removeRelationships(src, destL);
+    jgxAdapter.repaint();
     content.revalidate();
   }
 
