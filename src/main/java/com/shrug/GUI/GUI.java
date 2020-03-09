@@ -25,7 +25,7 @@ import shrugUML.*;
 public class GUI {
 
   private JFrame frame;
-  private JButton add, remove, edit, save, load, addR, removeR;
+  private JButton add, remove, edit, save, load, addR, removeR, help;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
@@ -57,7 +57,7 @@ public class GUI {
     frame.setName("GUI");
 
     content = new JPanel(new BorderLayout(30, 30));
-    content.setPreferredSize(new Dimension(600, 400));
+    content.setPreferredSize(new Dimension(800, 600));
     frame.setContentPane(content);
 
     initMenuBar();
@@ -83,12 +83,9 @@ public class GUI {
    */
   public void initMenuBar() {
     final JMenu file = new JMenu("File");
-    final JMenu help = new JMenu("Help");
-    final JMenu edit = new JMenu("Edit");
 
     JMenuBar menuBar = new JMenuBar();
     menuBar.add(file);
-    menuBar.add(help);
 
     // Set callback functions for each button
     JMenuItem save = new JMenuItem("Save");
@@ -122,12 +119,16 @@ public class GUI {
     removeR = new JButton("Remove Relation");
     removeR.addActionListener(this::processButtonPressRemoveR);
 
+    help = new JButton("Help");
+    help.addActionListener(this::helpDialog);
+
     JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
     flow.add(add);
     flow.add(remove);
     flow.add(edit);
     flow.add(addR);
     flow.add(removeR);
+    flow.add(help);
     content.add(flow, BorderLayout.NORTH);
   }
 
@@ -261,5 +262,19 @@ public class GUI {
       return ".";
     }
     return result;
+  }
+
+  public void helpDialog(ActionEvent event) {
+    JOptionPane.showMessageDialog(
+        frame,
+        "Add Class: Adds a class to the diagram\n"
+            + "Remove Class: Remove a class from the diagram\n"
+            + "Edit: Edit the attributes of a class\n"
+            + "Add Relation: Add a relationship src -> dest"
+            + "Remove Relation: Remove a relationship src -> dest\n"
+            + "Click and drag classes to move them around\n"
+            + "Click a class and drag its borders to change its size",
+        "Help",
+        JOptionPane.PLAIN_MESSAGE);
   }
 }
