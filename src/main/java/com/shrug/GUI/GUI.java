@@ -165,8 +165,11 @@ public class GUI {
    */
   public void processButtonPressLoad(ActionEvent event) {
     String load = getInputDialogBox("Load", "Load", "Enter a json file:");
+    control = new Controller();
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+    createSwingDiagram();
+    layout.execute(jgxAdapter.getDefaultParent());
     jgxAdapter.repaint();
     content.revalidate();
   }
