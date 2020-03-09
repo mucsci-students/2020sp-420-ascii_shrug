@@ -73,7 +73,7 @@ public class GUI {
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
-    layout.execute(jgxAdapter);
+    layout.execute(jgxAdapter.getDefaultParent());
     content.add(graph, BorderLayout.CENTER);
   }
 
@@ -219,6 +219,15 @@ public class GUI {
             "Relationship", "Add a relation", "Enter destination classes separated by whitespace:");
     ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
     control.addRelationships(src, destL);
+    for (String className : destL) {
+      jgxAdapter.edgeAdded(
+          new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
+              control.getGraph(),
+              GraphEdgeChangeEvent.EDGE_ADDED,
+              control.getDiagram().getRelationship(src, className),
+              control.getDiagram().findClass(src),
+              control.getDiagram().findClass(className)));
+    }
     jgxAdapter.repaint();
     content.revalidate();
   }
