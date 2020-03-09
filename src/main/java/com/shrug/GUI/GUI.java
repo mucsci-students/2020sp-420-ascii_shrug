@@ -60,21 +60,18 @@ public class GUI {
     content.setPreferredSize(new Dimension(600, 400));
     frame.setContentPane(content);
 
-    // createSwingDiagram();
-
     initMenuBar();
     initButtons();
+
+    initGraphComponent();
 
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
   }
 
-  /* SwingNode createSwingDiagram ()
-   * This function adds an mxGraphComponent to the GUI using the JGraphXAdapter
-   * The SwingNode returned is then added to the BorderPane
-   */
-  public void createSwingDiagram() {
+  public void initGraphComponent() {
+    content.remove(graph);
     graph = new mxGraphComponent(jgxAdapter);
     content.add(graph, BorderLayout.CENTER);
   }
@@ -168,7 +165,7 @@ public class GUI {
     control = new Controller();
     control.load(load);
     jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
-
+    initGraphComponent();
     jgxAdapter.repaint();
     content.revalidate();
   }
