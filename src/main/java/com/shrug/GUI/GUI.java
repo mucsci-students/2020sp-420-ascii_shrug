@@ -234,8 +234,7 @@ public class GUI {
 
   public void processButtonPressAddR(ActionEvent event) {
     try {
-      String src =
-          getInputDialogBox("Relationship", "Add a relation", "Enter source class:").trim();
+      String src = getInputDialogBox("Relationship", "Add a relation", "Enter source class:");
       String dest =
           getInputDialogBox(
               "Relationship",
@@ -291,6 +290,6 @@ public class GUI {
     if (result == null) {
       return null;
     }
-    return result;
+    return result.trim();
   }
 }
