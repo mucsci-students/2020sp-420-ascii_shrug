@@ -57,7 +57,7 @@ public class GUI {
     frame.setName("GUI");
 
     content = new JPanel(new BorderLayout(30, 30));
-    content.setPreferredSize(new Dimension(600, 400));
+    content.setPreferredSize(new Dimension(800, 600));
     frame.setContentPane(content);
 
     initMenuBar();
