@@ -40,3 +40,9 @@ GUI
 -To save a diagram, click save and enter a file name.
 -To load a diagram, click load and enter a file name.
 ```
+#### Quirks:
+`- Able to modify attributes in GUI, they will not display.
+- Relationships made by hovering and dragging from one class to another
+  will not modify the model. 
+- Classes can be double clicked to change the representation. The mode is
+  not changed.
