@@ -96,6 +96,11 @@ public class GUI {
     JMenuItem load = new JMenuItem("Load");
     load.addActionListener(this::processButtonPressLoad);
 
+    JMenuItem helpMenu = new JMenuItem("Help");
+    help.addActionListener(this::helpDialog);
+
+    help.add(helpMenu);
+
     file.add(save);
     file.add(load);
 
@@ -261,5 +266,19 @@ public class GUI {
       return ".";
     }
     return result;
+  }
+
+  public void helpDialog(ActionEvent event) {
+    JOptionPane.showMessageDialog(
+        frame,
+        "Add Class: Adds a class to the diagram\n"
+            + "Remove Class: Remove a class from the diagram\n"
+            + "Edit: Edit the attributes of a class\n"
+            + "Add Relation: Add a relationship src -> dest"
+            + "Remove Relation: Remove a relationship src -> dest\n"
+            + "Click and drag classes to move them around\n"
+            + "Click a class and drag its borders to change its size",
+        "Help",
+        JOptionPane.PLAIN_MESSAGE);
   }
 }
