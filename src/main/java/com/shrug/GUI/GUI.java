@@ -241,17 +241,16 @@ public class GUI {
             "Remove a relation",
             "Enter destination classes separated by whitespace:");
     ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-    DefaultEdge removed = control.getDiagram().getRelationship(src, destL.get(0));
-    control.removeRelationships(src, destL);
     for (String className : destL) {
       jgxAdapter.edgeRemoved(
           new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
               control.getGraph(),
-              GraphEdgeChangeEvent.EDGE_REMOVED,
-              removed,
+              GraphEdgeChangeEvent.BEFORE_EDGE_REMOVED,
+              control.getDiagram().getRelationship(src, className),
               control.getDiagram().findClass(src),
               control.getDiagram().findClass(className)));
     }
+    control.removeRelationships(src, destL);
     jgxAdapter.repaint();
     content.revalidate();
   }
