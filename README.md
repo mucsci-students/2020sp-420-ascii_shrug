@@ -1,3 +1,4 @@
+
 ### ¯\\\_(ツ)\_/¯ UML Editor ¯\\\_(ツ)\_/¯
 
 A basic UML editor with support for maintaining a diagram state and saving and loading diagrams in JSON format
@@ -16,8 +17,8 @@ GUI
 1. run `java -jar target/uml-VERSION-jar-with-dependencies.jar` (replace VERSION with the version number)
 
 #### Usage:
-`CLI
-¯\_(ツ)_/¯ UML Editor Help ¯\_(ツ)_/¯
+CLI
+¯\\_(ツ)_/¯ UML Editor Help ¯\_(ツ)_/¯
 
 Commands:
 add <classname> [options]     : adds classname to the diagram
@@ -39,9 +40,9 @@ GUI
  attributes to remove.
 -To save a diagram, click save and enter a file name.
 -To load a diagram, click load and enter a file name.
-```
+
 #### Quirks:
-`- Able to modify attributes in GUI, they will not display.
+- Able to modify attributes in GUI, they will not display.
 - Relationships made by hovering and dragging from one class to another
   will not modify the model. 
 - Classes can be double clicked to change the representation. The mode is
