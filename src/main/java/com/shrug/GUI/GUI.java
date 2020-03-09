@@ -25,7 +25,7 @@ import shrugUML.*;
 public class GUI {
 
   private JFrame frame;
-  private JButton add, remove, edit, save, load, addR, removeR;
+  private JButton add, remove, edit, save, load, addR, removeR, help;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
@@ -83,23 +83,15 @@ public class GUI {
    */
   public void initMenuBar() {
     final JMenu file = new JMenu("File");
-    final JMenu help = new JMenu("Help");
-    final JMenu edit = new JMenu("Edit");
 
     JMenuBar menuBar = new JMenuBar();
     menuBar.add(file);
-    menuBar.add(help);
 
     // Set callback functions for each button
     JMenuItem save = new JMenuItem("Save");
     save.addActionListener(this::processButtonPressSave);
     JMenuItem load = new JMenuItem("Load");
     load.addActionListener(this::processButtonPressLoad);
-
-    JMenuItem helpMenu = new JMenuItem("Help");
-    help.addActionListener(this::helpDialog);
-
-    help.add(helpMenu);
 
     file.add(save);
     file.add(load);
@@ -127,12 +119,16 @@ public class GUI {
     removeR = new JButton("Remove Relation");
     removeR.addActionListener(this::processButtonPressRemoveR);
 
+    help = new JButton("Help");
+    help.addActionListener(this::helpDialog);
+
     JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
     flow.add(add);
     flow.add(remove);
     flow.add(edit);
     flow.add(addR);
     flow.add(removeR);
+    flow.add(help);
     content.add(flow, BorderLayout.NORTH);
   }
 
