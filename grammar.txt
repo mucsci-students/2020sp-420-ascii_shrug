@@ -1,0 +1,24 @@
+Author: John Fazio
+
+
+Attributes -> [Attribute]
+
+Attribute -> FIELD | METHOD
+
+FIELD -> (TYPE | COLLECTION) ID
+
+METHOD -> TYPE ID '(' {FIELD} ')'
+
+Relationships -> [Relationship]
+
+Relationship -> R_TYPE ID ID
+
+TYPE -> 'short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool' |  TEMPLATE
+
+TEMPLATE -> (A-Z)
+
+COLLECTION -> 'List<'TYPE'>'
+
+R_TYPE -> 'aggergation' | 'association' | 'composition' | 'generalization'
+
+ID -> java_id
