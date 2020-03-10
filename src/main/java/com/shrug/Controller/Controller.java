@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.*;
+import org.jgrapht.ListenableGraph;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultListenableGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.AttributeType;
@@ -197,8 +199,13 @@ public class Controller {
 
       JSONImporter<ShrugUMLClass, DefaultEdge> creator =
           new JSONImporter<ShrugUMLClass, DefaultEdge>();
-      SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> g =
-          new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
+      ListenableGraph<ShrugUMLClass, DefaultEdge> g =
+          new DefaultListenableGraph<ShrugUMLClass, DefaultEdge>(
+              new SimpleDirectedGraph(DefaultEdge.class) {
+                {
+                  setVertexSupplier(() -> new ShrugUMLClass());
+                }
+              });
 
       BiConsumer<Pair<ShrugUMLClass, String>, Attribute> vertexConsumer =
           (pair, attr) -> {
@@ -233,7 +240,6 @@ public class Controller {
           };
 
       creator.addVertexAttributeConsumer(vertexConsumer);
-      g.setVertexSupplier(() -> new ShrugUMLClass());
       creator.importGraph(g, r);
       m_diagram.setGraph(g);
       return true;
@@ -246,7 +252,7 @@ public class Controller {
    * Precondition: this is instantiated
    * Postcondition: the underlying graph is returned
    */
-  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
+  public ListenableGraph<ShrugUMLClass, DefaultEdge> getGraph() {
     return m_diagram.getGraph();
   }
 

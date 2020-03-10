@@ -144,9 +144,6 @@ public class GUI {
       String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
       ShrugUMLClass add = new ShrugUMLClass(name);
       control.addClass(add);
-      jgxAdapter.vertexAdded(
-          new GraphVertexChangeEvent<ShrugUMLClass>(
-              control.getGraph(), GraphVertexChangeEvent.VERTEX_ADDED, add));
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
@@ -165,9 +162,6 @@ public class GUI {
       String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
       ShrugUMLClass remove = control.getDiagram().findClass(name);
       control.removeClass(name);
-      jgxAdapter.vertexRemoved(
-          new GraphVertexChangeEvent<ShrugUMLClass>(
-              control.getGraph(), GraphVertexChangeEvent.VERTEX_REMOVED, remove));
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
@@ -249,15 +243,6 @@ public class GUI {
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
       control.addRelationships(src, destL);
-      for (String className : destL) {
-        jgxAdapter.edgeAdded(
-            new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
-                control.getGraph(),
-                GraphEdgeChangeEvent.EDGE_ADDED,
-                control.getDiagram().getRelationship(src, className),
-                control.getDiagram().findClass(src),
-                control.getDiagram().findClass(className)));
-      }
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
@@ -276,15 +261,6 @@ public class GUI {
               "Remove a relation",
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-      for (String className : destL) {
-        jgxAdapter.edgeRemoved(
-            new GraphEdgeChangeEvent<ShrugUMLClass, DefaultEdge>(
-                control.getGraph(),
-                GraphEdgeChangeEvent.BEFORE_EDGE_REMOVED,
-                control.getDiagram().getRelationship(src, className),
-                control.getDiagram().findClass(src),
-                control.getDiagram().findClass(className)));
-      }
       control.removeRelationships(src, destL);
       layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
