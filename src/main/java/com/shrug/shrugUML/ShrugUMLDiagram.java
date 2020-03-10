@@ -7,13 +7,18 @@ package shrugUML;
 
 // Includes
 import java.util.Set;
+import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultListenableGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 public class ShrugUMLDiagram {
   // Default Ctor - new Diagram with nothing in it
   public ShrugUMLDiagram() {
-    m_diagram = new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
+    SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> simpleGraph =
+        new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
+    simpleGraph.setVertexSupplier(() -> new ShrugUMLClass());
+    m_diagram = new DefaultListenableGraph<ShrugUMLClass, DefaultEdge>(simpleGraph);
   }
 
   /** *********************************************************************** */
@@ -160,11 +165,11 @@ public class ShrugUMLDiagram {
 
   /** *********************************************************************** */
   // Utility Methods
-  public SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> getGraph() {
+  public ListenableGraph<ShrugUMLClass, DefaultEdge> getGraph() {
     return m_diagram;
   }
 
-  public void setGraph(SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> graph) {
+  public void setGraph(ListenableGraph<ShrugUMLClass, DefaultEdge> graph) {
     m_diagram = graph;
   }
 
@@ -173,5 +178,5 @@ public class ShrugUMLDiagram {
 
   /** *********************************************************************** */
   // Private Data Members
-  private SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> m_diagram;
+  private ListenableGraph<ShrugUMLClass, DefaultEdge> m_diagram;
 }
