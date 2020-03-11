@@ -24,6 +24,14 @@ public class LabeledEdge extends DefaultEdge {
     return m_label;
   }
 
+  public Object myGetSource() {
+    return new Object();
+  }
+
+  public Object myGetTarget() {
+    return new Object();
+  }
+
   @Override
   public String toString() {
     return "(" + getSource() + ":" + getTarget() + ":" + getLabel().toString() + ")";
