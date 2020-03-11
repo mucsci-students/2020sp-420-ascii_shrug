@@ -12,6 +12,7 @@ public class LabeledEdge extends DefaultEdge {
    */
   public LabeledEdge(RType label) {
     super();
+    m_label = label;
   }
 
   /**
@@ -20,11 +21,11 @@ public class LabeledEdge extends DefaultEdge {
    * @return edge label
    */
   public RType getLabel() {
-    return null;
+    return m_label;
   }
 
   @Override
   public String toString() {
-    return null;
+    return "(" + getSource() + ":" + getTarget() + ":" + getLabel().toString() + ")";
   }
 }

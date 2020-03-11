@@ -14,12 +14,12 @@ public class TestLabeledEdge {
   @Test
   public void testGetLabel() {
     LabeledEdge e = new LabeledEdge(RType.Aggregation);
-    assertEquals(e.getLabel().getClass(), RType.Aggregation);
+    assertEquals(e.getLabel(), RType.Aggregation);
   }
 
   @Test
   public void testToString() {
     LabeledEdge e = new LabeledEdge(RType.Aggregation);
-    assertEquals(e.toString(), "(::" + RType.Aggregation.toString() + ")");
+    assertEquals(e.toString(), "(null:null:" + RType.Aggregation.toString() + ")");
   }
 }
