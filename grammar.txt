@@ -3,21 +3,21 @@ Author: John Fazio
 
 Attributes -> [Attribute]
 
-Attribute -> FIELD | METHOD
+Attribute -> Field | Method
 
-FIELD -> (TYPE | COLLECTION) ID
+Field -> (TYPE | Collection) ID
 
-METHOD -> TYPE ID '(' {FIELD} ')'
+Method -> TYPE ID '(' {Field} ')'
 
 Relationships -> [Relationship]
 
 Relationship -> R_TYPE ID ID
 
+Collection -> 'List<' TYPE '>'
+
 TYPE -> 'short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool' |  TEMPLATE
 
 TEMPLATE -> (A-Z)
-
-COLLECTION -> 'List<'TYPE'>'
 
 R_TYPE -> 'aggergation' | 'association' | 'composition' | 'generalization'
 
