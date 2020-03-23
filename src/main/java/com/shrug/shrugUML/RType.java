@@ -4,5 +4,6 @@ public enum RType {
   Aggregation,
   Composition,
   Generalization,
-  Association
+  Association,
+  None
 }

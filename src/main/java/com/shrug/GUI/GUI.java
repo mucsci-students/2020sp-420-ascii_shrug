@@ -27,8 +27,8 @@ public class GUI {
   private JFrame frame;
   private JButton add, remove, edit, save, load, addR, removeR, help;
   private Controller control = new Controller();
-  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
-      new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+  private JGraphXAdapter<ShrugUMLClass, LabeledEdge> jgxAdapter =
+      new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
 
   private mxGraphLayout layout = new mxOrganicLayout(jgxAdapter);
 
@@ -180,7 +180,7 @@ public class GUI {
       String load = getInputDialogBox("Load", "Load", "Enter a json file:");
       control = new Controller();
       control.load(load);
-      jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+      jgxAdapter = new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
       layout = new mxOrganicLayout(jgxAdapter);
       initGraphComponent();
       layout.execute(jgxAdapter.getDefaultParent());

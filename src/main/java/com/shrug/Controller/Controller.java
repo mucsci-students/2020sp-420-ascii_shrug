@@ -164,8 +164,8 @@ public class Controller {
     try {
       FileWriter w = new FileWriter(path);
 
-      JSONExporter<ShrugUMLClass, DefaultEdge> saver =
-          new JSONExporter<ShrugUMLClass, DefaultEdge>();
+      JSONExporter<ShrugUMLClass, LabeledEdge> saver =
+          new JSONExporter<ShrugUMLClass, LabeledEdge>();
       saver.setVertexIdProvider(
           (ShrugUMLClass c) -> {
             return c.getName();
@@ -197,11 +197,11 @@ public class Controller {
     try {
       FileReader r = new FileReader(path);
 
-      JSONImporter<ShrugUMLClass, DefaultEdge> creator =
-          new JSONImporter<ShrugUMLClass, DefaultEdge>();
-      ListenableGraph<ShrugUMLClass, DefaultEdge> g =
-          new DefaultListenableGraph<ShrugUMLClass, DefaultEdge>(
-              new SimpleDirectedGraph(DefaultEdge.class) {
+      JSONImporter<ShrugUMLClass, LabeledEdge> creator =
+          new JSONImporter<ShrugUMLClass, LabeledEdge>();
+      ListenableGraph<ShrugUMLClass, LabeledEdge> g =
+          new DefaultListenableGraph<ShrugUMLClass, LabeledEdge>(
+              new SimpleDirectedGraph(LabeledEdge.class) {
                 {
                   setVertexSupplier(() -> new ShrugUMLClass());
                 }
@@ -252,7 +252,7 @@ public class Controller {
    * Precondition: this is instantiated
    * Postcondition: the underlying graph is returned
    */
-  public ListenableGraph<ShrugUMLClass, DefaultEdge> getGraph() {
+  public ListenableGraph<ShrugUMLClass, LabeledEdge> getGraph() {
     return m_diagram.getGraph();
   }
 
