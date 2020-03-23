@@ -118,6 +118,10 @@ public class ShrugUMLDiagram {
   }
 
   public boolean addRelationshipWithType(String n1, String n2, RType type) {
+    if (!isRelationshipInDiagram(n1, n2) && findClass(n1) != null && findClass(n2) != null) {
+      m_diagram.addEdge(findClass(n1), findClass(n2), new LabeledEdge (type));
+      return true;
+    }
     return false;
   }
   

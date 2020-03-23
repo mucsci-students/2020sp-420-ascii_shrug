@@ -23,15 +23,4 @@ public class TestLabeledEdge {
     assertEquals(e.toString(), "(null:null:" + RType.Aggregation.toString() + ")");
   }
 
-  @Test
-  public void testMyGetSource() {
-    LabeledEdge e = new LabeledEdge(RType.Aggregation);
-    assertNull(e.myGetSource());
-  }
-
-  @Test
-  public void testMyGetTarget() {
-    LabeledEdge e = new LabeledEdge(RType.Aggregation);
-    assertNull(e.myGetTarget());
-  }
 }

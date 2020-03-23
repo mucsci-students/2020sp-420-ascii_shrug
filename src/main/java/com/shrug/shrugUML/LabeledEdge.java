@@ -10,6 +10,16 @@ public class LabeledEdge extends DefaultEdge {
    *
    * @param label the label of the new edge.
    */
+  public LabeledEdge() {
+    super();
+    m_label = RType.None;
+  }
+  
+  /**
+   * Constructs a relationship edge
+   *
+   * @param label the label of the new edge.
+   */
   public LabeledEdge(RType label) {
     super();
     m_label = label;
