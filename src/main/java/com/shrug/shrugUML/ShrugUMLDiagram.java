@@ -15,10 +15,10 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 public class ShrugUMLDiagram {
   // Default Ctor - new Diagram with nothing in it
   public ShrugUMLDiagram() {
-    SimpleDirectedGraph<ShrugUMLClass, DefaultEdge> simpleGraph =
-        new SimpleDirectedGraph<ShrugUMLClass, DefaultEdge>(DefaultEdge.class);
+    SimpleDirectedGraph<ShrugUMLClass, LabeledEdge> simpleGraph =
+        new SimpleDirectedGraph<ShrugUMLClass, LabeledEdge>(LabeledEdge.class);
     simpleGraph.setVertexSupplier(() -> new ShrugUMLClass());
-    m_diagram = new DefaultListenableGraph<ShrugUMLClass, DefaultEdge>(simpleGraph);
+    m_diagram = new DefaultListenableGraph<ShrugUMLClass, LabeledEdge>(simpleGraph);
   }
 
   /** *********************************************************************** */
@@ -117,12 +117,20 @@ public class ShrugUMLDiagram {
     return false;
   }
 
+  public boolean addRelationshipWithType(String n1, String n2, RType type) {
+    if (!isRelationshipInDiagram(n1, n2) && findClass(n1) != null && findClass(n2) != null) {
+      m_diagram.addEdge(findClass(n1), findClass(n2), new LabeledEdge (type));
+      return true;
+    }
+    return false;
+  }
+  
   /* Function: removeRelationship (String c1, String c2)
    * Precondition:
    * Postcondition: Relationship c1 -> c2 is added to the diagram
    */
   public boolean removeRelationship(String n1, String n2) {
-    DefaultEdge edge = getRelationship(n1, n2);
+    LabeledEdge edge = getRelationship(n1, n2);
     if (edge != null) {
       return m_diagram.removeEdge(edge);
     }
@@ -133,7 +141,7 @@ public class ShrugUMLDiagram {
    * Precondition:
    * Postcondition: A set containing the edges going out from the class is returned; returns null if className is not in the diagram
    */
-  public Set<DefaultEdge> getRelationshipsOfClass(String className) {
+  public Set<LabeledEdge> getRelationshipsOfClass(String className) {
     ShrugUMLClass c = findClass(className);
     if (c != null) return m_diagram.edgesOf(c);
     return null;
@@ -143,10 +151,10 @@ public class ShrugUMLDiagram {
    * Precondition: graph exists
    * Postcondition: Returns the edge n1 -> n2; null if edge doesn't exist or one of the classes doesn't exist
    */
-  public DefaultEdge getRelationship(String n1, String n2) {
+  public LabeledEdge getRelationship(String n1, String n2) {
     ShrugUMLClass c1 = findClass(n1);
     ShrugUMLClass c2 = findClass(n2);
-    DefaultEdge edge = m_diagram.getEdge(c1, c2);
+    LabeledEdge edge = m_diagram.getEdge(c1, c2);
     if ((edge != null) && (c1 != null) && (c2 != null)) return edge;
     else return null;
   }
@@ -156,20 +164,24 @@ public class ShrugUMLDiagram {
    * Postcondition: Returns true if the edge n1 -> n2 exists. false otherwise
    */
   public boolean isRelationshipInDiagram(String n1, String n2) {
+    /*
     ShrugUMLClass c1 = findClass(n1);
     ShrugUMLClass c2 = findClass(n2);
-    DefaultEdge edge = m_diagram.getEdge(c1, c2);
+    LabeledEdge edge = m_diagram.getEdge(c1, c2);
     if ((edge != null) && (c1 != null) && (c2 != null)) return true;
+    else return false;
+    */
+    if (getRelationship (n1, n2) != null) return true;
     else return false;
   }
 
   /** *********************************************************************** */
   // Utility Methods
-  public ListenableGraph<ShrugUMLClass, DefaultEdge> getGraph() {
+  public ListenableGraph<ShrugUMLClass, LabeledEdge> getGraph() {
     return m_diagram;
   }
 
-  public void setGraph(ListenableGraph<ShrugUMLClass, DefaultEdge> graph) {
+  public void setGraph(ListenableGraph<ShrugUMLClass, LabeledEdge> graph) {
     m_diagram = graph;
   }
 
@@ -178,5 +190,5 @@ public class ShrugUMLDiagram {
 
   /** *********************************************************************** */
   // Private Data Members
-  private ListenableGraph<ShrugUMLClass, DefaultEdge> m_diagram;
+  private ListenableGraph<ShrugUMLClass, LabeledEdge> m_diagram;
 }
