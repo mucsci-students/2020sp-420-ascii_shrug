@@ -128,7 +128,14 @@ public class Controller {
    */
   public boolean addRelationships(String className, ArrayList<String> vectorList,
                                   String type) {
-    return false;
+    boolean success = false;
+    RType rType = RType.valueOf(type);
+    
+    for (String v : vectorList) {
+      if (isJavaID(v)) success |= m_diagram.addRelationshipWithType(className, v, rType);
+    }
+
+    return success;
   }
   
   /*

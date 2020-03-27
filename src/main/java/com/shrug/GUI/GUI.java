@@ -98,7 +98,7 @@ public class GUI {
     final Hashtable<String, Object> associationEdgeStyle = new Hashtable<String, Object>();
     associationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     associationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
-    associationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_BLOCK);
+    associationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_OPEN);
     associationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
     associationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     associationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
@@ -196,16 +196,24 @@ public class GUI {
     var styles = jgxAdapter.getStylesheet().getStyles();
     HashMap<mxICell, LabeledEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
     Set<mxICell> edgeCellSet = cellToEdgeMap.keySet();
+    // Iterate through edges to set their styles
+    // Right now the style is set, but the edge is still drawn the same
     for (mxICell c : edgeCellSet) {
       switch (cellToEdgeMap.get(c).getLabel()) {
         case Aggregation:
-          c.setStyle("aggregation");
+          c.setStyle(styles.get("aggregation").toString()
+                     .replace("{", "").replace("}", "")
+                     .replace(",", ";"));                     
           break;
         case Composition:
-          c.setStyle("composition");
+          c.setStyle(styles.get("composition").toString()
+                     .replace("{", "").replace("}", "")
+                     .replace(",", ";"));
           break;
         case Association:
-          c.setStyle("association");
+          c.setStyle(styles.get("association").toString()
+                     .replace("{", "").replace("}", "")
+                     .replace(",", ";"));
           break;
         case Generalization:
           break;
@@ -213,6 +221,8 @@ public class GUI {
           break;   
       }
     }
+    jgxAdapter.repaint();
+    content.revalidate();
   }
   
   /* void processBurronPressAdd ()
