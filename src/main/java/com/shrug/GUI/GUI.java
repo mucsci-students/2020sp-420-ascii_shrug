@@ -5,6 +5,7 @@ import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
 import com.mxgraph.view.*;
 import com.mxgraph.util.*;
+import com.mxgraph.model.mxICell;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -58,7 +59,7 @@ public class GUI {
   }
 
   public void start() {
-
+    
     frame = new JFrame();
     frame.setName("GUI");
 
@@ -76,7 +77,7 @@ public class GUI {
     frame.pack();
     frame.setVisible(true);
   }
-
+  
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     jgxAdapter.setAutoSizeCells(true);
@@ -94,29 +95,43 @@ public class GUI {
     style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_ELLIPSE);
     stylesheet.setDefaultVertexStyle (style);
 
+    final Hashtable<String, Object> associationEdgeStyle = new Hashtable<String, Object>();
+    associationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
+    associationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
+    associationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_BLOCK);
+    associationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
+    associationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+    associationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+    associationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    associationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    stylesheet.putCellStyle("association", associationEdgeStyle);
+    
     final Hashtable<String, Object> compositionEdgeStyle = new Hashtable<String, Object>();
     compositionEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     compositionEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
     compositionEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_DIAMOND);
+    compositionEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
     compositionEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     compositionEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
     compositionEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
     compositionEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
-    stylesheet.setDefaultEdgeStyle(compositionEdgeStyle);
+    //stylesheet.setDefaultEdgeStyle(compositionEdgeStyle);
+    stylesheet.putCellStyle("composition", compositionEdgeStyle);
 
     final Hashtable<String, Object> aggregationEdgeStyle = new Hashtable<String, Object>();
     aggregationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     aggregationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
     aggregationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_DIAMOND);
     aggregationEdgeStyle.put(mxConstants.STYLE_ENDFILL, 0);
-    aggregationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 20);
+    aggregationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
     aggregationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     aggregationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
     aggregationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
     aggregationEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
     aggregationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
     aggregationEdgeStyle.put(mxConstants.STYLE_FILLCOLOR, mxUtils.getHexColorString(Color.WHITE));
-    stylesheet.setDefaultEdgeStyle(aggregationEdgeStyle);
+    //stylesheet.setDefaultEdgeStyle(aggregationEdgeStyle);
+    stylesheet.putCellStyle("aggregation", aggregationEdgeStyle);
     
     jgxAdapter.setStylesheet(stylesheet);
     //jgxAdapter.setCellStyle("strokeColor=#CCCC00");
@@ -173,6 +188,32 @@ public class GUI {
     content.add(flow, BorderLayout.NORTH);
   }
 
+  /* void redrawEdges ()
+   * routine to redraw each edge using the stylesheet corresponding to its type
+   */
+  public void redrawEdges () {
+    // This feels like cheating
+    var styles = jgxAdapter.getStylesheet().getStyles();
+    HashMap<mxICell, LabeledEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
+    Set<mxICell> edgeCellSet = cellToEdgeMap.keySet();
+    for (mxICell c : edgeCellSet) {
+      switch (cellToEdgeMap.get(c).getLabel()) {
+        case Aggregation:
+          c.setStyle("aggregation");
+          break;
+        case Composition:
+          c.setStyle("composition");
+          break;
+        case Association:
+          c.setStyle("association");
+          break;
+        case Generalization:
+          break;
+        case None:
+          break;   
+      }
+    }
+  }
   
   /* void processBurronPressAdd ()
    * @param ActionEvent event : unused, but necessary for now
@@ -279,7 +320,14 @@ public class GUI {
               "Add a relation",
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-      control.addRelationships(src, destL);
+      String type =
+          getInputDialogBox(
+              "Relationship",
+              "Add a relation",
+              "Enter a type for these relations:"
+                            );
+      control.addRelationships(src, destL, type.trim());
+      redrawEdges();
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {

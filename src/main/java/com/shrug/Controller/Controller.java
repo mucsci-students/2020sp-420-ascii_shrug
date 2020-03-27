@@ -122,14 +122,23 @@ public class Controller {
     return success;
   }
 
+     /* Function: addRelationship (String className, String[] vectorList)
+   * Precondition: className and v in vectorList exist
+   * Postcondition: className has relationships to v[i] st i != 0
+   */
+  public boolean addRelationships(String className, ArrayList<String> vectorList,
+                                  String type) {
+    return false;
+  }
+  
   /*
    * Function: remove (String className, String[] vectorList)
    * Precondition: className and v in vectorList exist
    * Postcondition: className has relationships to v[i] st i != 0
    */
-  public boolean removeRelationships(String className, ArrayList<String> vectorList) {
+  public boolean removeRelationships(String className,
+                                     ArrayList<String> vectorList) {
     boolean success = false;
-
     for (String v : vectorList) success |= m_diagram.removeRelationship(className, v);
 
     return success;

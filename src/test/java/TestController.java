@@ -55,6 +55,16 @@ public class TestController {
   }
 
   @Test
+  public void testAddRelationshipWithType() {
+    Controller controller = new Controller();
+    controller.addClass("a");
+    controller.addClass("b");
+    ArrayList<String> vectorList = new ArrayList<String>();
+    vectorList.add("b");
+    assertTrue(controller.addRelationships("a", vectorList, "Aggregation"));
+  }
+
+  @Test
   public void testRemoveRelationship() {
     Controller controller = new Controller();
     controller.addClass("c1");
