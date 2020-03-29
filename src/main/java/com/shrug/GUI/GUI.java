@@ -1,6 +1,6 @@
-package GUI;
+package com.shrug.GUI;
 
-import Controller.*;
+import com.shrug.Controller.*;
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
 import com.mxgraph.view.*;
@@ -27,7 +27,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jgrapht.event.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
-import shrugUML.*;
+import com.shrug.shrugUML.*;
 
 
 public class GUI {

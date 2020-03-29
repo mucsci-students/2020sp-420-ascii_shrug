@@ -1,4 +1,4 @@
-package shrugUML;
+package com.shrug.shrugUML;
 
 public enum RType {
   Aggregation,

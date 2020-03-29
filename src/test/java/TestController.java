@@ -1,10 +1,10 @@
 import static org.junit.Assert.*;
 
-import Controller.*;
+import com.shrug.Controller.*;
 import java.io.File;
 import java.util.ArrayList;
 import org.junit.*;
-import shrugUML.*;
+import com.shrug.shrugUML.*;
 
 public class TestController {
 

@@ -5,7 +5,7 @@
 */
 
 // Package
-package shrugUML;
+package com.shrug.shrugUML;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -2,8 +2,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 import org.junit.*;
-import shrugUML.*;
-import Repl.*;
+import com.shrug.shrugUML.*;
+import com.shrug.Repl.*;
 
 public class TestRepl {
 

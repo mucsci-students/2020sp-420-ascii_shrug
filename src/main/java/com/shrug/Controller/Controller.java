@@ -1,4 +1,4 @@
-package Controller;
+package com.shrug.Controller;
 
 /** *********************************************************************** */
 // Imports (java/external/local)
@@ -19,7 +19,7 @@ import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.json.*;
-import shrugUML.*;
+import com.shrug.shrugUML.*;
 
 public class Controller {
 

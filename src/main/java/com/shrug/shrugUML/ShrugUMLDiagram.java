@@ -3,7 +3,7 @@
  * Package:     shrugUML
  * Description: A class representing a UML diagram
  */
-package shrugUML;
+package com.shrug.shrugUML;
 
 // Includes
 import java.util.Set;

@@ -3,14 +3,14 @@
  * Description: Text view of UML editor
  */
 
-package Repl;
+package com.shrug.Repl;
 
-import Controller.*;
+import com.shrug.Controller.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Set;
-import shrugUML.*;
+import com.shrug.shrugUML.*;
 
 public class Repl {
   public static Scanner scan = new Scanner(System.in);

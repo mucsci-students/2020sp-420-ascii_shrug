@@ -2,7 +2,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 import org.junit.*;
-import shrugUML.*;
+import com.shrug.shrugUML.*;
 
 public class TestLabeledEdge {
   @Test
