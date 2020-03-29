@@ -122,14 +122,30 @@ public class Controller {
     return success;
   }
 
+     /* Function: addRelationship (String className, String[] vectorList)
+   * Precondition: className and v in vectorList exist
+   * Postcondition: className has relationships to v[i] st i != 0
+   */
+  public boolean addRelationships(String className, ArrayList<String> vectorList,
+                                  String type) {
+    boolean success = false;
+    RType rType = RType.valueOf(type);
+    
+    for (String v : vectorList) {
+      if (isJavaID(v)) success |= m_diagram.addRelationshipWithType(className, v, rType);
+    }
+
+    return success;
+  }
+  
   /*
    * Function: remove (String className, String[] vectorList)
    * Precondition: className and v in vectorList exist
    * Postcondition: className has relationships to v[i] st i != 0
    */
-  public boolean removeRelationships(String className, ArrayList<String> vectorList) {
+  public boolean removeRelationships(String className,
+                                     ArrayList<String> vectorList) {
     boolean success = false;
-
     for (String v : vectorList) success |= m_diagram.removeRelationship(className, v);
 
     return success;
@@ -166,6 +182,12 @@ public class Controller {
 
       JSONExporter<ShrugUMLClass, LabeledEdge> saver =
           new JSONExporter<ShrugUMLClass, LabeledEdge>();
+      saver.setEdgeAttributeProvider(
+          (LabeledEdge e) -> {
+            Map<String, Attribute> map = new HashMap<String, Attribute>();
+            map.put("rType", new DefaultAttribute(e.getLabel(), AttributeType.UNKNOWN));
+            return map;
+          });
       saver.setVertexIdProvider(
           (ShrugUMLClass c) -> {
             return c.getName();
@@ -236,9 +258,41 @@ public class Controller {
                   pair.getFirst().addMethods(methods);
                   break;
                 }
-            }
+            }            
           };
 
+      BiConsumer<Pair<LabeledEdge, String>, Attribute> edgeConsumer =
+          (pair, attr) -> {
+        switch (attr.getValue()) {
+          case "Association":
+          {
+            pair.getFirst().setLabel(RType.Association);
+            break;
+          }
+          case "Generalization":
+          {
+            pair.getFirst().setLabel(RType.Generalization);
+            break;
+          }          
+          case "Aggregation":
+          {
+            pair.getFirst().setLabel(RType.Aggregation);
+            break;
+          }          
+          case "Composition":
+          {
+            pair.getFirst().setLabel(RType.Composition);
+            break;
+          }          
+          case "None":
+          {
+            pair.getFirst().setLabel(RType.None);
+            break;
+          }          
+        }
+      };
+
+      creator.addEdgeAttributeConsumer(edgeConsumer);
       creator.addVertexAttributeConsumer(vertexConsumer);
       creator.importGraph(g, r);
       m_diagram.setGraph(g);
