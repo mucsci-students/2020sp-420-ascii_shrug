@@ -182,6 +182,12 @@ public class Controller {
 
       JSONExporter<ShrugUMLClass, LabeledEdge> saver =
           new JSONExporter<ShrugUMLClass, LabeledEdge>();
+      saver.setEdgeAttributeProvider(
+          (LabeledEdge e) -> {
+            Map<String, Attribute> map = new HashMap<String, Attribute>();
+            map.put("rType", new DefaultAttribute(e.getLabel(), AttributeType.UNKNOWN));
+            return map;
+          });
       saver.setVertexIdProvider(
           (ShrugUMLClass c) -> {
             return c.getName();
@@ -252,9 +258,41 @@ public class Controller {
                   pair.getFirst().addMethods(methods);
                   break;
                 }
-            }
+            }            
           };
 
+      BiConsumer<Pair<LabeledEdge, String>, Attribute> edgeConsumer =
+          (pair, attr) -> {
+        switch (attr.getValue()) {
+          case "Association":
+          {
+            pair.getFirst().setLabel(RType.Association);
+            break;
+          }
+          case "Generalization":
+          {
+            pair.getFirst().setLabel(RType.Generalization);
+            break;
+          }          
+          case "Aggregation":
+          {
+            pair.getFirst().setLabel(RType.Aggregation);
+            break;
+          }          
+          case "Composition":
+          {
+            pair.getFirst().setLabel(RType.Composition);
+            break;
+          }          
+          case "None":
+          {
+            pair.getFirst().setLabel(RType.None);
+            break;
+          }          
+        }
+      };
+
+      creator.addEdgeAttributeConsumer(edgeConsumer);
       creator.addVertexAttributeConsumer(vertexConsumer);
       creator.importGraph(g, r);
       m_diagram.setGraph(g);

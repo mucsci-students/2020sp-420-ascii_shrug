@@ -6,6 +6,8 @@ import com.mxgraph.swing.*;
 import com.mxgraph.view.*;
 import com.mxgraph.util.*;
 import com.mxgraph.model.mxICell;
+import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.model.mxGraphModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -194,6 +196,7 @@ public class GUI {
   public void redrawEdges () {
     // This feels like cheating
     var styles = jgxAdapter.getStylesheet().getStyles();
+    mxIGraphModel model = jgxAdapter.getModel();
     HashMap<mxICell, LabeledEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
     Set<mxICell> edgeCellSet = cellToEdgeMap.keySet();
     // Iterate through edges to set their styles
@@ -201,17 +204,17 @@ public class GUI {
     for (mxICell c : edgeCellSet) {
       switch (cellToEdgeMap.get(c).getLabel()) {
         case Aggregation:
-          c.setStyle(styles.get("aggregation").toString()
-                     .replace("{", "").replace("}", "")
-                     .replace(",", ";"));                     
+          model.setStyle(c, styles.get("aggregation").toString()
+                         .replace("{", "").replace("}", "")
+                         .replace(",", ";"));                     
           break;
         case Composition:
-          c.setStyle(styles.get("composition").toString()
-                     .replace("{", "").replace("}", "")
-                     .replace(",", ";"));
+          model.setStyle(c, styles.get("composition").toString()
+                         .replace("{", "").replace("}", "")
+                         .replace(",", ";"));
           break;
         case Association:
-          c.setStyle(styles.get("association").toString()
+          model.setStyle(c, styles.get("association").toString()
                      .replace("{", "").replace("}", "")
                      .replace(",", ";"));
           break;
@@ -223,6 +226,7 @@ public class GUI {
     }
     jgxAdapter.repaint();
     content.revalidate();
+    jgxAdapter.refresh();
   }
   
   /* void processBurronPressAdd ()
@@ -271,8 +275,10 @@ public class GUI {
       control.load(load);
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
       layout = new mxOrganicLayout(jgxAdapter);
+      initStylesheet();
       initGraphComponent();
       layout.execute(jgxAdapter.getDefaultParent());
+      redrawEdges();
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {

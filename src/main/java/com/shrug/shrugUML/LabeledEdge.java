@@ -34,6 +34,10 @@ public class LabeledEdge extends DefaultEdge {
     return m_label;
   }
 
+  public void setLabel(RType type) {
+    m_label = type;
+  }
+
   public Object myGetSource() {
     return new Object();
   }
