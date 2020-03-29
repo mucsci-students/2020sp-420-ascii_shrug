@@ -14,6 +14,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.util.*;
+import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -194,29 +195,25 @@ public class GUI {
    * routine to redraw each edge using the stylesheet corresponding to its type
    */
   public void redrawEdges () {
-    // This feels like cheating
     var styles = jgxAdapter.getStylesheet().getStyles();
-    mxIGraphModel model = jgxAdapter.getModel();
     HashMap<mxICell, LabeledEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
     Set<mxICell> edgeCellSet = cellToEdgeMap.keySet();
     // Iterate through edges to set their styles
     // Right now the style is set, but the edge is still drawn the same
     for (mxICell c : edgeCellSet) {
+      mxICell[] cell = new mxICell[]{c};
       switch (cellToEdgeMap.get(c).getLabel()) {
         case Aggregation:
-          model.setStyle(c, styles.get("aggregation").toString()
-                         .replace("{", "").replace("}", "")
-                         .replace(",", ";"));                     
+          for (Map.Entry<String, Object> style : styles.get("aggregation").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
           break;
         case Composition:
-          model.setStyle(c, styles.get("composition").toString()
-                         .replace("{", "").replace("}", "")
-                         .replace(",", ";"));
+          for (Map.Entry<String, Object> style : styles.get("composition").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
           break;
         case Association:
-          model.setStyle(c, styles.get("association").toString()
-                     .replace("{", "").replace("}", "")
-                     .replace(",", ";"));
+          for (Map.Entry<String, Object> style : styles.get("association").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
           break;
         case Generalization:
           break;
