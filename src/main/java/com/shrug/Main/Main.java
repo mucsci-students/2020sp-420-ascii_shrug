@@ -1,4 +1,3 @@
-package com.shrug.Main;
 /* Filename: Main.java
  * Primary Author: Jack Fazio
  * Description: Entry point for the program. Selects view
