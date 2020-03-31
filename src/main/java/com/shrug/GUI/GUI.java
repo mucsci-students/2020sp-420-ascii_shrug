@@ -94,8 +94,8 @@ public class GUI {
     style.put(mxConstants.STYLE_FILLCOLOR, mxUtils.getHexColorString(Color.WHITE));
     style.put(mxConstants.STYLE_STROKEWIDTH, 1.5);
     style.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(new Color(0, 0, 170)));
-    style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
-    style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_ELLIPSE);
+    style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_RECTANGLE);
+    style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_RECTANGLE);
     stylesheet.setDefaultVertexStyle (style);
 
     final Hashtable<String, Object> associationEdgeStyle = new Hashtable<String, Object>();
@@ -311,7 +311,7 @@ public class GUI {
 
       String remove =
           getInputDialogBox(
-              "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+              "Edit", "Edit a class", "Enter attributes to remove separated by whitespace:");
       ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
       control.addAttributes(c.getName(), addAttr);
       ArrayList<String> removeAttr =
@@ -319,6 +319,7 @@ public class GUI {
       control.removeAttributes(c.getName(), removeAttr);
       jgxAdapter.repaint();
       content.revalidate();
+      jgxAdapter.refresh();
     } catch (NullPointerException e) {
 
     }
