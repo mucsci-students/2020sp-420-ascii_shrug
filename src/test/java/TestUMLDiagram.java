@@ -182,4 +182,24 @@ public class TestUMLDiagram {
     testDiagram.addRelationship("a", "b");
     assertFalse(testDiagram.isRelationshipInDiagram("a", "c"));
   }
+
+  @Test
+  public void testValidAddRelationshipWithType() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    testDiagram.addClass("a");
+    testDiagram.addClass("b");
+    testDiagram.addRelationshipWithType("a", "b", RType.Association);
+    assertEquals(testDiagram.getRelationship("a", "b").getLabel(), RType.Association);
+  }
+  
+  @Test
+  public void testInvalidAddRelationshipWithType() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    testDiagram.addClass("a");
+    testDiagram.addClass("b");
+    testDiagram.addRelationshipWithType("a", "c", RType.Association);
+    assertNull(testDiagram.getRelationship("a", "b"));
+  }
+
+  
 }
