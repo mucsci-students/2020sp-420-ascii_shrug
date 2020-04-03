@@ -11,21 +11,23 @@ public class TestRemoveCommand {
   public void testConstuctor() {
     ArrayList<String> fields = new ArrayList<String>(Arrays.asList("a", "b", "c")); 
     ArrayList<String> methods = new ArrayList<String>(Arrays.asList("a", "b", "c")); 
-    RemoveCommand remove = new RemoveCommand(fields, methods);
+    String className = "class";
+    RemoveCommand remove = new RemoveCommand(className, fields, methods);
 
     assertEquals (remove.getFields(), fields);
     assertEquals (remove.getMethods(), methods);
+    assertEquals (remove.getClassName(), className);
   }
 
   @Test
   public void testInvert() {
     ArrayList<String> fields = new ArrayList<String>(Arrays.asList("a", "b", "c")); 
     ArrayList<String> methods = new ArrayList<String>(Arrays.asList("a", "b", "c")); 
-    RemoveCommand remove = new RemoveCommand(fields, methods);
+    String className = "class";
+    RemoveCommand remove = new RemoveCommand(className, fields, methods);
     AddCommand undo = remove.invert ();
-    AddCommand add = new AddCommand(fields, methods);
 
-    assertEquals (undo.getFields(), add.getFields());
-    assertEquals (undo.getMethods(), add.getMethods());
+    assertEquals (undo.getFields(), remove.getFields());
+    assertEquals (undo.getMethods(), remove.getMethods());
   }
 }
