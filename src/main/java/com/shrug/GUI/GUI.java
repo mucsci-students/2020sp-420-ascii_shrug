@@ -3,11 +3,18 @@ package GUI;
 import Controller.*;
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
+import com.mxgraph.view.*;
+import com.mxgraph.util.*;
+import com.mxgraph.model.mxICell;
+import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.model.mxGraphModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 import java.util.*;
+import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,16 +29,19 @@ import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
 import shrugUML.*;
 
+
 public class GUI {
 
   private JFrame frame;
   private JButton add, remove, edit, save, load, addR, removeR, help;
   private Controller control = new Controller();
-  private JGraphXAdapter<ShrugUMLClass, DefaultEdge> jgxAdapter =
-      new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+  private JGraphXAdapter<ShrugUMLClass, LabeledEdge> jgxAdapter =
+      new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
 
-  private mxGraphLayout layout = new mxOrganicLayout(jgxAdapter);
+  private mxGraphLayout layout = new mxEdgeLabelLayout(jgxAdapter);
+  private mxStylesheet stylesheet = new mxStylesheet();
 
+  
   private mxGraphComponent graph;
   private JPanel content;
 
@@ -52,7 +62,7 @@ public class GUI {
   }
 
   public void start() {
-
+    
     frame = new JFrame();
     frame.setName("GUI");
 
@@ -63,13 +73,14 @@ public class GUI {
     initMenuBar();
     initButtons();
 
+    initStylesheet();
     initGraphComponent();
 
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
   }
-
+  
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     jgxAdapter.setAutoSizeCells(true);
@@ -78,13 +89,60 @@ public class GUI {
     layout.execute(jgxAdapter.getDefaultParent());
   }
 
-  /* void initMenuBar ()
-   * Initializes the menu options
-   * TODO: Change Add and Remove buttons to appear outside of the menu
-   */
-  public void initMenuBar() {
-    final JMenu file = new JMenu("File");
+  public void initStylesheet() {
+    Hashtable<String, Object> style = new Hashtable<String, Object>();
+    style.put(mxConstants.STYLE_FILLCOLOR, mxUtils.getHexColorString(Color.WHITE));
+    style.put(mxConstants.STYLE_STROKEWIDTH, 1.5);
+    style.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(new Color(0, 0, 170)));
+    style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
+    style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_ELLIPSE);
+    stylesheet.setDefaultVertexStyle (style);
 
+    final Hashtable<String, Object> associationEdgeStyle = new Hashtable<String, Object>();
+    associationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
+    associationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
+    associationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_OPEN);
+    associationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
+    associationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+    associationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+    associationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    associationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    stylesheet.putCellStyle("association", associationEdgeStyle);
+    
+    final Hashtable<String, Object> compositionEdgeStyle = new Hashtable<String, Object>();
+    compositionEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
+    compositionEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
+    compositionEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_DIAMOND);
+    compositionEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
+    compositionEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+    compositionEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+    compositionEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    compositionEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    //stylesheet.setDefaultEdgeStyle(compositionEdgeStyle);
+    stylesheet.putCellStyle("composition", compositionEdgeStyle);
+
+    final Hashtable<String, Object> aggregationEdgeStyle = new Hashtable<String, Object>();
+    aggregationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
+    aggregationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
+    aggregationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_DIAMOND);
+    aggregationEdgeStyle.put(mxConstants.STYLE_ENDFILL, 0);
+    aggregationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
+    aggregationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+    aggregationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+    aggregationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    aggregationEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
+    aggregationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    aggregationEdgeStyle.put(mxConstants.STYLE_FILLCOLOR, mxUtils.getHexColorString(Color.WHITE));
+    //stylesheet.setDefaultEdgeStyle(aggregationEdgeStyle);
+    stylesheet.putCellStyle("aggregation", aggregationEdgeStyle);
+    
+    jgxAdapter.setStylesheet(stylesheet);
+    //jgxAdapter.setCellStyle("strokeColor=#CCCC00");
+  } 
+
+  public void initMenuBar () {
+
+    final JMenu file = new JMenu("File");
     JMenuBar menuBar = new JMenuBar();
     menuBar.add(file);
 
@@ -133,6 +191,41 @@ public class GUI {
     content.add(flow, BorderLayout.NORTH);
   }
 
+  /* void redrawEdges ()
+   * routine to redraw each edge using the stylesheet corresponding to its type
+   */
+  public void redrawEdges () {
+    var styles = jgxAdapter.getStylesheet().getStyles();
+    HashMap<mxICell, LabeledEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
+    Set<mxICell> edgeCellSet = cellToEdgeMap.keySet();
+    // Iterate through edges to set their styles
+    // Right now the style is set, but the edge is still drawn the same
+    for (mxICell c : edgeCellSet) {
+      mxICell[] cell = new mxICell[]{c};
+      switch (cellToEdgeMap.get(c).getLabel()) {
+        case Aggregation:
+          for (Map.Entry<String, Object> style : styles.get("aggregation").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
+          break;
+        case Composition:
+          for (Map.Entry<String, Object> style : styles.get("composition").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
+          break;
+        case Association:
+          for (Map.Entry<String, Object> style : styles.get("association").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
+          break;
+        case Generalization:
+          break;
+        case None:
+          break;   
+      }
+    }
+    jgxAdapter.repaint();
+    content.revalidate();
+    jgxAdapter.refresh();
+  }
+  
   /* void processBurronPressAdd ()
    * @param ActionEvent event : unused, but necessary for now
    * Prompts the user for a class name and builds a UML object that's added
@@ -140,11 +233,9 @@ public class GUI {
    */
   public void processButtonPressAdd(ActionEvent event) {
     try {
-      // String name = JOptionPane.showInputDialog(null, "Enter a class name:");
       String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
       ShrugUMLClass add = new ShrugUMLClass(name);
       control.addClass(add);
-      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -162,7 +253,6 @@ public class GUI {
       String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
       ShrugUMLClass remove = control.getDiagram().findClass(name);
       control.removeClass(name);
-      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -180,10 +270,12 @@ public class GUI {
       String load = getInputDialogBox("Load", "Load", "Enter a json file:");
       control = new Controller();
       control.load(load);
-      jgxAdapter = new JGraphXAdapter<ShrugUMLClass, DefaultEdge>(control.getGraph());
+      jgxAdapter = new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
       layout = new mxOrganicLayout(jgxAdapter);
+      initStylesheet();
       initGraphComponent();
       layout.execute(jgxAdapter.getDefaultParent());
+      redrawEdges();
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -225,7 +317,6 @@ public class GUI {
       ArrayList<String> removeAttr =
           new ArrayList<String>(Arrays.asList(remove.trim().split("\\s+")));
       control.removeAttributes(c.getName(), removeAttr);
-      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -242,8 +333,14 @@ public class GUI {
               "Add a relation",
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-      control.addRelationships(src, destL);
-      layout.execute(jgxAdapter.getDefaultParent());
+      String type =
+          getInputDialogBox(
+              "Relationship",
+              "Add a relation",
+              "Enter a type for these relations:"
+                            );
+      control.addRelationships(src, destL, type.trim());
+      redrawEdges();
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -262,7 +359,6 @@ public class GUI {
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
       control.removeRelationships(src, destL);
-      layout.execute(jgxAdapter.getDefaultParent());
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -278,7 +374,7 @@ public class GUI {
     return result.trim();
   }
 
-  public void helpDialog(ActionEvent event) {
+public void helpDialog(ActionEvent event) {
     JOptionPane.showMessageDialog(
         frame,
         "Add Class: Adds a class to the diagram\n"
