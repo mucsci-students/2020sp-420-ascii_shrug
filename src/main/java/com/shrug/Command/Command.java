@@ -6,6 +6,10 @@ abstract class Command {
 
   abstract public Command invert ();
 
+  public String getClassName () {
+    return m_className;
+  }
+
   public ArrayList<String> getFields ()
   {
     return m_fields;
@@ -16,6 +20,7 @@ abstract class Command {
     return m_methods;
   }
 
+  String m_className;
   ArrayList<String> m_fields;
   ArrayList<String> m_methods;
 
