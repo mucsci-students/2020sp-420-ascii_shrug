@@ -1,4 +1,4 @@
-package Attribute;
+package com.shrug.Attribute;
 
 import java.util.ArrayList;
 
