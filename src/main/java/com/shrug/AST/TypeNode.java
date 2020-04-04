@@ -1,4 +1,4 @@
-package AST;
+package com.shrug.AST;
 
 public abstract class TypeNode extends Node {
 

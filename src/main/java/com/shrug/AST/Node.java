@@ -1,6 +1,6 @@
-package AST;
+package com.shrug.AST;
 
-abstract class Node {
+public abstract class Node {
 
   
 }

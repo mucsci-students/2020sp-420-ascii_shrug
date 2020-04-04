@@ -1,4 +1,4 @@
-package AST;
+package com.shrug.AST;
 
 public class ListNode extends TypeNode {
 
