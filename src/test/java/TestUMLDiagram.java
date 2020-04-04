@@ -238,8 +238,8 @@ public class TestUMLDiagram {
     assertTrue (testDiagram.nameInDiagram(className));
     ShrugUMLClass s = testDiagram.findClass(className);
 
-    assertEquals(s.getAttributes(), new HashSet<String>(fields));
-    assertEquals(s.getMethods(), new HashSet<String>(methods));
+    assertEquals(s.getAttributes(), new HashSet<String>());
+    assertEquals(s.getMethods(), new HashSet<String>());
     
   }
   

@@ -14,9 +14,9 @@ public class TestAddCommand {
     String className = "class";
     AddCommand add = new AddCommand(className, fields, methods);
 
-    assertEquals (add.getFields(), fields);
-    assertEquals (add.getMethods(), methods);
-    assertEquals (add.getClassName(), className);
+    assertEquals (className, add.getClassName());
+    assertEquals (fields, add.getFields());
+    assertEquals (methods, add.getMethods());
   }
 
   @Test
