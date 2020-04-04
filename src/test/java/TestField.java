@@ -2,7 +2,7 @@
 //
 import static org.junit.Assert.*;
 
-import Attribute.*;
+import com.shrug.Attribute.*;
 import java.util.*;
 import org.junit.*;
 
