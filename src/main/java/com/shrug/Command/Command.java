@@ -34,6 +34,15 @@ public class Command {
     m_methods = new ArrayList<String>();
   }
 
+  public Command (Command command)
+  {
+    m_className = command.getClassName();
+    m_fields = command.getFields();
+    m_methods = command.getMethods();
+    m_relationships = command.getRelationships();
+  }
+
+
   /*
    * 
   */

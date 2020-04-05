@@ -45,16 +45,16 @@ public class Parser {
     ArrayList<String> methods = new ArrayList<String>();
 
     Node curTok;
-    Iterator<Node> it = tokens.iterator();
+    ListIterator<Node> it = tokens.listIterator();
+
     while (it.hasNext())
     { 
       String res = "";
       curTok = it.next ();
-      
       // field or method coming up
-      if (curTok instanceof TypeNode)
+      if (curTok instanceof PrimitiveTypeNode)
       {
-        res = parseVar (it, curTok);
+        res = parseVar (it, curTok);        
 
         if (it.hasNext()) 
         {
@@ -63,32 +63,39 @@ public class Parser {
           // method
           if (curTok instanceof LParenNode)
           {
+            res += " (";
             while (it.hasNext())
             {
               curTok = it.next ();
 
-              if (curTok instanceof CommaNode)
-                continue;
 
               if (curTok instanceof RParenNode)
               {
+                res += ")";
                 methods.add(res);
                 break;
               }
-
-              // TODO ensure curTok is typeNode
-              res.concat (" " + parseVar (it, curTok));
+              else if (curTok instanceof CommaNode)
+              {
+                res += ", ";
+                continue;
+              }
+              else if (curTok instanceof PrimitiveTypeNode)
+              {
+                res += parseVar (it, curTok);
+              }
+              else
+                System.out.println ("Malformed Parameter");
             }
-          }
-          // field
-          else if (curTok instanceof CommaNode)
-          {
-            fields.add (res); 
             continue;
           }
+          // field
+          else
+          {
+            curTok = it.previous ();         
+          }
         }
-
-
+        fields.add (res);
       }
       else if (curTok instanceof CommaNode)
         continue;
@@ -97,22 +104,28 @@ public class Parser {
     return new Command (fields, methods);
   }
 
-  public String parseVar (Iterator<Node> it, Node curTok)
+  /*
+   *
+   */
+  public String parseVar (ListIterator<Node> it, Node curTok)
   {
       String type = "";
       String id = "";
+
       // field or method coming up
-      type = ((TypeNode)curTok).getType ();
+      type = ((PrimitiveTypeNode)curTok).getType ();
 
       if (it.hasNext ())
+      {
         curTok = it.next ();
+        if (curTok instanceof IDNode)
+          id = ((IDNode) curTok).getName ();
+      }
       else
-        System.out.println("Invalid Syntax");
+        System.out.println("Invalid Syntax ID expected after Type");
 
-      if (curTok instanceof IDNode)
-        id = ((IDNode) curTok).getName ();
 
-      return type.concat (" " + id);
+      return (type + " " + id);
   }
 
 }

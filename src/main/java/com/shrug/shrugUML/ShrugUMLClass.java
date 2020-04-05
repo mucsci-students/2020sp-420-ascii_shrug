@@ -119,7 +119,7 @@ public class ShrugUMLClass {
   public String toString() {
     return "Name: "
         + m_className
-        + "\nAttributes: "
+        + "\nFields: "
         + m_attributes.toString().replace("[", "").replace("]", "")
         + "\nMethods: "
         + m_methods.toString().replace("[", "").replace("]", "");
