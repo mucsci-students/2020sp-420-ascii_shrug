@@ -35,11 +35,12 @@ Options:
 
 - To remove a class, click Remove Class and supply a valid name of a class in the diagram.
 
-- To edit a class, click Edit, supply a name. Then provide the attributes to add and the 
- attributes to remove.
+- To edit a class, click Edit, and supply a name. Then provide the attributes to add and the 
+ attributes to remove. These attribute lists are comma delimited.
+ Field attributes are of form `type id` and method attributes are of form `type id (type id, type id, ...)`.
  
 - To add a relationship, click Add Relation and supply the source class followed by the destination class followed by the type.
- Valid types are Aggregation, Composition, Association, Generalization, and None (Case sensitive).
+ Valid types are `Aggregation`, `Composition`, `Association`, `Generalization`, and `None` (Case sensitive).
  
 - To remove a relationship, click Remove Relation and supply the source class followed by the destination class.
 
@@ -47,12 +48,12 @@ Options:
 
 - To load a diagram, click file -> load and enter a .json file name.
 
-- To move a class around, click and drag on it making sure that there is no green border as that will create an edge.
+- To move a class around, click and drag on it making sure that there is no solid green border as that will create an edge.
 
 #### Quirks:
 
 - Relationships made by hovering and dragging from one class to another
   will not modify the model. 
 
-- Classes can be double clicked to change the representation. The model is
+- Classes and edges can be double clicked to change the representation. The model is
   not changed.
