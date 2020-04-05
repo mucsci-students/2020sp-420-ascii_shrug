@@ -182,32 +182,20 @@ public class ShrugUMLDiagram {
   
   public void execute (AddCommand command) 
   {
-    if (nameInDiagram(command.getClassName()))
-    {
+    // addClass fails silently if class is already in diagram
+    addClass (command.getClassName());
     ShrugUMLClass edit = findClass (command.getClassName());
     edit.addAttributes (command.getFields ());
     edit.addMethods ( command.getMethods ());
-    }
-    else 
-    {
-      addClass (command.getClassName());
-      ShrugUMLClass edit = findClass (command.getClassName());
-      edit.addAttributes (command.getFields ());
-      edit.addMethods ( command.getMethods ());
-    }
   } 
 
   public void execute (RemoveCommand command) 
   {
-    if (nameInDiagram (command.getClassName()))
-    {
-      ShrugUMLClass edit = findClass (command.getClassName());
-      edit.removeAttributes (command.getFields ());
-      edit.removeMethods ( command.getMethods ());
-    }
-    else 
-    {
-      addClass (command.getClassName());
+    // If the fields and methods are empty, we're removing a class
+    if (command.getFields().isEmpty() && command.getMethods().isEmpty())
+      removeClass (command.getClassName());
+    // Else we're removing attributes
+    else {
       ShrugUMLClass edit = findClass (command.getClassName());
       edit.removeAttributes (command.getFields ());
       edit.removeMethods ( command.getMethods ());
