@@ -312,7 +312,6 @@ public class GUI {
               "Edit", "Edit a class", "Enter attributes to remove separated by commas:");
       if (!remove.isEmpty()) {
         // Parse inputs
-        System.out.println (remove);
         Parser removeParser = new Parser(remove);
         // Construct remove command with method and field lists
         Command r = removeParser.parse();
@@ -322,7 +321,6 @@ public class GUI {
         control.getDiagram().execute(removeCommand);
       }
       if (!add.isEmpty()) {
-        System.out.println (add);
         // Construct add command with method and field lists      
         Parser addParser = new Parser(add);
         Command a = addParser.parse();
