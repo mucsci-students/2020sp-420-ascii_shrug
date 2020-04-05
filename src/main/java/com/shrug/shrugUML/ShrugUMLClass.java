@@ -117,7 +117,12 @@ public class ShrugUMLClass {
 
   @Override
   public String toString() {
-    return m_className;
+    return "Name: "
+        + m_className
+        + "\nAttributes: "
+        + m_attributes.toString().replace("[", "").replace("]", "")
+        + "\nMethods: "
+        + m_methods.toString().replace("[", "").replace("]", "");
   }
 
   public String toStringFull() {

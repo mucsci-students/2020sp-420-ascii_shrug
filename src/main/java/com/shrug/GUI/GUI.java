@@ -95,10 +95,11 @@ public class GUI {
     style.put(mxConstants.STYLE_FILLCOLOR, mxUtils.getHexColorString(Color.WHITE));
     style.put(mxConstants.STYLE_STROKEWIDTH, 1.5);
     style.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(new Color(0, 0, 170)));
-    style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
-    style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_ELLIPSE);
+    style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_RECTANGLE);
+    style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_RECTANGLE);
     stylesheet.setDefaultVertexStyle (style);
 
+    // Stylesheet for association
     final Hashtable<String, Object> associationEdgeStyle = new Hashtable<String, Object>();
     associationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     associationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
@@ -109,7 +110,8 @@ public class GUI {
     associationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
     associationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
     stylesheet.putCellStyle("association", associationEdgeStyle);
-    
+
+    // Stylesheet for composition
     final Hashtable<String, Object> compositionEdgeStyle = new Hashtable<String, Object>();
     compositionEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     compositionEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
@@ -122,6 +124,7 @@ public class GUI {
     //stylesheet.setDefaultEdgeStyle(compositionEdgeStyle);
     stylesheet.putCellStyle("composition", compositionEdgeStyle);
 
+    //Stylesheet for composition
     final Hashtable<String, Object> aggregationEdgeStyle = new Hashtable<String, Object>();
     aggregationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     aggregationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
@@ -200,7 +203,6 @@ public class GUI {
     HashMap<mxICell, LabeledEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
     Set<mxICell> edgeCellSet = cellToEdgeMap.keySet();
     // Iterate through edges to set their styles
-    // Right now the style is set, but the edge is still drawn the same
     for (mxICell c : edgeCellSet) {
       mxICell[] cell = new mxICell[]{c};
       switch (cellToEdgeMap.get(c).getLabel()) {
@@ -298,9 +300,7 @@ public class GUI {
     }
   }
 
-  /*
-   * TODO
-   */
+  
   public void processButtonPressEdit(ActionEvent event) {
     try {
       String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
@@ -312,7 +312,7 @@ public class GUI {
 
       String remove =
           getInputDialogBox(
-              "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+              "Edit", "Edit a class", "Enter attributes to remove separated by whitespace:");
       ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
       control.addAttributes(c.getName(), addAttr);
       ArrayList<String> removeAttr =
@@ -320,6 +320,7 @@ public class GUI {
       control.removeAttributes(c.getName(), removeAttr);
       jgxAdapter.repaint();
       content.revalidate();
+      jgxAdapter.refresh();
     } catch (NullPointerException e) {
 
     }

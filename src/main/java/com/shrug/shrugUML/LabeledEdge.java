@@ -39,15 +39,17 @@ public class LabeledEdge extends DefaultEdge {
   }
 
   public Object myGetSource() {
-    return new Object();
+    return getSource();
   }
 
   public Object myGetTarget() {
-    return new Object();
+    return getTarget();
   }
 
   @Override
   public String toString() {
-    return "(" + getSource() + ":" + getTarget() + ":" + getLabel().toString() + ")";
+    ShrugUMLClass source = (ShrugUMLClass) myGetSource();
+    ShrugUMLClass target = (ShrugUMLClass) myGetTarget();
+    return "(" + source.getName() + ":" + target.getName() + ":" + getLabel().toString() + ")";
   }
 }
