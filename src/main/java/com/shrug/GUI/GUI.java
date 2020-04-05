@@ -300,7 +300,7 @@ public class GUI {
     }
   }
 
-  
+  // Edit a class's attributes (both fields and methods)
   public void processButtonPressEdit(ActionEvent event) {
     try {
       String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
@@ -308,11 +308,11 @@ public class GUI {
 
       String add =
           getInputDialogBox(
-              "Edit", "Edit a class", "Enter attributes to add separated by whitespace:");
+              "Edit", "Edit a class", "Enter attributes to add separated by commas:");
 
       String remove =
           getInputDialogBox(
-              "Edit", "Edit a class", "Enter attributes to remove separated by whitespace:");
+              "Edit", "Edit a class", "Enter attributes to remove separated by commas:");
       
       // Parse inputs
       Parser removeParser = new Parser(remove);
@@ -338,6 +338,7 @@ public class GUI {
     }
   }
 
+  // Add a relationship src -> dest with type
   public void processButtonPressAddR(ActionEvent event) {
     try {
       String src = getInputDialogBox("Relationship", "Add a relation", "Enter source class:");
@@ -364,6 +365,7 @@ public class GUI {
     }
   }
 
+  // Remove a relationship
   public void processButtonPressRemoveR(ActionEvent event) {
     try {
       String src =
@@ -384,6 +386,7 @@ public class GUI {
     }
   }
 
+  // Gets a string from a dialog box
   public String getInputDialogBox(String title, String header, String content) {
     String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
     if (result == null) {
@@ -392,13 +395,14 @@ public class GUI {
     return result.trim();
   }
 
-public void helpDialog(ActionEvent event) {
+  // Shows help message
+  public void helpDialog(ActionEvent event) {
     JOptionPane.showMessageDialog(
         frame,
         "Add Class: Adds a class to the diagram\n"
             + "Remove Class: Remove a class from the diagram\n"
-            + "Edit: Edit the attributes of a class\n"
-            + "Add Relation: Add a relationship src -> dest"
+            + "Edit: Edit the attributes of a class. Enter the class name to edit, any number of attributes to add (either fields or methods), \n\t\t and any number of attributes to remove, both comma delimited.\n"
+            + "Add Relation: Add a relationship src -> dest, valid types are Aggregation, Composition, Association, Generalization, and None\n"
             + "Remove Relation: Remove a relationship src -> dest\n"
             + "Click and drag classes to move them around\n"
             + "Click a class and drag its borders to change its size",
