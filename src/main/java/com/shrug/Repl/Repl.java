@@ -145,7 +145,7 @@ public class Repl {
   public static boolean add(ArrayList<String> cmds) {
 
     String name = cmds.get(1);
-    if (isJavaID (name)) {
+    if (control.isJavaID (name)) {
       ArrayList<String> relationships = parseRelationships(cmds);
       ArrayList<String> attributes = parseAttributes(cmds);
       
@@ -194,7 +194,7 @@ public class Repl {
         control.removeRelationships(name, relationships);
       return true;
     }
-    else if (!isJavaID(name))
+    else if (!control.isJavaID(name))
     {
       System.out.println (name + " is not a valid ID");
       return false;
@@ -219,7 +219,7 @@ public class Repl {
     {
       for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) 
       {
-        if (isJavaID(cmds.get(i)))
+        if (control.isJavaID(cmds.get(i)))
           attributes.add(cmds.get(i));
         else
           System.out.println(cmds.get(i) + " is not a valid Java ID");
@@ -241,7 +241,7 @@ public class Repl {
     {
       for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) 
       {
-        if (isJavaID(cmds.get(i)))
+        if (control.isJavaID(cmds.get(i)))
           relationships.add(cmds.get(i));
         else 
           System.out.println(cmds.get(i) + "is not a valid Java ID");
@@ -260,20 +260,4 @@ public class Repl {
     return true;
   }
 
-  /* Function: isJavaID ()
-   * precondition: input needs to be parsed
-   * postcondition: returns if it is a valid identifier
-   */
-  public static boolean isJavaID (String name) {
-    if (!(Character.isJavaIdentifierStart(name.charAt(0))))
-      return false;
-
-    for (int i = 1; i < name.length(); i++)
-    {
-      if (!(Character.isJavaIdentifierPart(name.charAt(i))))
-        return false;
-    }
-
-    return true;
-  }
 }
