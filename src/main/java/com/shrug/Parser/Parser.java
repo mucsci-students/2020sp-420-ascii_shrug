@@ -51,7 +51,6 @@ public class Parser {
     { 
       String res = "";
       curTok = it.next ();
-      System.out.println(tokens);
       // field or method coming up
       if (curTok instanceof PrimitiveTypeNode)
       {
@@ -64,21 +63,27 @@ public class Parser {
           // method
           if (curTok instanceof LParenNode)
           {
+            res += " (";
             while (it.hasNext())
             {
               curTok = it.next ();
 
-              if (curTok instanceof CommaNode)
-                continue;
 
               if (curTok instanceof RParenNode)
               {
+                res += ")";
                 methods.add(res);
                 break;
               }
-
-              if (curTok instanceof PrimitiveTypeNode)
-                res.concat (" " + parseVar (it, curTok));
+              else if (curTok instanceof CommaNode)
+              {
+                res += ", ";
+                continue;
+              }
+              else if (curTok instanceof PrimitiveTypeNode)
+              {
+                res += parseVar (it, curTok);
+              }
               else
                 System.out.println ("Malformed Parameter");
             }
