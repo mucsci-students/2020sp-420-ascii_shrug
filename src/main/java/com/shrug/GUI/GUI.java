@@ -28,7 +28,8 @@ import org.jgrapht.event.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
 import shrugUML.*;
-
+import com.shrug.Parser.*;
+import Command.*;
 
 public class GUI {
 
@@ -236,8 +237,8 @@ public class GUI {
   public void processButtonPressAdd(ActionEvent event) {
     try {
       String name = getInputDialogBox("Add", "Add a class", "Enter a class name:");
-      ShrugUMLClass add = new ShrugUMLClass(name);
-      control.addClass(add);
+      AddCommand command = new AddCommand (name);
+      control.getDiagram().execute(command);
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -253,8 +254,8 @@ public class GUI {
   public void processButtonPressRemove(ActionEvent event) {
     try {
       String name = getInputDialogBox("Remove", "Remove a class", "Enter a class name:");
-      ShrugUMLClass remove = control.getDiagram().findClass(name);
-      control.removeClass(name);
+      RemoveCommand command = new RemoveCommand (name);
+      control.getDiagram().execute(command);
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -317,6 +318,11 @@ public class GUI {
       ArrayList<String> removeAttr =
           new ArrayList<String>(Arrays.asList(remove.trim().split("\\s+")));
       control.removeAttributes(c.getName(), removeAttr);
+      // Parse inputs
+      // Construct remove command with method and field lists
+      // Execute
+      // Construct add command with method and field lists
+      // Execute
       jgxAdapter.repaint();
       content.revalidate();
       jgxAdapter.refresh();
@@ -340,7 +346,9 @@ public class GUI {
               "Add a relation",
               "Enter a type for these relations:"
                             );
-      control.addRelationships(src, destL, type.trim());
+      AddCommand command = new AddCommand (src);
+      command.setRelationships(destL, RType.valueOf(type.trim()));
+      control.getDiagram().execute(command);
       redrawEdges();
       jgxAdapter.repaint();
       content.revalidate();
@@ -360,6 +368,8 @@ public class GUI {
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
       control.removeRelationships(src, destL);
+      RemoveCommand command = new RemoveCommand(src);
+      command.setRelationships(destL, RType.None);
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {

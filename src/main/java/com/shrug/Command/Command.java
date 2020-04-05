@@ -57,6 +57,10 @@ public class Command {
     return m_methods;
   }
 
+  public HashMap<String, RType> getRelationships () {
+    return m_relationships;
+  }
+
   /*
    * 
   */
@@ -95,10 +99,5 @@ public class Command {
   String m_className;
   ArrayList<String> m_fields;
   ArrayList<String> m_methods;
-  HashMap<String, RType> m_relationships;
-
-
- 
-  
-
+  HashMap<String, RType> m_relationships = new HashMap<String, RType> ();
 }
