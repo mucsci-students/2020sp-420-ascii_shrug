@@ -9,8 +9,8 @@ public class Parser {
 
   Lexer m_lexer;
 
-  public Parser (Lexer lexer) {
-    m_lexer = lexer; 
+  public Parser (String s) {
+    m_lexer = new Lexer(StringReader (s)); 
   }
 
   public ArrayList<Node> getTokenStream() {
