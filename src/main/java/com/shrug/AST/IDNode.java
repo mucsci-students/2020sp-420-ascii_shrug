@@ -2,10 +2,14 @@ package com.shrug.AST;
 
 public class IDNode extends Node {
 
-  IDNode(String name)
+  public IDNode(String name)
   {
-    this.name = name;
+    m_name = name;
+  }
+
+  public String getName() {
+    return m_name;
   }
   
-  String name;
+  String m_name;
 }
