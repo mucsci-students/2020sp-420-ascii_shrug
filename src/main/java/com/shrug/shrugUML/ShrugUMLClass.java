@@ -107,6 +107,14 @@ public class ShrugUMLClass {
     return m_methods.addAll(methodNames);
   }
 
+  /* Function: removeMethods ()
+   * Precondition:
+   * Postcondition
+   */
+  public boolean removeMethods (ArrayList<String> methodNames) {
+    return m_methods.removeAll(methodNames);
+  }
+
   @Override
   public String toString() {
     return m_className;

@@ -7,6 +7,8 @@ package shrugUML;
 
 // Includes
 import java.util.Set;
+import Command.*;
+import com.shrug.Attribute.*;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultListenableGraph;
@@ -174,6 +176,43 @@ public class ShrugUMLDiagram {
     if (getRelationship (n1, n2) != null) return true;
     else return false;
   }
+
+  /** *********************************************************************** */
+  // Command Methods
+  
+  public void execute (AddCommand command) 
+  {
+    if (nameInDiagram(command.getClassName()))
+    {
+    ShrugUMLClass edit = findClass (command.getClassName());
+    edit.addAttributes (command.getFields ());
+    edit.addMethods ( command.getMethods ());
+    }
+    else 
+    {
+      addClass (command.getClassName());
+      ShrugUMLClass edit = findClass (command.getClassName());
+      edit.addAttributes (command.getFields ());
+      edit.addMethods ( command.getMethods ());
+    }
+  } 
+
+  public void execute (RemoveCommand command) 
+  {
+    if (nameInDiagram (command.getClassName()))
+    {
+      ShrugUMLClass edit = findClass (command.getClassName());
+      edit.removeAttributes (command.getFields ());
+      edit.removeMethods ( command.getMethods ());
+    }
+    else 
+    {
+      addClass (command.getClassName());
+      ShrugUMLClass edit = findClass (command.getClassName());
+      edit.removeAttributes (command.getFields ());
+      edit.removeMethods ( command.getMethods ());
+    }
+  } 
 
   /** *********************************************************************** */
   // Utility Methods
