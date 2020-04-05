@@ -51,11 +51,11 @@ public class Parser {
     { 
       String res = "";
       curTok = it.next ();
-      
+      System.out.println(tokens);
       // field or method coming up
-      if (curTok instanceof TypeNode)
+      if (curTok instanceof PrimitiveTypeNode)
       {
-        res = parseVar (it, curTok);
+        res = parseVar (it, curTok);        
 
         if (it.hasNext()) 
         {
@@ -77,17 +77,20 @@ public class Parser {
                 break;
               }
 
-              if (curTok instanceof TypeNode)
+              if (curTok instanceof PrimitiveTypeNode)
                 res.concat (" " + parseVar (it, curTok));
               else
                 System.out.println ("Malformed Parameter");
             }
+            continue;
           }
+          // field
           else
           {
-            curTok = it.previous ();
+            curTok = it.previous ();         
           }
         }
+        fields.add (res);
       }
       else if (curTok instanceof CommaNode)
         continue;
@@ -105,7 +108,7 @@ public class Parser {
       String id = "";
 
       // field or method coming up
-      type = ((TypeNode)curTok).getType ();
+      type = ((PrimitiveTypeNode)curTok).getType ();
 
       if (it.hasNext ())
       {

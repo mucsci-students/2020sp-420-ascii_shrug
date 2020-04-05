@@ -6,6 +6,7 @@ package com.shrug.Parser;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import com.shrug.AST.*;
 
 
@@ -895,7 +896,8 @@ class Lexer {
             // fall through
           case 8: break;
           case 3:
-            { if (types.contains(yytext()))
+            {
+              if (types.contains(yytext()))
                 return new PrimitiveTypeNode (yytext());
               else
                 return new IDNode (yytext());

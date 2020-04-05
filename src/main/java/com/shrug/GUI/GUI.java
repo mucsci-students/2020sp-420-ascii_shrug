@@ -313,16 +313,23 @@ public class GUI {
       String remove =
           getInputDialogBox(
               "Edit", "Edit a class", "Enter attributes to remove separated by whitespace:");
-      ArrayList<String> addAttr = new ArrayList<String>(Arrays.asList(add.trim().split("\\s+")));
-      control.addAttributes(c.getName(), addAttr);
-      ArrayList<String> removeAttr =
-          new ArrayList<String>(Arrays.asList(remove.trim().split("\\s+")));
-      control.removeAttributes(c.getName(), removeAttr);
+      
       // Parse inputs
+      Parser removeParser = new Parser(remove);
       // Construct remove command with method and field lists
+      Command r = removeParser.parse();
+      r.setClassName(edit);
+      RemoveCommand removeCommand = new RemoveCommand (r);
       // Execute
+      control.getDiagram().execute(removeCommand);
       // Construct add command with method and field lists
+      
+      Parser addParser = new Parser(add);
+      Command a = addParser.parse();
+      a.setClassName(edit);
+      AddCommand addCommand = new AddCommand (a);
       // Execute
+      control.getDiagram().execute(addCommand);
       jgxAdapter.repaint();
       content.revalidate();
       jgxAdapter.refresh();
