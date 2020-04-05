@@ -98,6 +98,7 @@ public class GUI {
     style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_RECTANGLE);
     stylesheet.setDefaultVertexStyle (style);
 
+    // Stylesheet for association
     final Hashtable<String, Object> associationEdgeStyle = new Hashtable<String, Object>();
     associationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     associationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
@@ -108,7 +109,8 @@ public class GUI {
     associationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
     associationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
     stylesheet.putCellStyle("association", associationEdgeStyle);
-    
+
+    // Stylesheet for composition
     final Hashtable<String, Object> compositionEdgeStyle = new Hashtable<String, Object>();
     compositionEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     compositionEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
@@ -121,6 +123,7 @@ public class GUI {
     //stylesheet.setDefaultEdgeStyle(compositionEdgeStyle);
     stylesheet.putCellStyle("composition", compositionEdgeStyle);
 
+    //Stylesheet for composition
     final Hashtable<String, Object> aggregationEdgeStyle = new Hashtable<String, Object>();
     aggregationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     aggregationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
@@ -199,7 +202,6 @@ public class GUI {
     HashMap<mxICell, LabeledEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
     Set<mxICell> edgeCellSet = cellToEdgeMap.keySet();
     // Iterate through edges to set their styles
-    // Right now the style is set, but the edge is still drawn the same
     for (mxICell c : edgeCellSet) {
       mxICell[] cell = new mxICell[]{c};
       switch (cellToEdgeMap.get(c).getLabel()) {
@@ -297,9 +299,7 @@ public class GUI {
     }
   }
 
-  /*
-   * TODO
-   */
+  
   public void processButtonPressEdit(ActionEvent event) {
     try {
       String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
