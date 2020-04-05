@@ -20,7 +20,6 @@ class Lexer {
 
   // Lexical states.
   public static final int YYINITIAL = 0;
-  public static final int STRING = 2;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -29,7 +28,7 @@ class Lexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0,  0,  1, 1
+     0, 0
   };
 
   /**
@@ -332,11 +331,11 @@ class Lexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\1\1\2\2\1\3\1\4\1\5\1\6\1\1"+
+    "\1\0\1\1\2\2\1\3\1\1\1\4\1\5\1\6"+
     "\26\0\1\7\1\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[34];
+    int [] result = new int[33];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -361,14 +360,14 @@ class Lexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\32\0\64\0\64\0\116\0\64\0\64\0\64"+
-    "\0\150\0\202\0\234\0\266\0\320\0\352\0\u0104\0\u011e"+
+    "\0\0\0\32\0\32\0\64\0\116\0\150\0\32\0\32"+
+    "\0\32\0\202\0\234\0\266\0\320\0\352\0\u0104\0\u011e"+
     "\0\u0138\0\u0152\0\u016c\0\u0186\0\u01a0\0\u01ba\0\u01d4\0\u01ee"+
-    "\0\u0208\0\u0222\0\u023c\0\u0256\0\u0270\0\u028a\0\u02a4\0\u02be"+
-    "\0\64\0\u02d8";
+    "\0\u0208\0\u0222\0\u023c\0\u0256\0\u0270\0\u028a\0\u02a4\0\32"+
+    "\0\u02be";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[34];
+    int [] result = new int[33];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -391,20 +390,19 @@ class Lexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\2\4\1\3\1\5\2\3\1\6\1\7\1\10"+
-    "\21\3\2\4\1\3\1\5\1\11\1\12\1\6\1\7"+
-    "\1\10\20\11\34\0\1\4\27\0\1\11\4\0\1\11"+
-    "\4\0\20\11\13\0\1\13\1\14\1\15\1\0\1\16"+
-    "\2\0\1\17\1\20\3\0\1\21\27\0\1\22\25\0"+
-    "\1\23\35\0\1\24\27\0\1\25\32\0\1\26\32\0"+
-    "\1\27\25\0\1\30\35\0\1\31\16\0\1\32\50\0"+
-    "\1\33\25\0\1\34\34\0\1\35\25\0\1\36\32\0"+
-    "\1\37\27\0\1\35\34\0\1\35\16\0\1\40\30\0"+
-    "\1\26\25\0\1\41\43\0\1\35\37\0\1\26\26\0"+
-    "\1\42\24\0\1\35\13\0";
+    "\1\2\2\3\1\2\1\4\1\5\1\6\1\7\1\10"+
+    "\1\11\20\5\34\0\1\3\27\0\1\5\4\0\1\5"+
+    "\4\0\20\5\13\0\1\12\1\13\1\14\1\0\1\15"+
+    "\2\0\1\16\1\17\3\0\1\20\27\0\1\21\25\0"+
+    "\1\22\35\0\1\23\27\0\1\24\32\0\1\25\32\0"+
+    "\1\26\25\0\1\27\35\0\1\30\16\0\1\31\50\0"+
+    "\1\32\25\0\1\33\34\0\1\34\25\0\1\35\32\0"+
+    "\1\36\27\0\1\34\34\0\1\34\16\0\1\37\30\0"+
+    "\1\25\25\0\1\40\43\0\1\34\37\0\1\25\26\0"+
+    "\1\41\24\0\1\34\13\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[754];
+    int [] result = new int[728];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -447,10 +445,10 @@ class Lexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\2\11\1\1\3\11\2\1\26\0\1\11\1\0";
+    "\1\0\2\11\3\1\3\11\26\0\1\11\1\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[34];
+    int [] result = new int[33];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -912,22 +910,22 @@ class Lexer {
             // fall through
           case 9: break;
           case 3:
-            { return new LParenNode();
+            { return new IDNode (yytext());
             }
             // fall through
           case 10: break;
           case 4:
-            { return new RParenNode();
+            { return new LParenNode();
             }
             // fall through
           case 11: break;
           case 5:
-            { return new CommaNode();
+            { return new RParenNode();
             }
             // fall through
           case 12: break;
           case 6:
-            { return new IDNode (yytext());
+            { return new CommaNode();
             }
             // fall through
           case 13: break;
