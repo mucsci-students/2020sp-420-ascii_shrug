@@ -10,7 +10,7 @@ public class Parser {
   Lexer m_lexer;
 
   public Parser (String s) {
-    m_lexer = new Lexer(StringReader (s)); 
+    m_lexer = new Lexer(new StringReader (s)); 
   }
 
   public ArrayList<Node> getTokenStream() {
