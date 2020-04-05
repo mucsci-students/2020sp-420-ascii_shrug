@@ -6,7 +6,8 @@
 package shrugUML;
 
 // Includes
-import java.util.Set;
+import java.util.*;
+import java.util.Map.Entry;
 import Command.*;
 import com.shrug.Attribute.*;
 import org.jgrapht.ListenableGraph;
@@ -184,21 +185,30 @@ public class ShrugUMLDiagram {
   {
     // addClass fails silently if class is already in diagram
     addClass (command.getClassName());
-    ShrugUMLClass edit = findClass (command.getClassName());
-    edit.addAttributes (command.getFields ());
-    edit.addMethods ( command.getMethods ());
+    if (command.getRelationships().isEmpty()) {
+      ShrugUMLClass edit = findClass (command.getClassName());
+      edit.addAttributes (command.getFields ());
+      edit.addMethods (command.getMethods ());
+    } else {
+      for (Map.Entry<String, RType> rel : command.getRelationships().entrySet()) {
+        addRelationshipWithType (command.getClassName(), rel.getKey(), rel.getValue());
+      }
+    }
+    
   } 
 
   public void execute (RemoveCommand command) 
   {
     // If the fields and methods are empty, we're removing a class
-    if (command.getFields().isEmpty() && command.getMethods().isEmpty())
+    if (command.getFields().isEmpty() && command.getMethods().isEmpty() && command.getRelationships().isEmpty())
       removeClass (command.getClassName());
-    // Else we're removing attributes
+    // Else if we're removing attributes
     else {
       ShrugUMLClass edit = findClass (command.getClassName());
       edit.removeAttributes (command.getFields ());
       edit.removeMethods ( command.getMethods ());
+      for (Map.Entry<String, RType> rel : command.getRelationships().entrySet())
+        removeRelationship(command.getClassName(), rel.getKey());
     }
   } 
 
