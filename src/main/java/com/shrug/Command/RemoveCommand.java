@@ -14,6 +14,11 @@ public class RemoveCommand extends Command {
     super (className);
   }
 
+  public RemoveCommand (Command command)
+  {
+    super (command);
+  }
+
   public AddCommand invert () {
     return new AddCommand (m_className, m_fields, m_methods);
   }
