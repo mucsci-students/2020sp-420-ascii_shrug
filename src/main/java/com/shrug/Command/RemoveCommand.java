@@ -6,9 +6,12 @@ public class RemoveCommand extends Command {
   
   public RemoveCommand (String className, ArrayList<String> fields, ArrayList<String> methods)
   {
-    m_className = className;
-    m_fields = fields;
-    m_methods = methods;
+    super(className, fields, methods);
+  }
+
+  public RemoveCommand (String className)
+  {
+    super (className);
   }
 
   public AddCommand invert () {

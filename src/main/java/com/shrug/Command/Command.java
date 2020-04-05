@@ -2,9 +2,27 @@ package Command;
 
 import java.util.ArrayList;
 
-abstract class Command {
+public class Command {
 
-  abstract public Command invert ();
+  public Command (String className, ArrayList<String> fields, ArrayList<String> methods)
+  {
+    m_className = className; 
+    m_fields = fields;
+    m_methods = methods;
+  }
+
+  public Command (ArrayList<String> fields, ArrayList<String> methods)
+  {
+    m_fields = fields;
+    m_methods = methods;
+  }
+  
+  public Command (String className)
+  {
+    m_className = className;
+    m_fields = new ArrayList<String>();
+    m_methods = new ArrayList<String>();
+  }
 
   public String getClassName () {
     return m_className;
@@ -18,6 +36,21 @@ abstract class Command {
   public ArrayList<String> getMethods ()
   {
     return m_methods;
+  }
+
+  public void setClassName (String className)
+  {
+    m_className = className;
+  }
+
+  public void setFields (ArrayList<String> fields)
+  {
+    m_fields = fields;
+  }
+
+  public void setMethods (ArrayList<String> methods)
+  {
+    m_methods = methods;
   }
 
   String m_className;
