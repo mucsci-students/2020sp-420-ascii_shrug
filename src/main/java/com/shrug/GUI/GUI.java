@@ -304,32 +304,31 @@ public class GUI {
   public void processButtonPressEdit(ActionEvent event) {
     try {
       String edit = getInputDialogBox("Edit", "Edit a Class", "Enter a class to edit:");
-      ShrugUMLClass c = control.getDiagram().findClass(edit);
-
       String add =
           getInputDialogBox(
               "Edit", "Edit a class", "Enter attributes to add separated by commas:");
-
       String remove =
           getInputDialogBox(
               "Edit", "Edit a class", "Enter attributes to remove separated by commas:");
-      
-      // Parse inputs
-      Parser removeParser = new Parser(remove);
-      // Construct remove command with method and field lists
-      Command r = removeParser.parse();
-      r.setClassName(edit);
-      RemoveCommand removeCommand = new RemoveCommand (r);
-      // Execute
-      control.getDiagram().execute(removeCommand);
-      // Construct add command with method and field lists
-      
-      Parser addParser = new Parser(add);
-      Command a = addParser.parse();
-      a.setClassName(edit);
-      AddCommand addCommand = new AddCommand (a);
-      // Execute
-      control.getDiagram().execute(addCommand);
+      if (!remove.isEmpty()) {
+        // Parse inputs
+        Parser removeParser = new Parser(remove);
+        // Construct remove command with method and field lists
+        Command r = removeParser.parse();
+        r.setClassName(edit);
+        RemoveCommand removeCommand = new RemoveCommand (r);
+        // Execute
+        control.getDiagram().execute(removeCommand);
+      }
+      if (!add.isEmpty()) {
+        // Construct add command with method and field lists      
+        Parser addParser = new Parser(add);
+        Command a = addParser.parse();
+        a.setClassName(edit);
+        AddCommand addCommand = new AddCommand (a);
+        // Execute
+        control.getDiagram().execute(addCommand);
+      }
       jgxAdapter.repaint();
       content.revalidate();
       jgxAdapter.refresh();
@@ -389,8 +388,8 @@ public class GUI {
   // Gets a string from a dialog box
   public String getInputDialogBox(String title, String header, String content) {
     String result = JOptionPane.showInputDialog(frame, content, title, JOptionPane.PLAIN_MESSAGE);
-    if (result == null) {
-      return null;
+    if (result == null || result.trim() == "") {
+      return "";
     }
     return result.trim();
   }
