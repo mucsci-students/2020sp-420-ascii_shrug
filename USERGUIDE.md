@@ -33,10 +33,11 @@ Options:
 Fields, Methods, and Relationship types
 
 
-Fields are of the form ('short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool') ID
+Fields are of the form         : ('short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool') ID
 
-Methods are of the form ('short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool') ID ({Field})
+Methods are of the form        : Field '('{Field}')'
 
+Relationships are of the form  : 'Aggregation' | 'Composition' | 'Generalization' | 'Association'
 
 ```
 
