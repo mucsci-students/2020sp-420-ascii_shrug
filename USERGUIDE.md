@@ -17,15 +17,17 @@ load <filename>.json          : load the diagram stored in specified json file
 
 print                         : prints the current diagram
 
+undo                          : reverses the most recent command
+
 exit                          : exit the editor (no warning for unsaved diagram)
 
 
 Options:
 
 
-"-a" [ID]                     : will add all ID as attributes of classname
+"-a" [Field | Method]                 : will add all ID as attributes of classname
 
-"-r" [ID]                     : will create relationships from classname to all ID``
+"-r" RelType [ID]                     : will create relationships from classname to all ID with type RelType``
 
 ```
 
