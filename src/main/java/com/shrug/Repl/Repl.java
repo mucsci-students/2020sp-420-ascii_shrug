@@ -155,12 +155,16 @@ public class Repl {
             + "save <filename>.json          : save the diagram in a specified json file\n"
             + "load <filename>.json          : load the diagram stored in specified json file\n"
             + "print                         : prints the current diagram\n"
-            + "exit                          : exit the editor (no warning for unsaved diagram)\n\n"
+            + "exit                          : exit the editor (no warning for unsaved diagram)\n"
             + "undo                          : reverses the most recent command\n\n"
             + "Options:\n\n"
-            + "\"-a\" [ID]                     : will add all ID as attributes of classname\n"
-            + "\"-r\" [ID]                     : will create relationships from classname to all ID\n");
-          
+            + "\"-a\" [Field | Method]       : will edit the Fields and Methods to classname\n"
+            + "\"-r\" RelType [ID]           : will edit relationships from classname to all ID\n"
+            + "(Note that removing relationships does not requre a type)\n\n"
+            + "Fields, Methods, and Relationship Types:\n\n"
+            + "Fields are of the form         : ('short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool') ID\n"
+            + "Methods are of the form        : Field '('{Field',}')'\n"
+            + "Relationships are of the form  : 'Aggregation' | 'Composition' | 'Generalization' | 'Association'\n\n");
   }
 
   /* Function: build ()
