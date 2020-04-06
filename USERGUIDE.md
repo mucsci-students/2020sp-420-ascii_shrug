@@ -29,6 +29,8 @@ Options:
 
 "-r" RelType [ID]             : will create relationships from classname to all ID with type RelType``
 
+(Note that removing relationships does not requre a type)
+
 
 Fields, Methods, and Relationship types
 
