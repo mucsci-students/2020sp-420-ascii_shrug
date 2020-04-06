@@ -27,19 +27,21 @@ Options:
 
 "-a" [Field | Method]         : will add all Fields and Methods to the UML class with classname
 
-"-r" RelType [ID]             : will create relationships from classname to all ID with type RelType``
+"-r" RelationshipType [ID]    : will create relationships from classname to all ID with type RelType``
 
 (Note that removing relationships does not requre a type)
 
 
-Fields, Methods, and Relationship types
+Fields, Methods, IDs, and Relationship types
 
 
 Fields are of the form         : ('short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool') ID
 
-Methods are of the form        : Field '('{Field}')'
+Methods are of the form        : Field '('{Field},')'
 
-Relationships are of the form  : 'Aggregation' | 'Composition' | 'Generalization' | 'Association'
+RelationshipTypes are of the form  : 'Aggregation' | 'Composition' | 'Generalization' | 'Association'
+
+IDs are of the form               : [letter] {letter | digit}
 
 ```
 
