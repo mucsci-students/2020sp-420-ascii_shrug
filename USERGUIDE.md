@@ -25,9 +25,9 @@ exit                          : exit the editor (no warning for unsaved diagram)
 Options:
 
 
-"-a" [Field | Method]                 : will add all ID as attributes of classname
+"-a" [Field | Method]         : will add all Fields and Methods to the UML class with classname
 
-"-r" RelType [ID]                     : will create relationships from classname to all ID with type RelType``
+"-r" RelType [ID]             : will create relationships from classname to all ID with type RelType``
 
 ```
 
