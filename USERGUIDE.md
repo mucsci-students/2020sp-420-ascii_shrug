@@ -29,6 +29,15 @@ Options:
 
 "-r" RelType [ID]             : will create relationships from classname to all ID with type RelType``
 
+
+Fields, Methods, and Relationship types
+
+
+Fields are of the form ('short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool') ID
+
+Methods are of the form ('short' | 'int' | 'long' | 'float' | 'double' | 'char' | 'bool') ID ({Field})
+
+
 ```
 
 #### GUI
