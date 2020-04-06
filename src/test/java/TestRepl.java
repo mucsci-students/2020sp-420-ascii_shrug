@@ -1,9 +1,10 @@
 import static org.junit.Assert.*;
 
 import java.util.*;
+import Command.*;
 import org.junit.*;
 import shrugUML.*;
-import Repl.*;
+import com.shrug.Repl.*;
 
 public class TestRepl {
 
@@ -22,38 +23,31 @@ public class TestRepl {
   }
 
   @Test
-  public void testParseAttribute()
-  {
-    String testCmd = "add classA -a a1 a2 -r r1";
-    ArrayList<String> test = new ArrayList<String>();
-    test.add("a1");
-    test.add("a2");
-    assertEquals(Repl.parseAttributes(Repl.parseLine(testCmd)), test);
+  public void testParseAttributes() {
+    ArrayList<String> test = new ArrayList<String>(Arrays.asList("add", "classA", "-a", "int", "a"));
+
+    assertEquals(Arrays.asList("int a"), Repl.parseAttributes(test).getFields());
   }
 
   @Test
-  public void testParseAttributeFilter()
-  {
-    String testCmd = "add classA -a a1 a2 !a -r r1";
-    assertFalse(Repl.parseAttributes(Repl.parseLine(testCmd)).contains("!a"));
+  public void testParseRelationships() {
+    ArrayList<String> test = new ArrayList<String>(Arrays.asList("add", "classA", "-r", "Aggregation", "classB"));
+    HashMap<String, RType> rels = new HashMap<String, RType> ();
+    rels.put ("classB", RType.Aggregation);
+
+    assertEquals(rels, Repl.parseRelationships(test));
   }
 
   @Test
-  public void testParseRelationship()
-  {
-    String testCmd = "add classA -a a1  -r r1 r2";
-    ArrayList<String> test = new ArrayList<String>();
-    test.add("r1");
-    test.add("r2");
-    assertEquals(Repl.parseRelationships (Repl.parseLine(testCmd)), test);
-  }
+  public void testBuild() {
+    ArrayList<String> test = new ArrayList<String>(Arrays.asList("add", "classA", "-a", "int", "a", "-r", "Aggregation", "classB"));
 
-  @Test
-  public void testParseRelationshipFilter()
-  {
-    String testCmd = "add classA -a a1 -r r1 r2 !r";
-    assertFalse(Repl.parseRelationships(Repl.parseLine(testCmd)).contains("!r"));
-  }
+    HashMap<String, RType> rels = new HashMap<String, RType> ();
+    rels.put ("classB", RType.Aggregation);
 
+    Command command = Repl.build(test);
+    assertEquals(Arrays.asList("int a"), command.getFields());
+    assertEquals(rels, command.getRelationships());
+  }
 }
 
