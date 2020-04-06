@@ -105,6 +105,14 @@ public class Command {
     }
   }
 
+  /*
+   * 
+  */
+  public void setRelationships (HashMap<String, RType> relationships)
+  {
+    m_relationships = relationships;
+  }
+
   String m_className;
   ArrayList<String> m_fields;
   ArrayList<String> m_methods;

@@ -3,13 +3,12 @@
  * Description: Text view of UML editor
  */
 
-package Repl;
+package com.shrug.Repl;
 
 import Controller.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.Set;
+import Command.*;
+import com.shrug.Parser.*;
+import java.util.*;
 import shrugUML.*;
 
 public class Repl {
@@ -28,7 +27,9 @@ public class Repl {
    */
   public static void run() {
     printHelp();
-    while (true) { System.out.print("-> "); execute(parseLine(scan.nextLine()));
+    while (true) { 
+      System.out.print("-> "); 
+      execute(parseLine(scan.nextLine()));
       continue;
     }
   }
@@ -52,11 +53,19 @@ public class Repl {
   public static boolean execute(ArrayList<String> cmds) {
     if (cmds.size() > 1)
     {
+
+      if (!Controller.isJavaID (cmds.get(1))) {
+        System.out.println(cmds.get(1) + " is not a valid ID");
+        return false;
+      }
+
       switch (cmds.get(0).toLowerCase()) {
         case "add":
-          return add(cmds);
+          control.getDiagram().execute(new AddCommand(build(cmds)));
+          return true;
         case "remove":
-          return remove(cmds);
+          control.getDiagram().execute(new RemoveCommand(build(cmds)));
+          return true;
         case "save":
           return control.save(cmds.get(1));
         case "load":
@@ -80,6 +89,9 @@ public class Repl {
       switch (cmds.get(0).toLowerCase()) {
         case "exit":
           return exit ();
+        case "undo":
+          control.getDiagram().undo();
+          return true;
         case "":
           return true;
         case "print":
@@ -103,9 +115,17 @@ public class Repl {
    */
   public static void printDiagram() {
     for (ShrugUMLClass c : control.getClasses()) {
-      String s = "Name: " + c.getName() + "\nAttributes: ";
+      String s = "Name: " + c.getName() + "\nFields: ";
 
       for (String attr : c.getAttributes()) 
+        s += attr + ", ";
+
+      if (s.charAt(s.length() - 2) == ',')
+        s = s.substring(0, s.length() - 2);
+
+      s += "\nMethods: ";
+
+      for (String attr : c.getMethods()) 
         s += attr + ", ";
 
       if (s.charAt(s.length() - 2) == ',')
@@ -132,123 +152,69 @@ public class Repl {
             + "load <filename>.json          : load the diagram stored in specified json file\n"
             + "print                         : prints the current diagram\n"
             + "exit                          : exit the editor (no warning for unsaved diagram)\n\n"
+            + "undo                          : reverses the most recent command\n\n"
             + "Options:\n\n"
             + "\"-a\" [ID]                     : will add all ID as attributes of classname\n"
             + "\"-r\" [ID]                     : will create relationships from classname to all ID\n");
           
   }
 
-  /* Function: add ()
-   * precondition: repl is instantiated with an associated controller.
-   * postcondition: the UML object is added to the diagram.
+  /* Function: build ()
+   * precondition: repl is instantiated with an associated controller and model.
+   * postcondition: the command is constructed with attributes and returned
    */
-  public static boolean add(ArrayList<String> cmds) {
+  public static Command build(ArrayList<String> cmds) {
 
-    String name = cmds.get(1);
-    if (control.isJavaID (name)) {
-      ArrayList<String> relationships = parseRelationships(cmds);
-      ArrayList<String> attributes = parseAttributes(cmds);
-      
-      if (relationships.isEmpty() && attributes.isEmpty() && control.contains(name)){
-        System.out.println ("This class already exists");
-        return false;
-      }
-      else 
-      {
-      
-        control.addClass(name);
+    Command command = new Command (parseAttributes(cmds));
+    command.setClassName (cmds.get(1));
+    command.setRelationships (parseRelationships(cmds));
 
-        if (!attributes.isEmpty())
-          control.addAttributes(name, attributes);
-        if(!relationships.isEmpty())
-          control.addRelationships(name, relationships);
 
-        return true;
-      }
-    }
-    else
-    {
-      System.out.println(name + " is not a valid ID");
-      return false;
-    }
+    return command;
   }
 
-
-  /* Function: remove ()
-   * precondition: repl is instantiated with an associated controller.
-   * postcondition: the UML object is removed from the diagram.
-   */
-  public static boolean remove(ArrayList<String> cmds) {
-
-    ArrayList<String> relationships = parseRelationships(cmds);
-    ArrayList<String> attributes = parseAttributes(cmds);
-    String name = cmds.get(1);
-
-
-    if (control.contains(name))
-    {
-      control.removeClass(name);
-      if (!attributes.isEmpty())
-        control.removeAttributes(name, attributes);
-      if(!relationships.isEmpty())
-        control.removeRelationships(name, relationships);
-      return true;
-    }
-    else if (!control.isJavaID(name))
-    {
-      System.out.println (name + " is not a valid ID");
-      return false;
-    }
-    else 
-    {
-      System.out.println(name + " is not in the diagram.\n");
-      return false;
-    }
-
-  }
 
   /* Function: parse ()
    * precondition: repl is instantiated with an associated controller.
    * postcondition: returns an arraylist of the attributes
   */
-  public static ArrayList<String> parseAttributes (ArrayList<String> cmds) {
+  public static Command parseAttributes (ArrayList<String> cmds) {
     
-    ArrayList<String> attributes = new ArrayList<String>();
+    String attributes = "";
     // parse attribute arguments
     if (cmds.contains("-a")) 
-    {
       for (int i = cmds.indexOf("-a") + 1; i != cmds.indexOf("-r") && i != cmds.size(); ++i) 
-      {
-        if (control.isJavaID(cmds.get(i)))
-          attributes.add(cmds.get(i));
-        else
-          System.out.println(cmds.get(i) + " is not a valid Java ID");
-      }
-    }
+        attributes = attributes.concat (" " + cmds.get(i));
 
-    return attributes;        
+    Parser p = new Parser(attributes);
+    return p.parse();       
   }
 
   /* Function: parse ()
    * precondition: repl is instantiated with an associated controller.
    * postcondition: returns an arraylist  of the relationships
   */
-  public static ArrayList<String> parseRelationships (ArrayList<String> cmds) {
+  public static HashMap<String, RType> parseRelationships (ArrayList<String> cmds) {
     
-    ArrayList<String> relationships = new ArrayList<String>();
-    // parse relationship arguments
+    HashMap<String, RType> relationships = new HashMap<String, RType> ();
+    
+    RType relType = RType.None;
+
+    // -r RType [destinationVertex]
     if (cmds.contains("-r")) 
     {
-      for (int i = cmds.indexOf("-r") + 1; i != cmds.indexOf("-a") && i != cmds.size(); ++i) 
+      if (cmds.get (0).equals("add"))
+        relType = RType.valueOf(cmds.get(cmds.indexOf("-r") + 1).trim());
+      for (int i = cmds.indexOf("-r") + 2; i != cmds.indexOf("-a") && i != cmds.size(); ++i) 
       {
-        if (control.isJavaID(cmds.get(i)))
-          relationships.add(cmds.get(i));
+        if (Controller.isJavaID(cmds.get(i)))
+          relationships.put (cmds.get(i), relType);
         else 
           System.out.println(cmds.get(i) + "is not a valid Java ID");
       }
     }
 
-    return relationships;        
+    return relationships;
   }
 
   /* Function: exit ()
