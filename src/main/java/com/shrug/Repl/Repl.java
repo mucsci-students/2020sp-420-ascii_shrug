@@ -53,19 +53,23 @@ public class Repl {
   public static boolean execute(ArrayList<String> cmds) {
     if (cmds.size() > 1)
     {
-
-      if (!Controller.isJavaID (cmds.get(1))) {
-        System.out.println(cmds.get(1) + " is not a valid ID");
-        return false;
-      }
-
       switch (cmds.get(0).toLowerCase()) {
         case "add":
-          control.getDiagram().execute(new AddCommand(build(cmds)));
+        {
+          Command command = build(cmds);
+          if (command == null)
+            return false;
+          control.getDiagram().execute(new AddCommand(command));
           return true;
+        }
         case "remove":
-          control.getDiagram().execute(new RemoveCommand(build(cmds)));
+        {
+          Command command = build(cmds);
+          if (command == null)
+            return false;
+          control.getDiagram().execute(new RemoveCommand(command));
           return true;
+        }
         case "save":
           return control.save(cmds.get(1));
         case "load":
@@ -164,6 +168,12 @@ public class Repl {
    * postcondition: the command is constructed with attributes and returned
    */
   public static Command build(ArrayList<String> cmds) {
+
+    if (!Controller.isJavaID(cmds.get(1)))
+    {
+      System.out.println("Invalid ID");
+      return null;
+    }
 
     Command command = new Command (parseAttributes(cmds));
     command.setClassName (cmds.get(1));
