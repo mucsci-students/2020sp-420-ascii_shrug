@@ -193,6 +193,7 @@ public class ShrugUMLDiagram {
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet()) {
         addRelationshipWithType (command.getClassName(), rel.getKey(), rel.getValue());
     }
+    log.push(command.invert ());
     
   } 
 
@@ -211,7 +212,20 @@ public class ShrugUMLDiagram {
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet())
         removeRelationship(command.getClassName(), rel.getKey());
     }
+    log.push(command.invert ());
   } 
+
+
+  public void undo ()
+  {
+    if (!log.empty())
+    {
+      if (log.peek() instanceof AddCommand)
+        execute(new AddCommand(log.pop()));
+      else 
+        execute(new RemoveCommand (log.pop()));
+    }
+  }
 
   /** *********************************************************************** */
   // Utility Methods
@@ -229,4 +243,5 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Private Data Members
   private ListenableGraph<ShrugUMLClass, LabeledEdge> m_diagram;
+  private Stack <Command> log = new Stack<Command>();
 }
