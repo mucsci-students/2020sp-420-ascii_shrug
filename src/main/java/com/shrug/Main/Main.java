@@ -3,7 +3,7 @@
  * Description: Entry point for the program. Selects view
  */
 import GUI.*;
-import Repl.*;
+import com.shrug.Repl.*;
 
 // import javafx.application.Application;
 
