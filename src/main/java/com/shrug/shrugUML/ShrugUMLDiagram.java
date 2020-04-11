@@ -225,6 +225,7 @@ public class ShrugUMLDiagram {
       else 
         execute(new RemoveCommand (log.pop()));
     }
+    log.pop ();
   }
 
   /** *********************************************************************** */
