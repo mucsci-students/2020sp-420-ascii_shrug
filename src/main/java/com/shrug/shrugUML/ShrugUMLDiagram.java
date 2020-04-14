@@ -223,9 +223,9 @@ public class ShrugUMLDiagram {
       if (m_log.peek() instanceof AddCommand)
         execute(new AddCommand(m_log.pop()));
       else 
-        execute(new RemoveCommand (log.pop()));
+        execute(new RemoveCommand (m_log.pop()));
 
-      log.pop ();
+      m_log.pop ();
     }
     else
       System.out.println ("No commands to undo");
@@ -246,7 +246,7 @@ public class ShrugUMLDiagram {
   }
 
   public void clearLog () {
-    log.clear ();
+    m_log.clear ();
   }
 
   /** *********************************************************************** */
