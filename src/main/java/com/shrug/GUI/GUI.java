@@ -118,7 +118,7 @@ public class GUI {
     final Hashtable<String, Object> generalizationEdgeStyle = new Hashtable<String, Object>();
     generalizationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
     generalizationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
-    generalizationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_OPEN);
+    generalizationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_CLASSIC);
     generalizationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
     generalizationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     generalizationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
