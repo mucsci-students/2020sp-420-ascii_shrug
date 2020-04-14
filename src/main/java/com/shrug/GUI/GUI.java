@@ -2,6 +2,7 @@ package GUI;
 
 import Controller.*;
 import com.mxgraph.layout.*;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.*;
 import com.mxgraph.view.*;
 import com.mxgraph.util.*;
@@ -39,7 +40,7 @@ public class GUI {
   private JGraphXAdapter<ShrugUMLClass, LabeledEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
 
-  private mxGraphLayout layout = new mxEdgeLabelLayout(jgxAdapter);
+  private mxHierarchicalLayout layout;
   private mxStylesheet stylesheet = new mxStylesheet();
 
   
@@ -74,6 +75,7 @@ public class GUI {
     initMenuBar();
     initButtons();
 
+    initLayout ();
     initStylesheet();
     initGraphComponent();
 
@@ -108,9 +110,24 @@ public class GUI {
     associationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     associationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
     associationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    associationEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
     associationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
     stylesheet.putCellStyle("association", associationEdgeStyle);
+    
+    // Stylesheet for generalization
+    final Hashtable<String, Object> generalizationEdgeStyle = new Hashtable<String, Object>();
+    generalizationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
+    generalizationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
+    generalizationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_OPEN);
+    generalizationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
+    generalizationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+    generalizationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+    generalizationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    generalizationEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
+    generalizationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    stylesheet.putCellStyle("generalization", generalizationEdgeStyle);
 
+    
     // Stylesheet for composition
     final Hashtable<String, Object> compositionEdgeStyle = new Hashtable<String, Object>();
     compositionEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
@@ -120,7 +137,8 @@ public class GUI {
     compositionEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     compositionEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
     compositionEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
-    compositionEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    compositionEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
+    compositionEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");    
     //stylesheet.setDefaultEdgeStyle(compositionEdgeStyle);
     stylesheet.putCellStyle("composition", compositionEdgeStyle);
 
@@ -195,6 +213,18 @@ public class GUI {
     content.add(flow, BorderLayout.NORTH);
   }
 
+  /* void initLayout () 
+   * initializes the default layout
+   */
+  public void initLayout () {
+    layout = new mxHierarchicalLayout (jgxAdapter);
+    
+    layout.setIntraCellSpacing (120);
+    layout.setInterRankCellSpacing (80);
+    layout.setFineTuning(false);
+    layout.setDisableEdgeStyle(true);
+  }
+  
   /* void redrawEdges ()
    * routine to redraw each edge using the stylesheet corresponding to its type
    */
@@ -219,6 +249,8 @@ public class GUI {
             jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
           break;
         case Generalization:
+          for (Map.Entry<String, Object> style : styles.get("generalization").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
           break;
         case None:
           break;   
@@ -274,9 +306,9 @@ public class GUI {
       control = new Controller();
       control.load(load);
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
-      layout = new mxOrganicLayout(jgxAdapter);
       initStylesheet();
       initGraphComponent();
+      initLayout ();
       layout.execute(jgxAdapter.getDefaultParent());
       redrawEdges();
       jgxAdapter.repaint();
