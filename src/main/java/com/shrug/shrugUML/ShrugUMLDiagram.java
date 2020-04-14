@@ -193,7 +193,7 @@ public class ShrugUMLDiagram {
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet()) {
         addRelationshipWithType (command.getClassName(), rel.getKey(), rel.getValue());
     }
-    log.push(command.invert ());
+    m_log.push(command.invert ());
     
   } 
 
@@ -212,20 +212,20 @@ public class ShrugUMLDiagram {
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet())
         removeRelationship(command.getClassName(), rel.getKey());
     }
-    log.push(command.invert ());
+    m_log.push(command.invert ());
   } 
 
 
   public void undo ()
   {
-    if (!log.empty())
+    if (!m_log.empty())
     {
-      if (log.peek() instanceof AddCommand)
-        execute(new AddCommand(log.pop()));
+      if (m_log.peek() instanceof AddCommand)
+        execute(new AddCommand(m_log.pop()));
       else 
-        execute(new RemoveCommand (log.pop()));
+        execute(new RemoveCommand (m_log.pop()));
     }
-    log.pop ();
+    m_log.pop ();
   }
 
   /** *********************************************************************** */
@@ -234,6 +234,10 @@ public class ShrugUMLDiagram {
     return m_diagram;
   }
 
+  public Stack<Command> getLog ()
+  {
+    return m_log;
+  }
   public void setGraph(ListenableGraph<ShrugUMLClass, LabeledEdge> graph) {
     m_diagram = graph;
   }
@@ -244,5 +248,5 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Private Data Members
   private ListenableGraph<ShrugUMLClass, LabeledEdge> m_diagram;
-  private Stack <Command> log = new Stack<Command>();
+  private Stack <Command> m_log = new Stack<Command>();
 }
