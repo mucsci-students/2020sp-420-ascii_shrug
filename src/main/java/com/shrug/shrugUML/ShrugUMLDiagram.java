@@ -223,9 +223,12 @@ public class ShrugUMLDiagram {
       if (m_log.peek() instanceof AddCommand)
         execute(new AddCommand(m_log.pop()));
       else 
-        execute(new RemoveCommand (m_log.pop()));
+        execute(new RemoveCommand (log.pop()));
+
+      log.pop ();
     }
-    m_log.pop ();
+    else
+      System.out.println ("No commands to undo");
   }
 
   /** *********************************************************************** */
@@ -240,6 +243,10 @@ public class ShrugUMLDiagram {
   }
   public void setGraph(ListenableGraph<ShrugUMLClass, LabeledEdge> graph) {
     m_diagram = graph;
+  }
+
+  public void clearLog () {
+    log.clear ();
   }
 
   /** *********************************************************************** */
