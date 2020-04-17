@@ -420,16 +420,15 @@ public class GUI {
   public void ProcessButtonPressExportImage (ActionEvent event) {
     try {
       BufferedImage image = mxCellRenderer.createBufferedImage(jgxAdapter, null, 1, Color.WHITE, true, null);
+      String filename = getInputDialogBox ("Export", "Export to PNG", "Enter a .png file");
       try {
-        ImageIO.write(image, "PNG", new File("C:\\Users\\Austin\\graph.png"));   
+        ImageIO.write(image, "PNG", new File(filename));   
       }
       catch(IOException e) {
         e.printStackTrace();
       }   
     }
     catch (NullPointerException e) {
-
     }
-
   }
 }
