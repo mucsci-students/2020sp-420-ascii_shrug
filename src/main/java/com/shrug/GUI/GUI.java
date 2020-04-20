@@ -9,13 +9,18 @@ import com.mxgraph.util.*;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.model.mxGraphModel;
+import com.mxgraph.util.mxCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import java.util.*;
 import java.util.Map.Entry;
+import java.io.*;
+import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -173,9 +178,12 @@ public class GUI {
     save.addActionListener(this::processButtonPressSave);
     JMenuItem load = new JMenuItem("Load");
     load.addActionListener(this::processButtonPressLoad);
+    JMenuItem export = new JMenuItem("Export");
+    export.addActionListener(this::ProcessButtonPressExportImage);
 
     file.add(save);
     file.add(load);
+    file.add(export);
 
     frame.setJMenuBar(menuBar);
   }
@@ -439,5 +447,20 @@ public class GUI {
             + "Click a class and drag its borders to change its size",
         "Help",
         JOptionPane.PLAIN_MESSAGE);
+  }
+
+  public void ProcessButtonPressExportImage (ActionEvent event) {
+    try {
+      BufferedImage image = mxCellRenderer.createBufferedImage(jgxAdapter, null, 1, Color.WHITE, true, null);
+      String filename = getInputDialogBox ("Export", "Export to PNG", "Enter a .png file");
+      try {
+        ImageIO.write(image, "PNG", new File(filename));   
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }   
+    }
+    catch (NullPointerException e) {
+    }
   }
 }
