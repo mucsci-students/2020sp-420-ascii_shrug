@@ -40,7 +40,7 @@ import Command.*;
 public class GUI {
 
   private JFrame frame;
-  private JButton add, remove, edit, save, load, addR, removeR, help;
+  private JButton add, remove, edit, save, load, addR, removeR, help, layoutE;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, LabeledEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
@@ -211,6 +211,9 @@ public class GUI {
     help = new JButton("Help");
     help.addActionListener(this::helpDialog);
 
+    layoutE = new JButton("Layout");
+    layoutE.addActionListener(this::processButtonPressLayout);
+
     JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
     flow.add(add);
     flow.add(remove);
@@ -218,6 +221,7 @@ public class GUI {
     flow.add(addR);
     flow.add(removeR);
     flow.add(help);
+    flow.add(layoutE);
     content.add(flow, BorderLayout.NORTH);
   }
 
@@ -463,4 +467,12 @@ public class GUI {
     catch (NullPointerException e) {
     }
   }
+
+  public void processButtonPressLayout (ActionEvent event) {
+    initLayout ();
+    layout.execute (jgxAdapter.getDefaultParent());
+    jgxAdapter.repaint();
+    content.revalidate();
+  }
 }
+
