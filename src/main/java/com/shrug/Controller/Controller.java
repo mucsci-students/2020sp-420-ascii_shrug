@@ -4,11 +4,7 @@ package Controller;
 // Imports (java/external/local)
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.*;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.alg.util.*;
@@ -20,10 +16,12 @@ import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.json.*;
 import shrugUML.*;
+import Command.*;
 
 public class Controller {
 
   private ShrugUMLDiagram m_diagram;
+  private Stack <Command> m_log = new Stack<Command>();
 
   public Controller() {
     this.m_diagram = new ShrugUMLDiagram();
@@ -179,7 +177,7 @@ public class Controller {
   public boolean save(String path) {
     try {
       
-      m_diagram.clearLog ();
+      m_log.clear ();
       FileWriter w = new FileWriter(path);
 
       JSONExporter<ShrugUMLClass, LabeledEdge> saver =
@@ -304,6 +302,51 @@ public class Controller {
     }
   }
 
+
+  public void undo ()
+  {
+    if (!m_log.empty())
+    {
+      if (m_log.peek() instanceof AddCommand)
+        execute (new AddCommand (m_log.pop ()));
+      else
+        execute (new RemoveCommand (m_log.pop ()));
+
+      m_log.pop ();
+    }
+    else
+      System.out.println ("No commands to undo");
+  }
+
+
+  public boolean execute (RemoveCommand command)
+  {
+    if (m_diagram.execute (command))
+    {
+      m_log.push (command.invert());
+      return true;
+    }
+    else 
+    {
+      System.out.println ("Error executing command");
+      return false;
+    }
+  }
+
+  public boolean execute (AddCommand command)
+  {
+    if (m_diagram.execute (command))
+    {
+      m_log.push (command.invert());
+      return true;
+    }
+    else 
+    {
+      System.out.println ("Error executing command");
+      return false;
+    }
+  }
+
   /* * Function: getGraph ()
    * Precondition: this is instantiated
    * Postcondition: the underlying graph is returned
@@ -323,6 +366,11 @@ public class Controller {
    */
   public Set<ShrugUMLClass> getClasses() {
     return m_diagram.getClasses();
+  }
+
+  public boolean noUndo ()
+  {
+    return  m_log.empty ();
   }
 
   /* Function: isJavaID ()

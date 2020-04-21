@@ -181,7 +181,8 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Command Methods
   
-  public void execute (AddCommand command) 
+  // TODO implement error checking
+  public boolean execute (AddCommand command) 
   {
     // addClass fails silently if class is already in diagram
     addClass (command.getClassName());
@@ -193,11 +194,12 @@ public class ShrugUMLDiagram {
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet()) {
         addRelationshipWithType (command.getClassName(), rel.getKey(), rel.getValue());
     }
-    m_log.push(command.invert ());
-    
+
+    return true;
   } 
 
-  public void execute (RemoveCommand command) 
+  //TODO implement error checking
+  public boolean execute (RemoveCommand command) 
   {
     // If the fields and methods are empty, we're removing a class
     if (command.getFields().isEmpty() && command.getMethods().isEmpty() && command.getRelationships().isEmpty())
@@ -212,24 +214,10 @@ public class ShrugUMLDiagram {
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet())
         removeRelationship(command.getClassName(), rel.getKey());
     }
-    m_log.push(command.invert ());
+
+    return true;
   } 
 
-
-  public void undo ()
-  {
-    if (!m_log.empty())
-    {
-      if (m_log.peek() instanceof AddCommand)
-        execute(new AddCommand(m_log.pop()));
-      else 
-        execute(new RemoveCommand (m_log.pop()));
-
-      m_log.pop ();
-    }
-    else
-      System.out.println ("No commands to undo");
-  }
 
   /** *********************************************************************** */
   // Utility Methods
@@ -237,16 +225,8 @@ public class ShrugUMLDiagram {
     return m_diagram;
   }
 
-  public Stack<Command> getLog ()
-  {
-    return m_log;
-  }
   public void setGraph(ListenableGraph<ShrugUMLClass, LabeledEdge> graph) {
     m_diagram = graph;
-  }
-
-  public void clearLog () {
-    m_log.clear ();
   }
 
   /** *********************************************************************** */
@@ -255,5 +235,4 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Private Data Members
   private ListenableGraph<ShrugUMLClass, LabeledEdge> m_diagram;
-  private Stack <Command> m_log = new Stack<Command>();
 }
