@@ -437,9 +437,9 @@ public class GUI {
               "Remove a relation",
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-      control.removeRelationships(src, destL);
       RemoveCommand command = new RemoveCommand(src);
       command.setRelationships(destL, RType.None);
+      control.getDiagram().execute(command);
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
