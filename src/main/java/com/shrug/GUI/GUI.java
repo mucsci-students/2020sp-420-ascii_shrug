@@ -16,6 +16,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.awt.event.*;
+import java.awt.*;
 import javax.imageio.ImageIO;
 import java.util.*;
 import java.util.Map.Entry;
@@ -30,6 +32,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.KeyStroke;
+import javax.swing.Action;
+import javax.swing.AbstractAction;
 import org.jgrapht.event.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
@@ -40,7 +45,7 @@ import Command.*;
 public class GUI {
 
   private JFrame frame;
-  private JButton add, remove, edit, save, load, addR, removeR, help, layoutE;
+  private JButton add, remove, edit, save, load, addR, removeR, help, layoutE, undo;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, LabeledEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
@@ -52,6 +57,13 @@ public class GUI {
   private mxGraphComponent graph;
   private JPanel content;
 
+  private class undoHandler implements ActionListener {
+    public void actionPerformed (ActionEvent e) {
+      control.getDiagram().undo();
+      jgxAdapter.repaint();
+    }
+  }
+  
   public GUI() {
 
     try {
@@ -60,9 +72,9 @@ public class GUI {
       System.setProperty("apple.laf.useScreenMenuBar", "true");
       System.setProperty("com.apple.mrj.application.apple.menu.about.name", "shrug_uml");
     } catch (ClassNotFoundException
-        | InstantiationException
-        | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
+             | InstantiationException
+             | IllegalAccessException
+             | UnsupportedLookAndFeelException e) {
     }
 
     start();
@@ -72,23 +84,23 @@ public class GUI {
     
     frame = new JFrame();
     frame.setName("GUI");
-
+    
     content = new JPanel(new BorderLayout(30, 30));
     content.setPreferredSize(new Dimension(800, 600));
     frame.setContentPane(content);
-
+    
     initMenuBar();
     initButtons();
 
     initLayout ();
     initStylesheet();
     initGraphComponent();
-
+    
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
   }
-  
+
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     jgxAdapter.setAutoSizeCells(true);
@@ -208,11 +220,15 @@ public class GUI {
     removeR = new JButton("Remove Relation");
     removeR.addActionListener(this::processButtonPressRemoveR);
 
-    help = new JButton("Help");
-    help.addActionListener(this::helpDialog);
+    undo = new JButton("Undo");
+    undo.addActionListener(new undoHandler ());
 
     layoutE = new JButton("Layout");
     layoutE.addActionListener(this::processButtonPressLayout);
+
+    help = new JButton("Help");
+    help.addActionListener(this::helpDialog);
+
 
     JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
     flow.add(add);
@@ -220,8 +236,10 @@ public class GUI {
     flow.add(edit);
     flow.add(addR);
     flow.add(removeR);
-    flow.add(help);
     flow.add(layoutE);
+    flow.add(undo);
+    flow.add(help);
+
     content.add(flow, BorderLayout.NORTH);
   }
 
@@ -270,6 +288,7 @@ public class GUI {
     }
     jgxAdapter.repaint();
     content.revalidate();
+    content.repaint();
     jgxAdapter.refresh();
   }
   
@@ -284,7 +303,6 @@ public class GUI {
       AddCommand command = new AddCommand (name);
       control.getDiagram().execute(command);
       jgxAdapter.repaint();
-      content.revalidate();
     } catch (NullPointerException e) {
 
     }
@@ -419,9 +437,9 @@ public class GUI {
               "Remove a relation",
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-      control.removeRelationships(src, destL);
       RemoveCommand command = new RemoveCommand(src);
       command.setRelationships(destL, RType.None);
+      control.getDiagram().execute(command);
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -443,12 +461,12 @@ public class GUI {
     JOptionPane.showMessageDialog(
         frame,
         "Add Class: Adds a class to the diagram\n"
-            + "Remove Class: Remove a class from the diagram\n"
-            + "Edit: Edit the attributes of a class. Enter the class name to edit, any number of attributes to add (either fields or methods), \n\t\t and any number of attributes to remove, both comma delimited.\n"
-            + "Add Relation: Add a relationship src -> dest, valid types are Aggregation, Composition, Association, Generalization, and None\n"
-            + "Remove Relation: Remove a relationship src -> dest\n"
-            + "Click and drag classes to move them around\n"
-            + "Click a class and drag its borders to change its size",
+        + "Remove Class: Remove a class from the diagram\n"
+        + "Edit: Edit the attributes of a class. Enter the class name to edit, any number of attributes to add (either fields or methods), \n\t\t and any number of attributes to remove, both comma delimited.\n"
+        + "Add Relation: Add a relationship src -> dest, valid types are Aggregation, Composition, Association, Generalization, and None\n"
+        + "Remove Relation: Remove a relationship src -> dest\n"
+        + "Click and drag classes to move them around\n"
+        + "Click a class and drag its borders to change its size",
         "Help",
         JOptionPane.PLAIN_MESSAGE);
   }
