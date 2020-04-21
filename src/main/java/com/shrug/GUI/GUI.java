@@ -2,19 +2,27 @@ package GUI;
 
 import Controller.*;
 import com.mxgraph.layout.*;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.*;
 import com.mxgraph.view.*;
 import com.mxgraph.util.*;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.model.mxGraphModel;
+import com.mxgraph.util.mxCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.awt.event.*;
+import java.awt.*;
+import javax.imageio.ImageIO;
 import java.util.*;
 import java.util.Map.Entry;
+import java.io.*;
+import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -24,6 +32,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.KeyStroke;
+import javax.swing.Action;
+import javax.swing.AbstractAction;
 import org.jgrapht.event.*;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.*;
@@ -34,18 +45,25 @@ import Command.*;
 public class GUI {
 
   private JFrame frame;
-  private JButton add, remove, edit, save, load, addR, removeR, help;
+  private JButton add, remove, edit, save, load, addR, removeR, help, layoutE, undo;
   private Controller control = new Controller();
   private JGraphXAdapter<ShrugUMLClass, LabeledEdge> jgxAdapter =
       new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
 
-  private mxGraphLayout layout = new mxEdgeLabelLayout(jgxAdapter);
+  private mxHierarchicalLayout layout;
   private mxStylesheet stylesheet = new mxStylesheet();
 
   
   private mxGraphComponent graph;
   private JPanel content;
 
+  private class undoHandler implements ActionListener {
+    public void actionPerformed (ActionEvent e) {
+      control.getDiagram().undo();
+      jgxAdapter.repaint();
+    }
+  }
+  
   public GUI() {
 
     try {
@@ -54,9 +72,9 @@ public class GUI {
       System.setProperty("apple.laf.useScreenMenuBar", "true");
       System.setProperty("com.apple.mrj.application.apple.menu.about.name", "shrug_uml");
     } catch (ClassNotFoundException
-        | InstantiationException
-        | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
+             | InstantiationException
+             | IllegalAccessException
+             | UnsupportedLookAndFeelException e) {
     }
 
     start();
@@ -66,22 +84,23 @@ public class GUI {
     
     frame = new JFrame();
     frame.setName("GUI");
-
+    
     content = new JPanel(new BorderLayout(30, 30));
     content.setPreferredSize(new Dimension(800, 600));
     frame.setContentPane(content);
-
+    
     initMenuBar();
     initButtons();
 
+    initLayout ();
     initStylesheet();
     initGraphComponent();
-
+    
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
   }
-  
+
   public void initGraphComponent() {
     if (graph != null) content.remove(graph);
     jgxAdapter.setAutoSizeCells(true);
@@ -108,9 +127,24 @@ public class GUI {
     associationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     associationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
     associationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    associationEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
     associationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
     stylesheet.putCellStyle("association", associationEdgeStyle);
+    
+    // Stylesheet for generalization
+    final Hashtable<String, Object> generalizationEdgeStyle = new Hashtable<String, Object>();
+    generalizationEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
+    generalizationEdgeStyle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
+    generalizationEdgeStyle.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_CLASSIC);
+    generalizationEdgeStyle.put(mxConstants.STYLE_ENDSIZE, 15);
+    generalizationEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+    generalizationEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+    generalizationEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
+    generalizationEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
+    generalizationEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    stylesheet.putCellStyle("generalization", generalizationEdgeStyle);
 
+    
     // Stylesheet for composition
     final Hashtable<String, Object> compositionEdgeStyle = new Hashtable<String, Object>();
     compositionEdgeStyle.put(mxConstants.STYLE_ROUNDED, true);
@@ -120,7 +154,8 @@ public class GUI {
     compositionEdgeStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     compositionEdgeStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
     compositionEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
-    compositionEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+    compositionEdgeStyle.put(mxConstants.STYLE_STROKEWIDTH, 2);
+    compositionEdgeStyle.put(mxConstants.STYLE_FONTCOLOR, "#446299");    
     //stylesheet.setDefaultEdgeStyle(compositionEdgeStyle);
     stylesheet.putCellStyle("composition", compositionEdgeStyle);
 
@@ -155,9 +190,12 @@ public class GUI {
     save.addActionListener(this::processButtonPressSave);
     JMenuItem load = new JMenuItem("Load");
     load.addActionListener(this::processButtonPressLoad);
+    JMenuItem export = new JMenuItem("Export");
+    export.addActionListener(this::ProcessButtonPressExportImage);
 
     file.add(save);
     file.add(load);
+    file.add(export);
 
     frame.setJMenuBar(menuBar);
   }
@@ -182,8 +220,15 @@ public class GUI {
     removeR = new JButton("Remove Relation");
     removeR.addActionListener(this::processButtonPressRemoveR);
 
+    undo = new JButton("Undo");
+    undo.addActionListener(new undoHandler ());
+
+    layoutE = new JButton("Layout");
+    layoutE.addActionListener(this::processButtonPressLayout);
+
     help = new JButton("Help");
     help.addActionListener(this::helpDialog);
+
 
     JPanel flow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
     flow.add(add);
@@ -191,10 +236,25 @@ public class GUI {
     flow.add(edit);
     flow.add(addR);
     flow.add(removeR);
+    flow.add(layoutE);
+    flow.add(undo);
     flow.add(help);
+
     content.add(flow, BorderLayout.NORTH);
   }
 
+  /* void initLayout () 
+   * initializes the default layout
+   */
+  public void initLayout () {
+    layout = new mxHierarchicalLayout (jgxAdapter);
+    
+    layout.setIntraCellSpacing (120);
+    layout.setInterRankCellSpacing (80);
+    layout.setFineTuning(false);
+    layout.setDisableEdgeStyle(true);
+  }
+  
   /* void redrawEdges ()
    * routine to redraw each edge using the stylesheet corresponding to its type
    */
@@ -219,6 +279,8 @@ public class GUI {
             jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
           break;
         case Generalization:
+          for (Map.Entry<String, Object> style : styles.get("generalization").entrySet())
+            jgxAdapter.setCellStyles(style.getKey(), style.getValue().toString(), cell);
           break;
         case None:
           break;   
@@ -226,6 +288,7 @@ public class GUI {
     }
     jgxAdapter.repaint();
     content.revalidate();
+    content.repaint();
     jgxAdapter.refresh();
   }
   
@@ -240,7 +303,6 @@ public class GUI {
       AddCommand command = new AddCommand (name);
       control.getDiagram().execute(command);
       jgxAdapter.repaint();
-      content.revalidate();
     } catch (NullPointerException e) {
 
     }
@@ -274,9 +336,9 @@ public class GUI {
       control = new Controller();
       control.load(load);
       jgxAdapter = new JGraphXAdapter<ShrugUMLClass, LabeledEdge>(control.getGraph());
-      layout = new mxOrganicLayout(jgxAdapter);
       initStylesheet();
       initGraphComponent();
+      initLayout ();
       layout.execute(jgxAdapter.getDefaultParent());
       redrawEdges();
       jgxAdapter.repaint();
@@ -375,9 +437,9 @@ public class GUI {
               "Remove a relation",
               "Enter destination classes separated by whitespace:");
       ArrayList<String> destL = new ArrayList<String>(Arrays.asList(dest.trim().split("\\s+")));
-      control.removeRelationships(src, destL);
       RemoveCommand command = new RemoveCommand(src);
       command.setRelationships(destL, RType.None);
+      control.getDiagram().execute(command);
       jgxAdapter.repaint();
       content.revalidate();
     } catch (NullPointerException e) {
@@ -399,13 +461,36 @@ public class GUI {
     JOptionPane.showMessageDialog(
         frame,
         "Add Class: Adds a class to the diagram\n"
-            + "Remove Class: Remove a class from the diagram\n"
-            + "Edit: Edit the attributes of a class. Enter the class name to edit, any number of attributes to add (either fields or methods), \n\t\t and any number of attributes to remove, both comma delimited.\n"
-            + "Add Relation: Add a relationship src -> dest, valid types are Aggregation, Composition, Association, Generalization, and None\n"
-            + "Remove Relation: Remove a relationship src -> dest\n"
-            + "Click and drag classes to move them around\n"
-            + "Click a class and drag its borders to change its size",
+        + "Remove Class: Remove a class from the diagram\n"
+        + "Edit: Edit the attributes of a class. Enter the class name to edit, any number of attributes to add (either fields or methods), \n\t\t and any number of attributes to remove, both comma delimited.\n"
+        + "Add Relation: Add a relationship src -> dest, valid types are Aggregation, Composition, Association, Generalization, and None\n"
+        + "Remove Relation: Remove a relationship src -> dest\n"
+        + "Click and drag classes to move them around\n"
+        + "Click a class and drag its borders to change its size",
         "Help",
         JOptionPane.PLAIN_MESSAGE);
   }
+
+  public void ProcessButtonPressExportImage (ActionEvent event) {
+    try {
+      BufferedImage image = mxCellRenderer.createBufferedImage(jgxAdapter, null, 1, Color.WHITE, true, null);
+      String filename = getInputDialogBox ("Export", "Export to PNG", "Enter a .png file");
+      try {
+        ImageIO.write(image, "PNG", new File(filename));   
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }   
+    }
+    catch (NullPointerException e) {
+    }
+  }
+
+  public void processButtonPressLayout (ActionEvent event) {
+    initLayout ();
+    layout.execute (jgxAdapter.getDefaultParent());
+    jgxAdapter.repaint();
+    content.revalidate();
+  }
 }
+

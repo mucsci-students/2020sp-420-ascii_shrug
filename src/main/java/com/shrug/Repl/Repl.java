@@ -236,6 +236,16 @@ public class Repl {
    * postcondition: program is terminated.
    */
   public static boolean exit() {
+    if (!control.getDiagram().getLog().empty())
+    {
+      System.out.println("You have unsaved changes!");
+      System.out.println("Type y if you want discard changes, n otherwise.");
+
+      if (!scan.next().equals("y")) 
+      {
+        return true;
+      }
+    }
     System.exit(0);
     return true;
   }

@@ -74,6 +74,8 @@ public class Controller {
 
   public boolean save(String path) {
     try {
+      
+      m_diagram.clearLog ();
       FileWriter w = new FileWriter(path);
 
       JSONExporter<ShrugUMLClass, LabeledEdge> saver =
