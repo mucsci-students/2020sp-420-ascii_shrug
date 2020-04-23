@@ -10,6 +10,7 @@ import Controller.*;
 import com.shrug.Parser.*;
 import java.util.*;
 import org.jline.reader.*;
+import org.jline.reader.impl.history.*;
 import org.jline.terminal.*;
 import shrugUML.*;
 
@@ -17,10 +18,13 @@ public class Repl {
   public Controller control = new Controller();
   private Terminal terminal;
   private LineReader reader;
+  private History history;
 
   public Repl(Terminal t) {
     terminal = t;
     reader = LineReaderBuilder.builder().terminal(terminal).build();
+    history = new DefaultHistory(reader);
+    history.attach(reader);
     run();
   }
 
@@ -39,14 +43,16 @@ public class Repl {
   public void run() {
     try {
       printHelp();
+      String input = "";
       while (true) {
-        execute(parseLine(reader.readLine("->")));
+        input = reader.readLine("->");
+        execute(parseLine(input));
+        history.add(input);
       }
     } catch (Exception e) {
       terminal().writer().println("ouch");
     }
   }
-
   /*
    *Method: parseLine ()
    * Precondition: Repl exists and stdin is valid
