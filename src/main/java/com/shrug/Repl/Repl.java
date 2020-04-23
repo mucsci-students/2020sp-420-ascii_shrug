@@ -59,7 +59,7 @@ public class Repl {
           Command command = build(cmds);
           if (command == null)
             return false;
-          control.getDiagram().execute(new AddCommand(command));
+          control.execute(new AddCommand(command));
           return true;
         }
         case "remove":
@@ -67,7 +67,7 @@ public class Repl {
           Command command = build(cmds);
           if (command == null)
             return false;
-          control.getDiagram().execute(new RemoveCommand(command));
+          control.execute(new RemoveCommand(command));
           return true;
         }
         case "save":
@@ -94,7 +94,7 @@ public class Repl {
         case "exit":
           return exit ();
         case "undo":
-          control.getDiagram().undo();
+          control.undo();
           return true;
         case "":
           return true;
@@ -236,7 +236,7 @@ public class Repl {
    * postcondition: program is terminated.
    */
   public static boolean exit() {
-    if (!control.getDiagram().getLog().empty())
+    if (!control.noUndo())
     {
       System.out.println("You have unsaved changes!");
       System.out.println("Type y if you want discard changes, n otherwise.");
