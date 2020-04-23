@@ -59,7 +59,7 @@ public class GUI {
 
   private class undoHandler implements ActionListener {
     public void actionPerformed (ActionEvent e) {
-      control.getDiagram().undo();
+      control.undo();
       jgxAdapter.repaint();
     }
   }
