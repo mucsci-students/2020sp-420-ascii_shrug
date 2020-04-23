@@ -11,9 +11,11 @@ import com.shrug.Parser.*;
 import java.util.*;
 import shrugUML.*;
 
+
 public class Repl {
   public static Scanner scan = new Scanner(System.in);
   public static Controller control = new Controller();
+  private 
 
   public Repl() {
     run();
