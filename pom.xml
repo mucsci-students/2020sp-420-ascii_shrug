@@ -32,6 +32,7 @@
     <groupId>org.jline</groupId>
     <artifactId>jline</artifactId>
     <version>3.14.1</version>
+    <scope>compile</scope>
   </dependency>
 
     <dependency>
