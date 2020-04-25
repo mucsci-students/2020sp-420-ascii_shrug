@@ -116,6 +116,7 @@ public class GUI {
     style.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(new Color(0, 0, 170)));
     style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_RECTANGLE);
     style.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_RECTANGLE);
+    style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
     stylesheet.setDefaultVertexStyle (style);
 
     // Stylesheet for association
