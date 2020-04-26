@@ -199,6 +199,10 @@ public class Controller {
   }
 
 
+  /* 
+   * function : undo() 
+   * rewinds the state by 1 command
+   */
   public void undo ()
   {
     if (!m_log.empty())
@@ -215,6 +219,11 @@ public class Controller {
   }
 
 
+  /*
+   * Function: execute ()
+   * paramaters;
+   *   command: The command to be executed
+   */
   public boolean execute (RemoveCommand command)
   {
     if (m_diagram.execute (command))
@@ -229,6 +238,11 @@ public class Controller {
     }
   }
 
+  /*
+   * Function: execute ()
+   * paramaters;
+   *   command: The command to be executed
+   */
   public boolean execute (AddCommand command)
   {
     if (m_diagram.execute (command))

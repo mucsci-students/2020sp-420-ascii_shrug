@@ -185,7 +185,11 @@ public class ShrugUMLDiagram {
   public boolean execute (AddCommand command) 
   {
     // addClass fails silently if class is already in diagram
-    addClass (command.getClassName());
+    if (!addClass (command.getClassName()))
+    {
+      if (command.getRelationships().isEmpty() && command.getFields().isEmpty() && command.getMethods().isEmpty())
+        return false;
+    }
     ShrugUMLClass edit = findClass (command.getClassName());
     edit.addAttributes (command.getFields ());
     edit.addMethods (command.getMethods ());
@@ -201,6 +205,9 @@ public class ShrugUMLDiagram {
   //TODO implement error checking
   public boolean execute (RemoveCommand command) 
   {
+    if (!nameInDiagram(command.getClassName()))
+      return false;
+      
     // If the fields and methods are empty, we're removing a class
     if (command.getFields().isEmpty() && command.getMethods().isEmpty() && command.getRelationships().isEmpty())
     {
