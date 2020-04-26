@@ -199,6 +199,15 @@ public class Controller {
   }
 
 
+  //TODO
+  /*Function: export ()
+   * Will export the diagram as an image with the parameter as the file name
+   */
+  public boolean export (String fileName) {
+    return true;
+  }
+  
+
   public void undo ()
   {
     if (!m_log.empty())

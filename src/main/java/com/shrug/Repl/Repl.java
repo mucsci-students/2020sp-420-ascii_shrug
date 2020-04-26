@@ -11,20 +11,30 @@ import com.shrug.Parser.*;
 import java.util.*;
 import org.jline.reader.*;
 import org.jline.reader.impl.history.*;
+import org.jline.reader.impl.completer.*;
+import org.jline.reader.impl.*;
 import org.jline.terminal.*;
 import shrugUML.*;
 
 public class Repl {
   public Controller control = new Controller();
   private Terminal terminal;
-  private LineReader reader;
+  private LineReaderImpl reader;
   private History history;
 
   public Repl(Terminal t) {
+    try {
     terminal = t;
-    reader = LineReaderBuilder.builder().terminal(terminal).build();
+    //reader = LineReaderBuilder.builder().terminal(terminal).build();
+    reader = new LineReaderImpl (t);
+    reader.setCompleter(new StringsCompleter("add", "remove", "-a", "-r", "short", "int", "long", "float", "double", "char", "bool"));
     history = new DefaultHistory(reader);
     history.attach(reader);
+    }
+    catch (Exception e)
+    {
+      System.out.println ("Reader failed to build");
+    }
     run();
   }
 
@@ -90,6 +100,8 @@ public class Repl {
           return control.save(cmds.get(1));
         case "load":
           return control.load(cmds.get(1));
+        case "export":
+          return control.export (cmds.get(1));
         case "":
           return true;
         case "help":
@@ -241,6 +253,7 @@ public class Repl {
 
     return relationships;
   }
+
 
   /* Function: exit ()
    * precondition: program is running and exit is entered into Repl.
