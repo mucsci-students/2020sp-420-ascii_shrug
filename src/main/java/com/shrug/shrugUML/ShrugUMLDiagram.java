@@ -181,7 +181,6 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Command Methods
   
-  // TODO implement error checking
   public boolean execute (AddCommand command) 
   {
     // addClass fails silently if class is already in diagram
@@ -202,7 +201,6 @@ public class ShrugUMLDiagram {
     return true;
   } 
 
-  //TODO implement error checking
   public boolean execute (RemoveCommand command) 
   {
     if (!nameInDiagram(command.getClassName()))
@@ -220,7 +218,11 @@ public class ShrugUMLDiagram {
       edit.removeMethods ( command.getMethods ());
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet())
         removeRelationship(command.getClassName(), rel.getKey());
+
+      if (getRelationshipsOfClass(command.getClassName()).isEmpty() && edit.getMethods().isEmpty() && edit.getAttributes().isEmpty())
+        removeClass(command.getClassName());
     }
+
 
     return true;
   } 
