@@ -4,11 +4,7 @@ package Controller;
 // Imports (java/external/local)
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.*;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.alg.util.*;
@@ -20,10 +16,12 @@ import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.json.*;
 import shrugUML.*;
+import Command.*;
 
 public class Controller {
 
   private ShrugUMLDiagram m_diagram;
+  private Stack <Command> m_log = new Stack<Command>();
 
   public Controller() {
     this.m_diagram = new ShrugUMLDiagram();
@@ -33,111 +31,6 @@ public class Controller {
     this.m_diagram = obj;
   }
 
-  /** *********************************************************************** */
-  // Class methods
-
-  /*
-   * Function: add (String className)
-   * Precondition: className is the name of the class to be added to the diagram
-   * Postcondition: className is added to the diagram if the name is valid. Returns true if it's added, false if it's
-   * not
-   */
-
-  public boolean addClass(String className) {
-    if (isJavaID(className)) return m_diagram.addClass(className);
-    else return false;
-  }
-
-  /*
-   *
-   *
-   */
-  public boolean addClass(ShrugUMLClass c) {
-    if (isJavaID(c.getName())) return m_diagram.addClass(c);
-    else return false;
-  }
-
-  /*
-   * Method: remove (String className)
-   * Precondition: className is the name of the class to be removed from the
-   * diagram
-   * Postcondition: className is removed from the diagram if className is in the diagram. Returns true if
-   * remove, false if not removed.
-   */
-  public boolean removeClass(String className) {
-    return m_diagram.removeClass(className);
-  }
-
-  /** *********************************************************************** */
-  // Attribute methods
-
-  /*
-   * Function: addAttribute (String className, ArrayList<String> attributeList)
-   * Precondition: className and n in attributeList are valid identifiers
-   * Postcondition: className is added to the diagram if the name is valid with attributeList as its attributes.
-   *                valid attributes are given to className if className exists.
-   */
-  public boolean addAttributes(String className, ArrayList<String> attributeList) {
-    ArrayList<String> validList = new ArrayList<String>();
-
-    for (String s : attributeList) {
-      if (isJavaID(s)) validList.add(s);
-    }
-
-    if (m_diagram.nameInDiagram(className))
-      return m_diagram.findClass(className).addAttributes(validList);
-    else {
-      addClass(className);
-      return m_diagram.findClass(className).addAttributes(validList);
-    }
-  }
-
-  /*
-   * Function: removeAttribute (String className, String[] attributeList)
-   * Precondition: className exists and n in attributeList are valid identifiers
-   * Postcondition: Removes all attributes of classname. returns false if
-   *                className is not in diagram
-   */
-  public boolean removeAttributes(String className, ArrayList<String> attributeList) {
-    if (m_diagram.nameInDiagram(className))
-      return m_diagram.findClass(className).removeAttributes(attributeList);
-    else return false;
-  }
-
-  /** *********************************************************************** */
-  // Relationship methods
-
-  /*
-   * Function: addRelationship (String className, String[] vectorList)
-   * Precondition: className and v in vectorList exist
-   * Postcondition: className has relationships to v[i] st i != 0
-   */
-  public boolean addRelationships(String className, ArrayList<String> vectorList) {
-    boolean success = false;
-
-    for (String v : vectorList) {
-      if (isJavaID(v)) success |= m_diagram.addRelationship(className, v);
-    }
-
-    return success;
-  }
-
-     /* Function: addRelationship (String className, String[] vectorList)
-   * Precondition: className and v in vectorList exist
-   * Postcondition: className has relationships to v[i] st i != 0
-   */
-  public boolean addRelationships(String className, ArrayList<String> vectorList,
-                                  String type) {
-    boolean success = false;
-    RType rType = RType.valueOf(type);
-    
-    for (String v : vectorList) {
-      if (isJavaID(v)) success |= m_diagram.addRelationshipWithType(className, v, rType);
-    }
-
-    return success;
-  }
-  
   /*
    * Function: remove (String className, String[] vectorList)
    * Precondition: className and v in vectorList exist
@@ -157,6 +50,7 @@ public class Controller {
   public boolean contains(String className) {
     return m_diagram.nameInDiagram(className);
   }
+
   /*
     Method: save ()
     Precondition:
@@ -178,6 +72,8 @@ public class Controller {
 
   public boolean save(String path) {
     try {
+      
+      m_log.clear ();
       FileWriter w = new FileWriter(path);
 
       JSONExporter<ShrugUMLClass, LabeledEdge> saver =
@@ -302,6 +198,74 @@ public class Controller {
     }
   }
 
+
+  /* 
+   * function : undo() 
+   * rewinds the state by 1 command
+   */
+
+  //TODO
+  /*Function: export ()
+   * Will export the diagram as an image with the parameter as the file name
+   */
+  public boolean export (String fileName) {
+    return true;
+  }
+  
+  public void undo ()
+  {
+    if (!m_log.empty())
+    {
+      if (m_log.peek() instanceof AddCommand)
+        execute (new AddCommand (m_log.pop ()));
+      else
+        execute (new RemoveCommand (m_log.pop ()));
+
+      m_log.pop ();
+    }
+    else
+      System.out.println ("No commands to undo");
+  }
+
+
+  /*
+   * Function: execute ()
+   * paramaters;
+   *   command: The command to be executed
+   */
+  public boolean execute (RemoveCommand command)
+  {
+    if (m_diagram.execute (command))
+    {
+      m_log.push (command.invert());
+      return true;
+    }
+    else 
+    {
+      System.out.println ("Error executing command");
+      return false;
+    }
+  }
+
+  /*
+   * Function: execute ()
+   * paramaters;
+   *   command: The command to be executed
+   */
+  public boolean execute (AddCommand command)
+  {
+    if (m_diagram.execute (command))
+    {
+      m_log.push (command.invert());
+      return true;
+    }
+    else 
+    {
+      System.out.println ("Error executing command");
+      return false;
+    }
+  }
+
   /* * Function: getGraph ()
    * Precondition: this is instantiated
    * Postcondition: the underlying graph is returned
@@ -321,6 +285,11 @@ public class Controller {
    */
   public Set<ShrugUMLClass> getClasses() {
     return m_diagram.getClasses();
+  }
+
+  public boolean noUndo ()
+  {
+    return  m_log.empty ();
   }
 
   /* Function: isJavaID ()

@@ -181,10 +181,14 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Command Methods
   
-  public void execute (AddCommand command) 
+  public boolean execute (AddCommand command) 
   {
     // addClass fails silently if class is already in diagram
-    addClass (command.getClassName());
+    if (!addClass (command.getClassName()))
+    {
+      if (command.getRelationships().isEmpty() && command.getFields().isEmpty() && command.getMethods().isEmpty())
+        return false;
+    }
     ShrugUMLClass edit = findClass (command.getClassName());
     edit.addAttributes (command.getFields ());
     edit.addMethods (command.getMethods ());
@@ -193,12 +197,15 @@ public class ShrugUMLDiagram {
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet()) {
         addRelationshipWithType (command.getClassName(), rel.getKey(), rel.getValue());
     }
-    log.push(command.invert ());
-    
+
+    return true;
   } 
 
-  public void execute (RemoveCommand command) 
+  public boolean execute (RemoveCommand command) 
   {
+    if (!nameInDiagram(command.getClassName()))
+      return false;
+      
     // If the fields and methods are empty, we're removing a class
     if (command.getFields().isEmpty() && command.getMethods().isEmpty() && command.getRelationships().isEmpty())
     {
@@ -211,21 +218,15 @@ public class ShrugUMLDiagram {
       edit.removeMethods ( command.getMethods ());
       for (Map.Entry<String, RType> rel : command.getRelationships().entrySet())
         removeRelationship(command.getClassName(), rel.getKey());
+
+      if (getRelationshipsOfClass(command.getClassName()).isEmpty() && edit.getMethods().isEmpty() && edit.getAttributes().isEmpty())
+        removeClass(command.getClassName());
     }
-    log.push(command.invert ());
+
+
+    return true;
   } 
 
-
-  public void undo ()
-  {
-    if (!log.empty())
-    {
-      if (log.peek() instanceof AddCommand)
-        execute(new AddCommand(log.pop()));
-      else 
-        execute(new RemoveCommand (log.pop()));
-    }
-  }
 
   /** *********************************************************************** */
   // Utility Methods
@@ -243,5 +244,4 @@ public class ShrugUMLDiagram {
   /** *********************************************************************** */
   // Private Data Members
   private ListenableGraph<ShrugUMLClass, LabeledEdge> m_diagram;
-  private Stack <Command> log = new Stack<Command>();
 }

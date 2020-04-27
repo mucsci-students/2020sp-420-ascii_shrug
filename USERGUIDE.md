@@ -19,7 +19,7 @@ print                         : prints the current diagram
 
 undo                          : reverses the most recent command
 
-exit                          : exit the editor (no warning for unsaved diagram)
+exit                          : exit the editor
 
 
 Options:
@@ -66,6 +66,8 @@ IDs are of the form               : [letter] {letter | digit}
 
 - To move a class around, click and drag on it making sure that there is no solid green border as that will create an edge.
 
+- To export to a png, click file -> export and enter a .png file
+
 #### Quirks:
 
 - Relationships made by hovering and dragging from one class to another
@@ -73,3 +75,5 @@ IDs are of the form               : [letter] {letter | digit}
 
 - Classes and edges can be double clicked to change the representation. The model is
   not changed.
+
+- If you use the `urxvt` terminal, the cli will not work unless you change your TERM to `screen-256color`

@@ -214,7 +214,7 @@ public class TestUMLDiagram {
     ArrayList<String> methods = new ArrayList<String>(Arrays.asList("int a(int a1)", "int b(int b1, int b2)", "void c()")); 
     
     AddCommand add = new AddCommand (className, fields, methods);
-    testDiagram.execute(add);
+    assertTrue (testDiagram.execute(add));
 
     assertTrue (testDiagram.nameInDiagram(className));
     ShrugUMLClass s = testDiagram.findClass(className);
@@ -236,12 +236,7 @@ public class TestUMLDiagram {
     testDiagram.execute(add);
     testDiagram.execute(add.invert());
 
-    assertTrue (testDiagram.nameInDiagram(className));
-    ShrugUMLClass s = testDiagram.findClass(className);
-
-    assertEquals(s.getAttributes(), new HashSet<String>());
-    assertEquals(s.getMethods(), new HashSet<String>());
-    
+    assertTrue (!testDiagram.nameInDiagram(className));
   }
   
 }
