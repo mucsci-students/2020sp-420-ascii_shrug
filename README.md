@@ -1,3 +1,6 @@
+[![codecov](https://codecov.io/gh/mucsci-students/2020sp-420-ascii_shrug/branch/develop/graph/badge.svg)](https://codecov.io/gh/mucsci-students/2020sp-420-ascii_shrug)
+![Java CI with Maven](https://github.com/mucsci-students/2020sp-420-ascii_shrug/workflows/Java%20CI%20with%20Maven/badge.svg)
+
 ### ¯\\\_(ツ)\_/¯ UML Editor ¯\\\_(ツ)\_/¯
 
 A basic UML editor with support for maintaining a diagram state and saving and loading diagrams in JSON format. Makes use of jgrapht for the underlying model, jgraphx to draw the model in the GUI, and java swing for the GUI.
