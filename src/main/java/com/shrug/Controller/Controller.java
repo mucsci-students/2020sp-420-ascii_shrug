@@ -3,12 +3,12 @@ package Controller;
 /** *********************************************************************** */
 // Imports (java/external/local)
 
+import Command.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultListenableGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.nio.Attribute;
@@ -16,12 +16,11 @@ import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.json.*;
 import shrugUML.*;
-import Command.*;
 
 public class Controller {
 
   private ShrugUMLDiagram m_diagram;
-  private Stack <Command> m_log = new Stack<Command>();
+  private Stack<Command> m_log = new Stack<Command>();
 
   public Controller() {
     this.m_diagram = new ShrugUMLDiagram();
@@ -31,25 +30,8 @@ public class Controller {
     this.m_diagram = obj;
   }
 
-  /*
-   * Function: remove (String className, String[] vectorList)
-   * Precondition: className and v in vectorList exist
-   * Postcondition: className has relationships to v[i] st i != 0
-   */
-  public boolean removeRelationships(String className,
-                                     ArrayList<String> vectorList) {
-    boolean success = false;
-    for (String v : vectorList) success |= m_diagram.removeRelationship(className, v);
-
-    return success;
-  }
-
   /** *********************************************************************** */
   // Utility methods
-
-  public boolean contains(String className) {
-    return m_diagram.nameInDiagram(className);
-  }
 
   /*
     Method: save ()
@@ -64,16 +46,12 @@ public class Controller {
 
     Returns:
     true if able to save file else return false
-
-    BUGS:
-    not catching objectMapper exceptions
-    parameter path only works with file names and with file paths
   */
 
   public boolean save(String path) {
     try {
-      
-      m_log.clear ();
+
+      m_log.clear();
       FileWriter w = new FileWriter(path);
 
       JSONExporter<ShrugUMLClass, LabeledEdge> saver =
@@ -154,39 +132,39 @@ public class Controller {
                   pair.getFirst().addMethods(methods);
                   break;
                 }
-            }            
+            }
           };
 
       BiConsumer<Pair<LabeledEdge, String>, Attribute> edgeConsumer =
           (pair, attr) -> {
-        switch (attr.getValue()) {
-          case "Association":
-          {
-            pair.getFirst().setLabel(RType.Association);
-            break;
-          }
-          case "Generalization":
-          {
-            pair.getFirst().setLabel(RType.Generalization);
-            break;
-          }          
-          case "Aggregation":
-          {
-            pair.getFirst().setLabel(RType.Aggregation);
-            break;
-          }          
-          case "Composition":
-          {
-            pair.getFirst().setLabel(RType.Composition);
-            break;
-          }          
-          case "None":
-          {
-            pair.getFirst().setLabel(RType.None);
-            break;
-          }          
-        }
-      };
+            switch (attr.getValue()) {
+              case "Association":
+                {
+                  pair.getFirst().setLabel(RType.Association);
+                  break;
+                }
+              case "Generalization":
+                {
+                  pair.getFirst().setLabel(RType.Generalization);
+                  break;
+                }
+              case "Aggregation":
+                {
+                  pair.getFirst().setLabel(RType.Aggregation);
+                  break;
+                }
+              case "Composition":
+                {
+                  pair.getFirst().setLabel(RType.Composition);
+                  break;
+                }
+              case "None":
+                {
+                  pair.getFirst().setLabel(RType.None);
+                  break;
+                }
+            }
+          };
 
       creator.addEdgeAttributeConsumer(edgeConsumer);
       creator.addVertexAttributeConsumer(vertexConsumer);
@@ -198,51 +176,38 @@ public class Controller {
     }
   }
 
-
-  /* 
-   * function : undo() 
-   * rewinds the state by 1 command
-   */
-
-  //TODO
+  // TODO
   /*Function: export ()
    * Will export the diagram as an image with the parameter as the file name
    */
-  public boolean export (String fileName) {
+  public boolean export(String fileName) {
     return true;
   }
-  
-  public void undo ()
-  {
-    if (!m_log.empty())
-    {
-      if (m_log.peek() instanceof AddCommand)
-        execute (new AddCommand (m_log.pop ()));
-      else
-        execute (new RemoveCommand (m_log.pop ()));
 
-      m_log.pop ();
-    }
-    else
-      System.out.println ("No commands to undo");
+  /*
+   * function : undo()
+   * rewinds the state by 1 command
+   */
+  public void undo() {
+    if (!m_log.empty()) {
+      if (m_log.peek() instanceof AddCommand) execute(new AddCommand(m_log.pop()));
+      else execute(new RemoveCommand(m_log.pop()));
+
+      m_log.pop();
+    } else System.out.println("No commands to undo");
   }
-
 
   /*
    * Function: execute ()
    * paramaters;
    *   command: The command to be executed
    */
-  public boolean execute (RemoveCommand command)
-  {
-    if (m_diagram.execute (command))
-    {
-      m_log.push (command.invert());
+  public boolean execute(RemoveCommand command) {
+    if (m_diagram.execute(command)) {
+      m_log.push(command.invert());
       return true;
-    }
-    else 
-    {
-      System.out.println ("Error executing command");
+    } else {
+      System.out.println("Error executing command");
       return false;
     }
   }
@@ -252,16 +217,12 @@ public class Controller {
    * paramaters;
    *   command: The command to be executed
    */
-  public boolean execute (AddCommand command)
-  {
-    if (m_diagram.execute (command))
-    {
-      m_log.push (command.invert());
+  public boolean execute(AddCommand command) {
+    if (m_diagram.execute(command)) {
+      m_log.push(command.invert());
       return true;
-    }
-    else 
-    {
-      System.out.println ("Error executing command");
+    } else {
+      System.out.println("Error executing command");
       return false;
     }
   }
@@ -287,9 +248,8 @@ public class Controller {
     return m_diagram.getClasses();
   }
 
-  public boolean noUndo ()
-  {
-    return  m_log.empty ();
+  public boolean noUndo() {
+    return m_log.empty();
   }
 
   /* Function: isJavaID ()
