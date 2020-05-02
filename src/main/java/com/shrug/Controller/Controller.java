@@ -71,7 +71,7 @@ public class Controller {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
             map.put("Name", new DefaultAttribute(c.getName(), AttributeType.STRING));
             map.put("Attributes", new DefaultAttribute(c.getAttributes(), AttributeType.UNKNOWN));
-            map.put("Methods", new DefaultAttribute(c.getMethods(), AttributeType.UNKNOWN));
+            map.put("Methods", new DefaultAttribute(c.getMethods().toString().replace("),", ");"), AttributeType.UNKNOWN));
             return map;
           });
       saver.exportGraph(getGraph(), w);
@@ -105,66 +105,71 @@ public class Controller {
 
       BiConsumer<Pair<ShrugUMLClass, String>, Attribute> vertexConsumer =
           (pair, attr) -> {
-            switch (pair.getSecond()) {
-              case "Name":
-                {
-                  pair.getFirst().setName(attr.getValue());
-                  break;
-                }
-              case "Attributes":
-                {
-                  ArrayList<String> attributes =
-                      new ArrayList<String>(
-                          Arrays.asList(
-                              attr.getValue()
-                                  .trim()
-                                  .replace(",", "")
-                                  .replace("[", "")
-                                  .replace("]", "")
-                                  .split("\\s+")));
-                  pair.getFirst().addAttributes(attributes);
-                  break;
-                }
-              case "Methods":
-                {
-                  ArrayList<String> methods =
-                      new ArrayList<String>(Arrays.asList(attr.getValue().trim().split(", ")));
-                  pair.getFirst().addMethods(methods);
-                  break;
-                }
-            }
-          };
+        switch (pair.getSecond()) {
+          case "Name":
+          {
+            pair.getFirst().setName(attr.getValue());
+            break;
+          }
+          case "Attributes":
+          {
+            ArrayList<String> attributes =
+            new ArrayList<String>(
+                Arrays.asList(
+                    attr.getValue()
+                    .trim()
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split("\\s*,\\s+")));
+            pair.getFirst().addAttributes(attributes);
+            break;
+          }
+          case "Methods":
+          {
+            
+            ArrayList<String> methods =
+            new ArrayList<String>(Arrays.asList(
+                attr.getValue()
+                .trim()
+                .replace("[", "")
+                .replace("]", "")
+                .split(";\\s+")));
+            pair.getFirst().addMethods(methods);
+            break;
+          }
+        }
+      };
 
       BiConsumer<Pair<LabeledEdge, String>, Attribute> edgeConsumer =
           (pair, attr) -> {
-            switch (attr.getValue()) {
-              case "Association":
-                {
-                  pair.getFirst().setLabel(RType.Association);
-                  break;
-                }
-              case "Generalization":
-                {
-                  pair.getFirst().setLabel(RType.Generalization);
-                  break;
-                }
-              case "Aggregation":
-                {
-                  pair.getFirst().setLabel(RType.Aggregation);
-                  break;
-                }
-              case "Composition":
-                {
-                  pair.getFirst().setLabel(RType.Composition);
-                  break;
-                }
-              case "None":
-                {
-                  pair.getFirst().setLabel(RType.None);
-                  break;
-                }
-            }
-          };
+        switch (attr.getValue()) {
+          case "Association":
+          {
+            pair.getFirst().setLabel(RType.Association);
+            break;
+          }
+          case "Generalization":
+          {
+            pair.getFirst().setLabel(RType.Generalization);
+            break;
+          }
+          case "Aggregation":
+          {
+            pair.getFirst().setLabel(RType.Aggregation);
+            break;
+          }
+          case "Composition":
+          {
+            pair.getFirst().setLabel(RType.Composition);
+            break;
+          }
+          case "None":
+          {
+            pair.getFirst().setLabel(RType.None);
+            break;
+          }
+        }
+      };
 
       creator.addEdgeAttributeConsumer(edgeConsumer);
       creator.addVertexAttributeConsumer(vertexConsumer);
