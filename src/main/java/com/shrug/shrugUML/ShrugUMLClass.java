@@ -117,11 +117,19 @@ public class ShrugUMLClass {
 
   @Override
   public String toString() {
+    String attributes = "";
+    for (String a : m_attributes) {
+      attributes += a + "\n";
+    }
+    String methods = "";
+    for (String m : m_methods) {
+      methods += m + "\n";
+    }
     return m_className 
         + "\n__________\n"
-        + m_attributes.toString().replace("[", "").replace("]", "").replace(",", "\n")
+        + attributes
         + "\n__________\n"
-        + m_methods.toString().replace("[", "").replace("]", "").replace(",", "\n");
+        + methods;
   }
 
   // Private Data Members

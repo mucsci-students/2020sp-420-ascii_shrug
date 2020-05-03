@@ -105,6 +105,8 @@ public class GUI {
     if (graph != null) content.remove(graph);
     jgxAdapter.setAutoSizeCells(true);
     graph = new mxGraphComponent(jgxAdapter);
+    graph.setDragEnabled(false);
+    graph.setConnectable(false);
     content.add(graph, BorderLayout.CENTER);
     layout.execute(jgxAdapter.getDefaultParent());
   }
