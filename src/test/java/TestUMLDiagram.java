@@ -17,7 +17,6 @@ public class TestUMLDiagram {
   public void testAddClass() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     assertEquals(testDiagram.addClass("newClass"), true);
-    assertFalse(testDiagram.addClass("newClass"));
   }
 
   @Test
@@ -25,6 +24,13 @@ public class TestUMLDiagram {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     assertEquals(testDiagram.addClass("newClass"), true);
     assertEquals(testDiagram.addClass("newClass"), false);
+  }
+
+  @Test
+  public void testAddSUMLClass() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    assertTrue(testDiagram.addClass(new ShrugUMLClass("a")));
+    assertFalse(testDiagram.addClass(new ShrugUMLClass("a")));
   }
 
   @Test
