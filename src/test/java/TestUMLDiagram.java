@@ -1,11 +1,10 @@
 import static org.junit.Assert.*;
 
+import Command.*;
+import com.shrug.Attribute.*;
 import java.util.*;
 import org.junit.*;
 import shrugUML.*;
-import Command.*;
-import com.shrug.Attribute.*;
-
 
 public class TestUMLDiagram {
   @Test
@@ -25,6 +24,13 @@ public class TestUMLDiagram {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     assertEquals(testDiagram.addClass("newClass"), true);
     assertEquals(testDiagram.addClass("newClass"), false);
+  }
+
+  @Test
+  public void testAddSUMLClass() {
+    ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
+    assertTrue(testDiagram.addClass(new ShrugUMLClass("a")));
+    assertFalse(testDiagram.addClass(new ShrugUMLClass("a")));
   }
 
   @Test
@@ -143,7 +149,6 @@ public class TestUMLDiagram {
     assertTrue(s.containsAll(classes));
   }
 
-
   @Test
   public void testEmptyGetRelationshipsOfClass() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
@@ -194,7 +199,7 @@ public class TestUMLDiagram {
     testDiagram.addRelationshipWithType("a", "b", RType.Association);
     assertEquals(testDiagram.getRelationship("a", "b").getLabel(), RType.Association);
   }
-  
+
   @Test
   public void testInvalidAddRelationshipWithType() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
@@ -204,39 +209,49 @@ public class TestUMLDiagram {
     assertNull(testDiagram.getRelationship("a", "b"));
   }
 
-
   @Test
-  public void testAddCommand()
-  {
+  public void testAddCommand() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     String className = "a";
     ArrayList<String> fields = new ArrayList<String>(Arrays.asList("int a", "string b"));
-    ArrayList<String> methods = new ArrayList<String>(Arrays.asList("int a(int a1)", "int b(int b1, int b2)", "void c()")); 
-    
-    AddCommand add = new AddCommand (className, fields, methods);
-    assertTrue (testDiagram.execute(add));
+    ArrayList<String> methods =
+        new ArrayList<String>(Arrays.asList("int a(int a1)", "int b(int b1, int b2)", "void c()"));
+    AddCommand add = new AddCommand(className, fields, methods);
+    assertTrue(testDiagram.execute(add));
 
-    assertTrue (testDiagram.nameInDiagram(className));
+    String className2 = "b";
+    ArrayList relationships = new ArrayList<String>(Arrays.asList("a"));
+    AddCommand add2 = new AddCommand(className2);
+    add2.setRelationships(relationships, RType.Aggregation);
+    assertTrue(testDiagram.execute(add2));
+
+    assertTrue(testDiagram.nameInDiagram(className));
     ShrugUMLClass s = testDiagram.findClass(className);
 
     assertEquals(s.getAttributes(), new HashSet<String>(fields));
     assertEquals(s.getMethods(), new HashSet<String>(methods));
-    
   }
 
-  @Test 
-  public void testRemoveCommand ()
-  {
+  @Test
+  public void testRemoveCommand() {
     ShrugUMLDiagram testDiagram = new ShrugUMLDiagram();
     String className = "a";
     ArrayList<String> fields = new ArrayList<String>(Arrays.asList("int a", "string b"));
-    ArrayList<String> methods = new ArrayList<String>(Arrays.asList("int a(int a1)", "int b(int b1, int b2)", "void c()")); 
-    
-    AddCommand add = new AddCommand (className, fields, methods);
+    ArrayList<String> methods =
+        new ArrayList<String>(Arrays.asList("int a(int a1)", "int b(int b1, int b2)", "void c()"));
+
+    String className2 = "b";
+    ArrayList relationships = new ArrayList<String>(Arrays.asList("a"));
+    AddCommand add2 = new AddCommand(className2);
+    add2.setRelationships(relationships, RType.Aggregation);
+    assertTrue(testDiagram.execute(add2));
+
+    assertTrue(testDiagram.execute(add2.invert()));
+
+    AddCommand add = new AddCommand(className, fields, methods);
     testDiagram.execute(add);
     testDiagram.execute(add.invert());
 
-    assertTrue (!testDiagram.nameInDiagram(className));
+    assertTrue(!testDiagram.nameInDiagram(className));
   }
-  
 }
